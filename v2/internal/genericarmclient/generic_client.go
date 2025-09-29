@@ -107,6 +107,7 @@ func NewGenericClient(
 	if options.Metrics != nil {
 		opts.PerCallPolicies = append(opts.PerCallPolicies, metrics.NewMetricsPolicy(options.Metrics))
 	}
+	opts.ClientOptions.Logging.IncludeBody = true
 	pipeline, err := armruntime.NewPipeline("generic", version.BuildVersion, creds, runtime.PipelineOptions{}, opts)
 	if err != nil {
 		return nil, err

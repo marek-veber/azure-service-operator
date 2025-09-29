@@ -9,6 +9,7 @@ import (
 	"flag"
 	"os"
 
+	sdklog "github.com/Azure/azure-sdk-for-go/sdk/azcore/log"
 	_ "k8s.io/client-go/plugin/pkg/client/auth/gcp"
 	ctrl "sigs.k8s.io/controller-runtime"
 
@@ -38,6 +39,9 @@ func main() {
 
 	// Replace the logger with a configured one
 	log = logging.Create(logFlags)
+	sdklog.SetListener(func(cls sdklog.Event, s string) {
+		log.V(3).Info(s)
+	})
 	ctrl.SetLogger(log)
 	log.Info("Launching with flags", "flags", appFlags.String())
 

@@ -19,7 +19,7 @@ def create_role_assignment(subscription_id: str, object_id: str) -> str:
         "create",
         "--assignee-object-id", object_id,
         "--assignee-principal-type", "ServicePrincipal",
-        "--role", "Owner",
+        "--role", "Custom-Owner (Block Billing and Subscription deletion)",
         "--subscription", subscription_id,
         "--scope", f"/subscriptions/{subscription_id}"
     ]

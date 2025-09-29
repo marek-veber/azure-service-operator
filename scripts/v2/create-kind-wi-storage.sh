@@ -104,13 +104,15 @@ echo "[DBG] KIND_OIDC_STORAGE_CONTAINER: ${KIND_OIDC_STORAGE_CONTAINER}"
 echo "[DBG] OIDC_IDENTIFIER: ${OIDC_IDENTIFIER}"
 echo "[DBG] CREATION_TIME: ${CREATION_TIME}"
 
+az storage container create --account-name "${KIND_OIDC_STORAGE_ACCOUNT}" --name '$web' --public-access blob --auth-mode login
+
 az storage blob upload \
   --account-name "${KIND_OIDC_STORAGE_ACCOUNT}" \
   --container-name "${KIND_OIDC_STORAGE_CONTAINER}" \
   --file "${DIR}/openid-configuration.json" \
   --tags "CreatedAt=${CREATION_TIME}" \
   --name "${OIDC_IDENTIFIER}/.well-known/openid-configuration" \
-  --auth-mode login
+  --auth-mode key
 
 azwi jwks --public-keys "${DIR}/sa.pub" --output-file "${DIR}/jwks.json"
 
@@ -120,4 +122,4 @@ az storage blob upload \
   --file "${DIR}/jwks.json" \
   --tags "CreatedAt=${CREATION_TIME}" \
   --name "${OIDC_IDENTIFIER}/openid/v1/jwks" \
-  --auth-mode login
+  --auth-mode key

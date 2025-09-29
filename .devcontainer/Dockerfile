@@ -9,7 +9,7 @@ ARG TARGETARCH
 # APT dependencies
 ENV DEBIAN_FRONTEND=noninteractive
 RUN apt-get update \
-    && apt-get -y install --no-install-recommends bash-completion software-properties-common lsb-release graphviz zip nodejs npm python3-pip \
+    && apt-get -y install --no-install-recommends bash-completion lsb-release graphviz zip nodejs npm python3-pip \
     # install az-cli
     && curl -sL https://aka.ms/InstallAzureCLIDeb | bash -
 
@@ -42,7 +42,7 @@ RUN echo 'source <(kubectl completion bash)' >> "/etc/bash.bashrc"
 RUN curl -sL "https://raw.githubusercontent.com/go-task/task/v3.2.0/completion/bash/task.bash" > "/etc/.task.completion.sh" \
     && echo 'source /etc/.task.completion.sh' >> "/etc/bash.bashrc"
 
-ENV KIND_CLUSTER_NAME=aso
+ENV KIND_CLUSTER_NAME=asov2-wi
 
 # install docker, from: https://github.com/microsoft/vscode-dev-containers/blob/main/script-library/docs/docker.md
 COPY library-scripts/docker-debian.sh /tmp/library-scripts/
