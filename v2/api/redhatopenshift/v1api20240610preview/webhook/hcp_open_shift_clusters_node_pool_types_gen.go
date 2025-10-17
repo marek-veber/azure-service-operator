@@ -116,12 +116,7 @@ func (pool *HcpOpenShiftClustersNodePool) ValidateUpdate(ctx context.Context, ol
 
 // createValidations validates the creation of the resource
 func (pool *HcpOpenShiftClustersNodePool) createValidations() []func(ctx context.Context, obj *v20240610p.HcpOpenShiftClustersNodePool) (admission.Warnings, error) {
-	return []func(ctx context.Context, obj *v20240610p.HcpOpenShiftClustersNodePool) (admission.Warnings, error){
-		pool.validateResourceReferences,
-		pool.validateOwnerReference,
-		pool.validateSecretDestinations,
-		pool.validateConfigMapDestinations,
-	}
+	return []func(ctx context.Context, obj *v20240610p.HcpOpenShiftClustersNodePool) (admission.Warnings, error){pool.validateResourceReferences, pool.validateOwnerReference, pool.validateSecretDestinations, pool.validateConfigMapDestinations}
 }
 
 // deleteValidations validates the deletion of the resource

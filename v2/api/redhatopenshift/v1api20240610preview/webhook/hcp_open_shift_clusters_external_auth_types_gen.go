@@ -116,12 +116,7 @@ func (auth *HcpOpenShiftClustersExternalAuth) ValidateUpdate(ctx context.Context
 
 // createValidations validates the creation of the resource
 func (auth *HcpOpenShiftClustersExternalAuth) createValidations() []func(ctx context.Context, obj *v20240610p.HcpOpenShiftClustersExternalAuth) (admission.Warnings, error) {
-	return []func(ctx context.Context, obj *v20240610p.HcpOpenShiftClustersExternalAuth) (admission.Warnings, error){
-		auth.validateResourceReferences,
-		auth.validateOwnerReference,
-		auth.validateSecretDestinations,
-		auth.validateConfigMapDestinations,
-	}
+	return []func(ctx context.Context, obj *v20240610p.HcpOpenShiftClustersExternalAuth) (admission.Warnings, error){auth.validateResourceReferences, auth.validateOwnerReference, auth.validateSecretDestinations, auth.validateConfigMapDestinations}
 }
 
 // deleteValidations validates the deletion of the resource

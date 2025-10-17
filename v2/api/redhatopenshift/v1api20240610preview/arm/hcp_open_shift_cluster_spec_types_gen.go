@@ -180,10 +180,7 @@ type NetworkProfile struct {
 // Azure specific configuration
 type PlatformProfile struct {
 	// ManagedResourceGroup: Resource group to put cluster resources
-	ManagedResourceGroup *string `json:"managedResourceGroup,omitempty"`
-
-	// NetworkSecurityGroupId: ResourceId for the NSG (network security group) attached to the cluster subnet
-	// Note that NSGs cannot be reused for other ARO-HCP clusters.
+	ManagedResourceGroup   *string `json:"managedResourceGroup,omitempty"`
 	NetworkSecurityGroupId *string `json:"networkSecurityGroupId,omitempty"`
 
 	// OperatorsAuthentication: The configuration that the operators of the cluster have to authenticate to Azure
@@ -191,10 +188,7 @@ type PlatformProfile struct {
 
 	// OutboundType: The core outgoing configuration
 	OutboundType *PlatformProfile_OutboundType `json:"outboundType,omitempty"`
-
-	// SubnetId: The Azure resource ID of the worker subnet
-	// Note that a subnet cannot be reused between ARO-HCP Clusters.
-	SubnetId *string `json:"subnetId,omitempty"`
+	SubnetId     *string                       `json:"subnetId,omitempty"`
 }
 
 // Information about the user assigned identity for the resource
@@ -310,19 +304,9 @@ var etcdDataEncryptionProfile_KeyManagementMode_Values = map[string]EtcdDataEncr
 // to perform Operators authentication
 // based on Azure User-Assigned Managed Identities
 type UserAssignedIdentitiesProfile struct {
-	// ControlPlaneOperators: The set of Azure User-Assigned Managed Identities leveraged for the Control Plane
-	// operators of the cluster. The set of required managed identities is dependent on the
-	// Cluster's OpenShift version.
-	ControlPlaneOperators map[string]string `json:"controlPlaneOperators,omitempty"`
-
-	// DataPlaneOperators: The set of Azure User-Assigned Managed Identities leveraged for the Data Plane
-	// operators of the cluster. The set of required managed identities is dependent on the
-	// Cluster's OpenShift version.
-	DataPlaneOperators map[string]string `json:"dataPlaneOperators,omitempty"`
-
-	// ServiceManagedIdentity: Represents the information associated to an Azure User-Assigned Managed Identity whose
-	// purpose is to perform service level actions.
-	ServiceManagedIdentity *string `json:"serviceManagedIdentity,omitempty"`
+	ControlPlaneOperators  map[string]string `json:"controlPlaneOperators,omitempty"`
+	DataPlaneOperators     map[string]string `json:"dataPlaneOperators,omitempty"`
+	ServiceManagedIdentity *string           `json:"serviceManagedIdentity,omitempty"`
 }
 
 // +kubebuilder:validation:Enum={"KMS"}

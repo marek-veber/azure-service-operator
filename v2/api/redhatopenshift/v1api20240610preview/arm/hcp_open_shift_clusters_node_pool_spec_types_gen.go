@@ -104,12 +104,8 @@ type NodePoolPlatformProfile struct {
 	EnableEncryptionAtHost *bool `json:"enableEncryptionAtHost,omitempty"`
 
 	// OsDisk: The settings and configuration options for OSDisk
-	OsDisk *OsDiskProfile `json:"osDisk,omitempty"`
-
-	// SubnetId: The Azure resource ID of the worker subnet
-	// Note that a subnet cannot be reused between ARO-HCP Clusters, however the
-	// same subnet can be used for NodePools of the same cluster.
-	SubnetId *string `json:"subnetId,omitempty"`
+	OsDisk   *OsDiskProfile `json:"osDisk,omitempty"`
+	SubnetId *string        `json:"subnetId,omitempty"`
 
 	// VmSize: The VM size according to the documentation:
 	// - https://learn.microsoft.com/en-us/azure/virtual-machines/sizes
@@ -160,15 +156,7 @@ type OsDiskProfile struct {
 	// DiskStorageAccountType: The type of the disk storage account
 	// - https://learn.microsoft.com/en-us/azure/virtual-machines/disks-types
 	DiskStorageAccountType *OsDiskProfile_DiskStorageAccountType `json:"diskStorageAccountType,omitempty"`
-
-	// EncryptionSetId: The ID of the DiskEncryptionSet resource to use to encrypt the OS disks for the VMs.
-	// This needs to exist in the same subscription id listed in the Hosted Cluster,
-	// HostedCluster.Spec.Platform.Azure.SubscriptionID.
-	// DiskEncryptionSetID should also exist in a resource group under the same subscription id and the same location
-	// listed in the Hosted Cluster, HostedCluster.Spec.Platform.Azure.Location.
-	// Details on how to create a Disk Encryption Set can be found here:
-	// https://learn.microsoft.com/en-us/azure/virtual-machines/disks-enable-customer-managed-keys-portal#set-up-your-disk-encryption-set
-	EncryptionSetId *string `json:"encryptionSetId,omitempty"`
+	EncryptionSetId        *string                               `json:"encryptionSetId,omitempty"`
 
 	// SizeGiB: The OS disk size in GiB
 	SizeGiB *int `json:"sizeGiB,omitempty"`
