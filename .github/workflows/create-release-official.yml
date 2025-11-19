@@ -9,7 +9,7 @@ on:
 
 jobs:
   build-and-push:
-    runs-on: [self-hosted, 1ES.Pool=aso-1es-pool]
+    runs-on: ubuntu-latest
 
     permissions:
       contents: write # Required to write a release
@@ -49,20 +49,20 @@ jobs:
           file: "v2/out/release/*"
           file_glob: true
 
-      - name: Build, tag and push docker image
-        run: |
-          container_id=${{env.container_id}}
-          docker exec -e AZURE_SUBSCRIPTION_ID -e GITHUB_ACTIONS -e DOCKER_REGISTRY -e DOCKER_PUSH_TARGET "$container_id" task controller:docker-push-multiarch
-        env:
-          DOCKER_PUSH_TARGET: ${{ secrets.REGISTRY_PUBLIC }}
-          DOCKER_REGISTRY: ${{ secrets.REGISTRY_LOGIN }}
-          AZURE_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
-
-      - name: Protect image
-        run: |
-          container_id=${{env.container_id}}
-          docker exec -e AZURE_SUBSCRIPTION_ID -e GITHUB_ACTIONS -e DOCKER_PUSH_TARGET -e DOCKER_REGISTRY -e AZURE_TENANT_ID -e AZURE_SUBSCRIPTION_ID "$container_id" task controller:acr-protect-image
-        env:
-          DOCKER_PUSH_TARGET: ${{ secrets.REGISTRY_PUBLIC }}
-          DOCKER_REGISTRY: ${{ secrets.REGISTRY_LOGIN }}
-          AZURE_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+#       - name: Build, tag and push docker image
+#         run: |
+#           container_id=${{env.container_id}}
+#           docker exec -e AZURE_SUBSCRIPTION_ID -e GITHUB_ACTIONS -e DOCKER_REGISTRY -e DOCKER_PUSH_TARGET "$container_id" task controller:docker-push-multiarch
+#         env:
+#           DOCKER_PUSH_TARGET: ${{ secrets.REGISTRY_PUBLIC }}
+#           DOCKER_REGISTRY: ${{ secrets.REGISTRY_LOGIN }}
+#           AZURE_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+# 
+#       - name: Protect image
+#         run: |
+#           container_id=${{env.container_id}}
+#           docker exec -e AZURE_SUBSCRIPTION_ID -e GITHUB_ACTIONS -e DOCKER_PUSH_TARGET -e DOCKER_REGISTRY -e AZURE_TENANT_ID -e AZURE_SUBSCRIPTION_ID "$container_id" task controller:acr-protect-image
+#         env:
+#           DOCKER_PUSH_TARGET: ${{ secrets.REGISTRY_PUBLIC }}
+#           DOCKER_REGISTRY: ${{ secrets.REGISTRY_LOGIN }}
+#           AZURE_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
