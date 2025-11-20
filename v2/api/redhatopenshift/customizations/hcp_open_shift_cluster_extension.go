@@ -33,7 +33,8 @@ var _ extensions.PreReconciliationChecker = &HcpOpenShiftClusterExtension{}
 // Returns BlockReconcile and a human-readable reason if the reconciliation should be skipped.
 // ctx is the current operation context.
 // obj is the resource about to be reconciled. The resource's State will be freshly updated.
-// kubeClient allows access to the cluster for any required queries.
+// owner is the owner of the resource being reconciled.
+// resourceResolver allows resolving references to other resources.
 // armClient allows access to ARM for any required queries.
 // log is the logger for the current operation.
 // next is the next (nested) implementation to call.
