@@ -54,6 +54,7 @@ import (
 )
 
 func getRoot() (string, error) {
+	//nolint:noctx
 	cmd := exec.Command("git", "rev-parse", "--show-toplevel")
 	out, err := cmd.Output()
 	if err != nil {
