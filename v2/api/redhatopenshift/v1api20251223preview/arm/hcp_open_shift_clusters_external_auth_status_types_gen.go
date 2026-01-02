@@ -278,7 +278,8 @@ type UsernameClaimProfile_STATUS struct {
 
 	// PrefixPolicy: Prefix policy is an optional field that configures how a prefix should be
 	// applied to the value of the JWT claim specified in the 'claim' field.
-	// Allowed values are 'Prefix', 'NoPrefix', and 'None'.
+	// Allowed values are 'Prefix', 'NoPrefix', and 'None'. If not specified, the
+	// default policy is 'None'.
 	// When set to 'Prefix', the value specified in the prefix field will be
 	// prepended to the value of the JWT claim.
 	// The prefix field must be set when prefixPolicy is 'Prefix'.

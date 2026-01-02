@@ -14,9 +14,9 @@ type HcpOpenShiftClustersExternalAuth_Spec struct {
 
 var _ genruntime.ARMResourceSpec = &HcpOpenShiftClustersExternalAuth_Spec{}
 
-// GetAPIVersion returns the ARM API version of the resource. This is always "2024-06-10-preview"
+// GetAPIVersion returns the ARM API version of the resource. This is always "2025-12-23-preview"
 func (auth HcpOpenShiftClustersExternalAuth_Spec) GetAPIVersion() string {
-	return "2024-06-10-preview"
+	return "2025-12-23-preview"
 }
 
 // GetName returns the Name of the resource
@@ -204,7 +204,8 @@ type UsernameClaimProfile struct {
 
 	// PrefixPolicy: Prefix policy is an optional field that configures how a prefix should be
 	// applied to the value of the JWT claim specified in the 'claim' field.
-	// Allowed values are 'Prefix', 'NoPrefix', and 'None'.
+	// Allowed values are 'Prefix', 'NoPrefix', and 'None'. If not specified, the
+	// default policy is 'None'.
 	// When set to 'Prefix', the value specified in the prefix field will be
 	// prepended to the value of the JWT claim.
 	// The prefix field must be set when prefixPolicy is 'Prefix'.

@@ -22,9 +22,9 @@ type HcpOpenShiftClustersNodePool_Spec struct {
 
 var _ genruntime.ARMResourceSpec = &HcpOpenShiftClustersNodePool_Spec{}
 
-// GetAPIVersion returns the ARM API version of the resource. This is always "2024-06-10-preview"
+// GetAPIVersion returns the ARM API version of the resource. This is always "2025-12-23-preview"
 func (pool HcpOpenShiftClustersNodePool_Spec) GetAPIVersion() string {
-	return "2024-06-10-preview"
+	return "2025-12-23-preview"
 }
 
 // GetName returns the Name of the resource
@@ -63,7 +63,11 @@ type NodePoolProperties struct {
 	// Platform: Azure node pool platform configuration
 	Platform *NodePoolPlatformProfile `json:"platform,omitempty"`
 
-	// Replicas: The number of worker nodes, it cannot be used together with autoscaling
+	// Replicas: The number of worker nodes, it cannot be used together with autoscaling.
+	// Validation:
+	// - Minimum: 0
+	// - Maximum: 200 (only when availabilityZone is not specified)
+	// - No maximum when availabilityZone is specified
 	Replicas *int `json:"replicas,omitempty"`
 
 	// Taints: Taints for the nodes
@@ -84,10 +88,18 @@ type Label struct {
 
 // Node pool autoscaling
 type NodePoolAutoScaling struct {
-	// Max: The maximum number of nodes in the node pool
+	// Max: The maximum number of nodes in the node pool.
+	// Validation:
+	// - Minimum: 0 (must be >= min)
+	// - Maximum: 200 (only when availabilityZone is not specified)
+	// - No maximum when availabilityZone is specified
 	Max *int `json:"max,omitempty"`
 
-	// Min: The minimum number of nodes in the node pool
+	// Min: The minimum number of nodes in the node pool.
+	// Validation:
+	// - Minimum: 0
+	// - Maximum: 200 (only when availabilityZone is not specified)
+	// - No maximum when availabilityZone is specified
 	Min *int `json:"min,omitempty"`
 }
 
@@ -114,8 +126,13 @@ type NodePoolPlatformProfile struct {
 
 // Versions represents an OpenShift version.
 type NodePoolVersionProfile struct {
-	// ChannelGroup: ChannelGroup is the name of the set to which this version belongs. Each version belongs to only a single
-	// set.
+	// ChannelGroup: ChannelGroup is the name of the set to which this version belongs.
+	// Each version belongs to only a single set.
+	// If not specified, the default value is 'stable'.
+	// Note: The default value is not declared in the API specification because
+	// of a TypeSpec bug with updatable fields. The default value will be
+	// declared in a future API version once the TypeSpec bug is fixed.
+	// https://github.com/Azure/typespec-azure/issues/1586
 	ChannelGroup *string `json:"channelGroup,omitempty"`
 
 	// Id: ID is the unique identifier of the version.

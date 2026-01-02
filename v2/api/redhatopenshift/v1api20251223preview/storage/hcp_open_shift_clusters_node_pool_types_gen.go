@@ -24,9 +24,9 @@ import (
 // +kubebuilder:printcolumn:name="Severity",type="string",JSONPath=".status.conditions[?(@.type=='Ready')].severity"
 // +kubebuilder:printcolumn:name="Reason",type="string",JSONPath=".status.conditions[?(@.type=='Ready')].reason"
 // +kubebuilder:printcolumn:name="Message",type="string",JSONPath=".status.conditions[?(@.type=='Ready')].message"
-// Storage version of v1api20240610preview.HcpOpenShiftClustersNodePool
+// Storage version of v1api20251223preview.HcpOpenShiftClustersNodePool
 // Generator information:
-// - Generated from: /redhatopenshift/resource-manager/Microsoft.RedHatOpenShift/hcpclusters/preview/2024-06-10-preview/openapi.json
+// - Generated from: /redhatopenshift/resource-manager/Microsoft.RedHatOpenShift/hcpclusters/preview/2025-12-23-preview/openapi.json
 // - ARM URI: /subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.RedHatOpenShift/hcpOpenShiftClusters/{hcpOpenShiftClusterName}/nodePools/{nodePoolName}
 type HcpOpenShiftClustersNodePool struct {
 	metav1.TypeMeta   `json:",inline"`
@@ -74,9 +74,9 @@ func (pool *HcpOpenShiftClustersNodePool) AzureName() string {
 	return pool.Spec.AzureName
 }
 
-// GetAPIVersion returns the ARM API version of the resource. This is always "2024-06-10-preview"
+// GetAPIVersion returns the ARM API version of the resource. This is always "2025-12-23-preview"
 func (pool HcpOpenShiftClustersNodePool) GetAPIVersion() string {
-	return "2024-06-10-preview"
+	return "2025-12-23-preview"
 }
 
 // GetResourceScope returns the scope of the resource
@@ -155,9 +155,9 @@ func (pool *HcpOpenShiftClustersNodePool) OriginalGVK() *schema.GroupVersionKind
 }
 
 // +kubebuilder:object:root=true
-// Storage version of v1api20240610preview.HcpOpenShiftClustersNodePool
+// Storage version of v1api20251223preview.HcpOpenShiftClustersNodePool
 // Generator information:
-// - Generated from: /redhatopenshift/resource-manager/Microsoft.RedHatOpenShift/hcpclusters/preview/2024-06-10-preview/openapi.json
+// - Generated from: /redhatopenshift/resource-manager/Microsoft.RedHatOpenShift/hcpclusters/preview/2025-12-23-preview/openapi.json
 // - ARM URI: /subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.RedHatOpenShift/hcpOpenShiftClusters/{hcpOpenShiftClusterName}/nodePools/{nodePoolName}
 type HcpOpenShiftClustersNodePoolList struct {
 	metav1.TypeMeta `json:",inline"`
@@ -165,7 +165,7 @@ type HcpOpenShiftClustersNodePoolList struct {
 	Items           []HcpOpenShiftClustersNodePool `json:"items"`
 }
 
-// Storage version of v1api20240610preview.HcpOpenShiftClustersNodePool_Spec
+// Storage version of v1api20251223preview.HcpOpenShiftClustersNodePool_Spec
 type HcpOpenShiftClustersNodePool_Spec struct {
 	// AzureName: The name of the resource in Azure. This is often the same as the name of the resource in Kubernetes but it
 	// doesn't have to be.
@@ -205,7 +205,7 @@ func (pool *HcpOpenShiftClustersNodePool_Spec) ConvertSpecTo(destination genrunt
 	return destination.ConvertSpecFrom(pool)
 }
 
-// Storage version of v1api20240610preview.HcpOpenShiftClustersNodePool_STATUS
+// Storage version of v1api20251223preview.HcpOpenShiftClustersNodePool_STATUS
 type HcpOpenShiftClustersNodePool_STATUS struct {
 	Conditions  []conditions.Condition         `json:"conditions,omitempty"`
 	Id          *string                        `json:"id,omitempty"`
@@ -239,7 +239,7 @@ func (pool *HcpOpenShiftClustersNodePool_STATUS) ConvertStatusTo(destination gen
 	return destination.ConvertStatusFrom(pool)
 }
 
-// Storage version of v1api20240610preview.HcpOpenShiftClustersNodePoolOperatorSpec
+// Storage version of v1api20251223preview.HcpOpenShiftClustersNodePoolOperatorSpec
 // Details for configuring operator behavior. Fields in this struct are interpreted by the operator directly rather than being passed to Azure
 type HcpOpenShiftClustersNodePoolOperatorSpec struct {
 	ConfigMapExpressions []*core.DestinationExpression `json:"configMapExpressions,omitempty"`
@@ -247,7 +247,7 @@ type HcpOpenShiftClustersNodePoolOperatorSpec struct {
 	SecretExpressions    []*core.DestinationExpression `json:"secretExpressions,omitempty"`
 }
 
-// Storage version of v1api20240610preview.NodePoolProperties
+// Storage version of v1api20251223preview.NodePoolProperties
 // Represents the node pool properties
 type NodePoolProperties struct {
 	AutoRepair              *bool                    `json:"autoRepair,omitempty"`
@@ -261,7 +261,7 @@ type NodePoolProperties struct {
 	Version                 *NodePoolVersionProfile  `json:"version,omitempty"`
 }
 
-// Storage version of v1api20240610preview.NodePoolProperties_STATUS
+// Storage version of v1api20251223preview.NodePoolProperties_STATUS
 // Represents the node pool properties
 type NodePoolProperties_STATUS struct {
 	AutoRepair              *bool                           `json:"autoRepair,omitempty"`
@@ -276,7 +276,7 @@ type NodePoolProperties_STATUS struct {
 	Version                 *NodePoolVersionProfile_STATUS  `json:"version,omitempty"`
 }
 
-// Storage version of v1api20240610preview.Label
+// Storage version of v1api20251223preview.Label
 // Label represents the Kubernetes label
 type Label struct {
 	Key         *string                `json:"key,omitempty"`
@@ -284,7 +284,7 @@ type Label struct {
 	Value       *string                `json:"value,omitempty"`
 }
 
-// Storage version of v1api20240610preview.Label_STATUS
+// Storage version of v1api20251223preview.Label_STATUS
 // Label represents the Kubernetes label
 type Label_STATUS struct {
 	Key         *string                `json:"key,omitempty"`
@@ -292,7 +292,7 @@ type Label_STATUS struct {
 	Value       *string                `json:"value,omitempty"`
 }
 
-// Storage version of v1api20240610preview.NodePoolAutoScaling
+// Storage version of v1api20251223preview.NodePoolAutoScaling
 // Node pool autoscaling
 type NodePoolAutoScaling struct {
 	Max         *int                   `json:"max,omitempty"`
@@ -300,7 +300,7 @@ type NodePoolAutoScaling struct {
 	PropertyBag genruntime.PropertyBag `json:"$propertyBag,omitempty"`
 }
 
-// Storage version of v1api20240610preview.NodePoolAutoScaling_STATUS
+// Storage version of v1api20251223preview.NodePoolAutoScaling_STATUS
 // Node pool autoscaling
 type NodePoolAutoScaling_STATUS struct {
 	Max         *int                   `json:"max,omitempty"`
@@ -308,7 +308,7 @@ type NodePoolAutoScaling_STATUS struct {
 	PropertyBag genruntime.PropertyBag `json:"$propertyBag,omitempty"`
 }
 
-// Storage version of v1api20240610preview.NodePoolPlatformProfile
+// Storage version of v1api20251223preview.NodePoolPlatformProfile
 // Azure node pool platform configuration
 type NodePoolPlatformProfile struct {
 	AvailabilityZone       *string                `json:"availabilityZone,omitempty"`
@@ -323,7 +323,7 @@ type NodePoolPlatformProfile struct {
 	VmSize          *string                       `json:"vmSize,omitempty"`
 }
 
-// Storage version of v1api20240610preview.NodePoolPlatformProfile_STATUS
+// Storage version of v1api20251223preview.NodePoolPlatformProfile_STATUS
 // Azure node pool platform configuration
 type NodePoolPlatformProfile_STATUS struct {
 	AvailabilityZone       *string                `json:"availabilityZone,omitempty"`
@@ -334,7 +334,7 @@ type NodePoolPlatformProfile_STATUS struct {
 	VmSize                 *string                `json:"vmSize,omitempty"`
 }
 
-// Storage version of v1api20240610preview.NodePoolVersionProfile
+// Storage version of v1api20251223preview.NodePoolVersionProfile
 // Versions represents an OpenShift version.
 type NodePoolVersionProfile struct {
 	ChannelGroup *string                `json:"channelGroup,omitempty"`
@@ -342,7 +342,7 @@ type NodePoolVersionProfile struct {
 	PropertyBag  genruntime.PropertyBag `json:"$propertyBag,omitempty"`
 }
 
-// Storage version of v1api20240610preview.NodePoolVersionProfile_STATUS
+// Storage version of v1api20251223preview.NodePoolVersionProfile_STATUS
 // Versions represents an OpenShift version.
 type NodePoolVersionProfile_STATUS struct {
 	ChannelGroup *string                `json:"channelGroup,omitempty"`
@@ -350,7 +350,7 @@ type NodePoolVersionProfile_STATUS struct {
 	PropertyBag  genruntime.PropertyBag `json:"$propertyBag,omitempty"`
 }
 
-// Storage version of v1api20240610preview.Taint
+// Storage version of v1api20251223preview.Taint
 // Taint is controlling the node taint and its effects
 type Taint struct {
 	Effect      *string                `json:"effect,omitempty"`
@@ -359,7 +359,7 @@ type Taint struct {
 	Value       *string                `json:"value,omitempty"`
 }
 
-// Storage version of v1api20240610preview.Taint_STATUS
+// Storage version of v1api20251223preview.Taint_STATUS
 // Taint is controlling the node taint and its effects
 type Taint_STATUS struct {
 	Effect      *string                `json:"effect,omitempty"`
@@ -368,7 +368,7 @@ type Taint_STATUS struct {
 	Value       *string                `json:"value,omitempty"`
 }
 
-// Storage version of v1api20240610preview.OsDiskProfile
+// Storage version of v1api20251223preview.OsDiskProfile
 // The settings and configuration options for OSDisk
 type OsDiskProfile struct {
 	DiskStorageAccountType *string `json:"diskStorageAccountType,omitempty"`
@@ -385,7 +385,7 @@ type OsDiskProfile struct {
 	SizeGiB                *int                          `json:"sizeGiB,omitempty"`
 }
 
-// Storage version of v1api20240610preview.OsDiskProfile_STATUS
+// Storage version of v1api20251223preview.OsDiskProfile_STATUS
 // The settings and configuration options for OSDisk
 type OsDiskProfile_STATUS struct {
 	DiskStorageAccountType *string                `json:"diskStorageAccountType,omitempty"`
