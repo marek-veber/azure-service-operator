@@ -22,9 +22,9 @@ type HcpOpenShiftCluster_Spec struct {
 
 var _ genruntime.ARMResourceSpec = &HcpOpenShiftCluster_Spec{}
 
-// GetAPIVersion returns the ARM API version of the resource. This is always "2024-06-10-preview"
+// GetAPIVersion returns the ARM API version of the resource. This is always "2025-12-23-preview"
 func (cluster HcpOpenShiftCluster_Spec) GetAPIVersion() string {
-	return "2024-06-10-preview"
+	return "2025-12-23-preview"
 }
 
 // GetName returns the Name of the resource
@@ -97,6 +97,10 @@ type ClusterAutoscalingProfile struct {
 	// MaxNodeProvisionTimeSeconds: maxNodeProvisionTimeSeconds is the maximum time to wait for node provisioning before
 	// considering the
 	// provisioning to be unsuccessful. The default is 900 seconds, or 15 minutes.
+	// Note: The default value is not declared in the API specification because
+	// of a TypeSpec bug with updatable fields. The default value will be
+	// declared in a future API version once the TypeSpec bug is fixed.
+	// https://github.com/Azure/typespec-azure/issues/1586
 	MaxNodeProvisionTimeSeconds *int `json:"maxNodeProvisionTimeSeconds,omitempty"`
 
 	// MaxNodesTotal: maxNodesTotal is the maximum allowable number of nodes for the Autoscaler scale out to be operational.
@@ -106,6 +110,10 @@ type ClusterAutoscalingProfile struct {
 	// MaxPodGracePeriodSeconds: maxPodGracePeriod is the maximum seconds to wait for graceful pod termination before scaling
 	// down a NodePool.
 	// The default is 600 seconds.
+	// Note: The default value is not declared in the API specification because
+	// of a TypeSpec bug with updatable fields. The default value will be
+	// declared in a future API version once the TypeSpec bug is fixed.
+	// https://github.com/Azure/typespec-azure/issues/1586
 	MaxPodGracePeriodSeconds *int `json:"maxPodGracePeriodSeconds,omitempty"`
 
 	// PodPriorityThreshold: podPriorityThreshold enables users to schedule “best-effort” pods, which shouldn’t trigger
@@ -113,6 +121,10 @@ type ClusterAutoscalingProfile struct {
 	// but only run when there are spare resources available. The default is -10.
 	// See the following for more details:
 	// https://github.com/kubernetes/autoscaler/blob/master/cluster-autoscaler/FAQ.md#how-does-cluster-autoscaler-work-with-pod-priority-and-preemption
+	// Note: The default value is not declared in the API specification because
+	// of a TypeSpec bug with updatable fields. The default value will be
+	// declared in a future API version once the TypeSpec bug is fixed.
+	// https://github.com/Azure/typespec-azure/issues/1586
 	PodPriorityThreshold *int `json:"podPriorityThreshold,omitempty"`
 }
 
@@ -179,7 +191,13 @@ type NetworkProfile struct {
 
 // Azure specific configuration
 type PlatformProfile struct {
-	// ManagedResourceGroup: Resource group to put cluster resources
+	// ManagedResourceGroup: Resource group name to put cluster resources
+	// If not specified then a unique name is generated from the
+	// following pattern
+	// "aro-hcp-" + clusterName + "-" + UUID
+	// where clusterName means the hcpOpenShiftClusters resource name
+	// (up to 45 characters) followed by a 16-byte universally unique
+	// identifier per RFC 4122.
 	ManagedResourceGroup   *string `json:"managedResourceGroup,omitempty"`
 	NetworkSecurityGroupId *string `json:"networkSecurityGroupId,omitempty"`
 
@@ -197,8 +215,13 @@ type UserAssignedIdentityDetails struct {
 
 // Versions represents an OpenShift version.
 type VersionProfile struct {
-	// ChannelGroup: ChannelGroup is the name of the set to which this version belongs. Each version belongs to only a single
-	// set.
+	// ChannelGroup: ChannelGroup is the name of the set to which this version belongs.
+	// Each version belongs to only a single set.
+	// If not specified, the default value is 'stable'.
+	// Note: The default value is not declared in the API specification because
+	// of a TypeSpec bug with updatable fields. The default value will be
+	// declared in a future API version once the TypeSpec bug is fixed.
+	// https://github.com/Azure/typespec-azure/issues/1586
 	ChannelGroup *string `json:"channelGroup,omitempty"`
 
 	// Id: ID is the unique identifier of the version.
@@ -323,7 +346,7 @@ var customerManagedEncryptionProfile_EncryptionType_Values = map[string]Customer
 // Your Microsoft Entra application used to create the cluster
 // must be authorized to access this keyvault,
 // e.g using the AzureCLI: `az keyvault set-policy -n $KEYVAULT_NAME
-// --key-permissions decrypt encrypt --spn <YOUR APPLICATION CLIENT ID>`
+// --key-permissions decrypt encrypt --spn (YOUR APPLICATION CLIENT ID)`
 type KmsEncryptionProfile struct {
 	// ActiveKey: The details of the active key.
 	ActiveKey *KmsKey `json:"activeKey,omitempty"`
