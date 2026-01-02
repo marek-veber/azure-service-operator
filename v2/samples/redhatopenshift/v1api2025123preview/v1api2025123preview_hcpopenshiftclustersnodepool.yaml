@@ -1,4 +1,4 @@
-apiVersion: redhatopenshift.azure.com/v1api20240610preview
+apiVersion: redhatopenshift.azure.com/v1api20251223preview
 kind: HcpOpenShiftClustersNodePool
 metadata:
   name: mveber-int-mp-0
