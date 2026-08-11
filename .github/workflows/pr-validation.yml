@@ -15,6 +15,8 @@ on:
       - main
     types: [checks_requested]
 
+permissions: {}
+
 jobs:
   test-go-get:
     runs-on: ubuntu-latest
@@ -60,7 +62,7 @@ jobs:
           exit $FAILED
 
   test-generator:
-    runs-on: [self-hosted, 1ES.Pool=aso-1es-pool]
+    runs-on: [self-hosted, 1ES.Pool=aso-1es-pool, "JobId=${{ github.run_id }}-${{ github.run_number }}-${{ github.run_attempt }}"]
     permissions:
       packages: read
 
@@ -89,7 +91,7 @@ jobs:
       # Note: Changes to this step must also be mirrored into pr-validation-with-secrets.yaml
       - name: Build devcontainer image
         run: |
-          docker build --cache-from ghcr.io/azure/azure-service-operator/aso-devcontainer:latest --tag devcontainer:latest .devcontainer
+          docker build --cache-from ghcr.io/azure/azure-service-operator/aso-devcontainer:latest --tag devcontainer:latest -f .devcontainer/Dockerfile .
         env:
           DOCKER_BUILDKIT: 1
         if: steps.check-changes.outputs.code-changed == 'true'
@@ -174,7 +176,7 @@ jobs:
         run: sudo chown -R $USER:$USER .
 
   test-controllers:
-    runs-on: [self-hosted, 1ES.Pool=aso-1es-pool]
+    runs-on: [self-hosted, 1ES.Pool=aso-1es-pool, "JobId=${{ github.run_id }}-${{ github.run_number }}-${{ github.run_attempt }}"]
     permissions:
       packages: read
 
@@ -203,7 +205,7 @@ jobs:
       # Note: Changes to this step must also be mirrored into pr-validation-with-secrets.yaml
       - name: Build devcontainer image
         run: |
-          docker build --cache-from ghcr.io/azure/azure-service-operator/aso-devcontainer:latest --tag devcontainer:latest .devcontainer
+          docker build --cache-from ghcr.io/azure/azure-service-operator/aso-devcontainer:latest --tag devcontainer:latest -f .devcontainer/Dockerfile .
         env:
           DOCKER_BUILDKIT: 1
         if: steps.check-changes.outputs.code-changed == 'true'
@@ -239,7 +241,7 @@ jobs:
           path: reports/*.json
 
   test-samples:
-    runs-on: [self-hosted, 1ES.Pool=aso-1es-pool]
+    runs-on: [self-hosted, 1ES.Pool=aso-1es-pool, "JobId=${{ github.run_id }}-${{ github.run_number }}-${{ github.run_attempt }}"]
     permissions:
       packages: read
 
@@ -268,7 +270,7 @@ jobs:
       # Note: Changes to this step must also be mirrored into pr-validation-with-secrets.yaml
       - name: Build devcontainer image
         run: |
-          docker build --cache-from ghcr.io/azure/azure-service-operator/aso-devcontainer:latest --tag devcontainer:latest .devcontainer
+          docker build --cache-from ghcr.io/azure/azure-service-operator/aso-devcontainer:latest --tag devcontainer:latest -f .devcontainer/Dockerfile .
         env:
           DOCKER_BUILDKIT: 1
         if: steps.check-changes.outputs.code-changed == 'true'
@@ -305,7 +307,7 @@ jobs:
 
   # TODO: Changing this name requires changing the github API calls in pr-validation-fork.yml
   integration-tests:
-    runs-on: [self-hosted, 1ES.Pool=aso-1es-pool]
+    runs-on: [self-hosted, 1ES.Pool=aso-1es-pool, "JobId=${{ github.run_id }}-${{ github.run_number }}-${{ github.run_attempt }}"]
     if: 
       # Run on pull requests in this repository that are not from @dependabot, and run for merge groups
       github.event_name == 'merge_group' ||
@@ -341,7 +343,7 @@ jobs:
       # Note: Changes to this step must also be mirror into pr-validation.yaml
       - name: Build devcontainer image
         run: |
-          docker build --cache-from ghcr.io/azure/azure-service-operator/aso-devcontainer:latest --tag devcontainer:latest .devcontainer
+          docker build --cache-from ghcr.io/azure/azure-service-operator/aso-devcontainer:latest --tag devcontainer:latest -f .devcontainer/Dockerfile .
         env:
           DOCKER_BUILDKIT: 1
         if: steps.check-changes.outputs.code-changed == 'true'
@@ -373,7 +375,7 @@ jobs:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           jobs=$(gh api repos/${{ github.repository }}/actions/runs/${{ github.run_id}}/attempts/${{ github.run_attempt }}/jobs)
-          job_id=$(echo $jobs | jq -r '.jobs[] | select(.runner_name=="${{ runner.name }}") | .id')
+          job_id=$(echo $jobs | jq -r '.jobs[] | select(.runner_name=="${{ runner.name }}" and .name=="integration-tests") | .id')
           echo "job_id=$job_id" >> $GITHUB_ENV
     
       # Update check run called "integration-tests-fork"

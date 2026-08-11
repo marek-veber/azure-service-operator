@@ -93,14 +93,11 @@ type IngressProfile struct {
 
 // MasterProfile represents a master profile.
 type MasterProfile struct {
-	// DiskEncryptionSetId: The resource ID of an associated DiskEncryptionSet, if applicable.
 	DiskEncryptionSetId *string `json:"diskEncryptionSetId,omitempty"`
 
 	// EncryptionAtHost: Whether master virtual machines are encrypted at host.
 	EncryptionAtHost *EncryptionAtHost `json:"encryptionAtHost,omitempty"`
-
-	// SubnetId: The Azure resource ID of the master subnet.
-	SubnetId *string `json:"subnetId,omitempty"`
+	SubnetId         *string           `json:"subnetId,omitempty"`
 
 	// VmSize: The size of the master VMs.
 	VmSize *string `json:"vmSize,omitempty"`
@@ -136,9 +133,7 @@ type ServicePrincipalProfile struct {
 // WorkerProfile represents a worker profile.
 type WorkerProfile struct {
 	// Count: The number of worker VMs.
-	Count *int `json:"count,omitempty"`
-
-	// DiskEncryptionSetId: The resource ID of an associated DiskEncryptionSet, if applicable.
+	Count               *int    `json:"count,omitempty"`
 	DiskEncryptionSetId *string `json:"diskEncryptionSetId,omitempty"`
 
 	// DiskSizeGB: The disk size of the worker VMs.
@@ -148,9 +143,7 @@ type WorkerProfile struct {
 	EncryptionAtHost *EncryptionAtHost `json:"encryptionAtHost,omitempty"`
 
 	// Name: The worker profile name.
-	Name *string `json:"name,omitempty"`
-
-	// SubnetId: The Azure resource ID of the worker subnet.
+	Name     *string `json:"name,omitempty"`
 	SubnetId *string `json:"subnetId,omitempty"`
 
 	// VmSize: The size of the worker VMs.
