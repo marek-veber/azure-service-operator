@@ -13,18 +13,21 @@ name: "CodeQL"
 
 on:
   push:
-    branches: [ main ]
+    branches: [ main, "backplane-2*" ]
   pull_request:
     # The branches below must be a subset of the branches above
-    branches: [ main ]
+    branches: [ main, "backplane-2*" ]
+  merge_group:
+    branches: [ main, "backplane-2*" ]
   schedule:
     - cron: '31 1 * * 3'
+
+permissions: {}
 
 jobs:
   analyze:
     name: Analyze (${{ matrix.language }})
-    # We moved CodeQL to our self-hosted pool because the self hosted runners are not big enough - CodeQL gets OOM killed on those.
-    runs-on: [self-hosted, 1ES.Pool=aso-1es-pool, "JobId=codeql-${{ github.run_id }}-${{ github.run_number }}-${{ github.run_attempt }}"]
+    runs-on: ubuntu-latest
     permissions:
       # required for all workflows
       security-events: write
@@ -49,7 +52,7 @@ jobs:
 
       # Initializes the CodeQL tools for scanning.
     - name: Initialize CodeQL
-      uses: github/codeql-action/init@95e58e9a2cdfd71adc6e0353d5c52f41a045d225 # pinned to v4.35.2
+      uses: github/codeql-action/init@v3
       with:
         languages: ${{ matrix.language }}
         build-mode: ${{ matrix.build-mode }}
@@ -76,7 +79,6 @@ jobs:
         exit 1
 
     - name: Perform CodeQL Analysis
-      uses: github/codeql-action/analyze@95e58e9a2cdfd71adc6e0353d5c52f41a045d225 # pinned to v4.35.2
+      uses: github/codeql-action/analyze@v3
       with:
         category: "/language:${{matrix.language}}"
-      timeout-minutes: 60

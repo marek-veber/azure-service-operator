@@ -44,6 +44,11 @@ func (b *GroupConversionGraphBuilder) Add(names ...astmodel.InternalTypeName) {
 		subBuilder.Add(name)
 
 		b.packages.AddReference(name.InternalPackageReference())
+
+		// If a hub version override is configured for this group, pass it to the resource builder
+		if hubVersion, ok := b.configuration.HubVersion.Lookup(name.InternalPackageReference()); ok {
+			subBuilder.SetHubVersion(hubVersion)
+		}
 	}
 }
 
