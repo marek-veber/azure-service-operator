@@ -19,6 +19,7 @@ import (
 )
 
 // +kubebuilder:object:root=true
+// +kubebuilder:resource:categories={azure,redhatopenshift}
 // +kubebuilder:subresource:status
 // +kubebuilder:printcolumn:name="Ready",type="string",JSONPath=".status.conditions[?(@.type=='Ready')].status"
 // +kubebuilder:printcolumn:name="Severity",type="string",JSONPath=".status.conditions[?(@.type=='Ready')].severity"
@@ -291,7 +292,7 @@ func (cluster *HcpOpenShiftCluster_Spec) ConvertToARM(resolved genruntime.Conver
 
 	// Set property "Identity":
 	if cluster.Identity != nil {
-		identity_ARM, err := (*cluster.Identity).ConvertToARM(resolved)
+		identity_ARM, err := cluster.Identity.ConvertToARM(resolved)
 		if err != nil {
 			return nil, err
 		}
@@ -310,7 +311,7 @@ func (cluster *HcpOpenShiftCluster_Spec) ConvertToARM(resolved genruntime.Conver
 
 	// Set property "Properties":
 	if cluster.Properties != nil {
-		properties_ARM, err := (*cluster.Properties).ConvertToARM(resolved)
+		properties_ARM, err := cluster.Properties.ConvertToARM(resolved)
 		if err != nil {
 			return nil, err
 		}
@@ -936,8 +937,6 @@ func (operator *HcpOpenShiftClusterOperatorSpec) AssignProperties_From_HcpOpenSh
 	if source.ConfigMapExpressions != nil {
 		configMapExpressionList := make([]*core.DestinationExpression, len(source.ConfigMapExpressions))
 		for configMapExpressionIndex, configMapExpressionItem := range source.ConfigMapExpressions {
-			// Shadow the loop variable to avoid aliasing
-			configMapExpressionItem := configMapExpressionItem
 			if configMapExpressionItem != nil {
 				configMapExpression := *configMapExpressionItem.DeepCopy()
 				configMapExpressionList[configMapExpressionIndex] = &configMapExpression
@@ -954,8 +953,6 @@ func (operator *HcpOpenShiftClusterOperatorSpec) AssignProperties_From_HcpOpenSh
 	if source.SecretExpressions != nil {
 		secretExpressionList := make([]*core.DestinationExpression, len(source.SecretExpressions))
 		for secretExpressionIndex, secretExpressionItem := range source.SecretExpressions {
-			// Shadow the loop variable to avoid aliasing
-			secretExpressionItem := secretExpressionItem
 			if secretExpressionItem != nil {
 				secretExpression := *secretExpressionItem.DeepCopy()
 				secretExpressionList[secretExpressionIndex] = &secretExpression
@@ -993,8 +990,6 @@ func (operator *HcpOpenShiftClusterOperatorSpec) AssignProperties_To_HcpOpenShif
 	if operator.ConfigMapExpressions != nil {
 		configMapExpressionList := make([]*core.DestinationExpression, len(operator.ConfigMapExpressions))
 		for configMapExpressionIndex, configMapExpressionItem := range operator.ConfigMapExpressions {
-			// Shadow the loop variable to avoid aliasing
-			configMapExpressionItem := configMapExpressionItem
 			if configMapExpressionItem != nil {
 				configMapExpression := *configMapExpressionItem.DeepCopy()
 				configMapExpressionList[configMapExpressionIndex] = &configMapExpression
@@ -1011,8 +1006,6 @@ func (operator *HcpOpenShiftClusterOperatorSpec) AssignProperties_To_HcpOpenShif
 	if operator.SecretExpressions != nil {
 		secretExpressionList := make([]*core.DestinationExpression, len(operator.SecretExpressions))
 		for secretExpressionIndex, secretExpressionItem := range operator.SecretExpressions {
-			// Shadow the loop variable to avoid aliasing
-			secretExpressionItem := secretExpressionItem
 			if secretExpressionItem != nil {
 				secretExpression := *secretExpressionItem.DeepCopy()
 				secretExpressionList[secretExpressionIndex] = &secretExpression
@@ -1113,7 +1106,7 @@ func (properties *HcpOpenShiftClusterProperties) ConvertToARM(resolved genruntim
 
 	// Set property "Api":
 	if properties.Api != nil {
-		api_ARM, err := (*properties.Api).ConvertToARM(resolved)
+		api_ARM, err := properties.Api.ConvertToARM(resolved)
 		if err != nil {
 			return nil, err
 		}
@@ -1123,7 +1116,7 @@ func (properties *HcpOpenShiftClusterProperties) ConvertToARM(resolved genruntim
 
 	// Set property "Autoscaling":
 	if properties.Autoscaling != nil {
-		autoscaling_ARM, err := (*properties.Autoscaling).ConvertToARM(resolved)
+		autoscaling_ARM, err := properties.Autoscaling.ConvertToARM(resolved)
 		if err != nil {
 			return nil, err
 		}
@@ -1133,7 +1126,7 @@ func (properties *HcpOpenShiftClusterProperties) ConvertToARM(resolved genruntim
 
 	// Set property "ClusterImageRegistry":
 	if properties.ClusterImageRegistry != nil {
-		clusterImageRegistry_ARM, err := (*properties.ClusterImageRegistry).ConvertToARM(resolved)
+		clusterImageRegistry_ARM, err := properties.ClusterImageRegistry.ConvertToARM(resolved)
 		if err != nil {
 			return nil, err
 		}
@@ -1151,7 +1144,7 @@ func (properties *HcpOpenShiftClusterProperties) ConvertToARM(resolved genruntim
 
 	// Set property "Dns":
 	if properties.Dns != nil {
-		dns_ARM, err := (*properties.Dns).ConvertToARM(resolved)
+		dns_ARM, err := properties.Dns.ConvertToARM(resolved)
 		if err != nil {
 			return nil, err
 		}
@@ -1161,7 +1154,7 @@ func (properties *HcpOpenShiftClusterProperties) ConvertToARM(resolved genruntim
 
 	// Set property "Etcd":
 	if properties.Etcd != nil {
-		etcd_ARM, err := (*properties.Etcd).ConvertToARM(resolved)
+		etcd_ARM, err := properties.Etcd.ConvertToARM(resolved)
 		if err != nil {
 			return nil, err
 		}
@@ -1180,7 +1173,7 @@ func (properties *HcpOpenShiftClusterProperties) ConvertToARM(resolved genruntim
 
 	// Set property "Ingress":
 	if properties.Ingress != nil {
-		ingress_ARM, err := (*properties.Ingress).ConvertToARM(resolved)
+		ingress_ARM, err := properties.Ingress.ConvertToARM(resolved)
 		if err != nil {
 			return nil, err
 		}
@@ -1190,7 +1183,7 @@ func (properties *HcpOpenShiftClusterProperties) ConvertToARM(resolved genruntim
 
 	// Set property "Network":
 	if properties.Network != nil {
-		network_ARM, err := (*properties.Network).ConvertToARM(resolved)
+		network_ARM, err := properties.Network.ConvertToARM(resolved)
 		if err != nil {
 			return nil, err
 		}
@@ -1206,7 +1199,7 @@ func (properties *HcpOpenShiftClusterProperties) ConvertToARM(resolved genruntim
 
 	// Set property "Platform":
 	if properties.Platform != nil {
-		platform_ARM, err := (*properties.Platform).ConvertToARM(resolved)
+		platform_ARM, err := properties.Platform.ConvertToARM(resolved)
 		if err != nil {
 			return nil, err
 		}
@@ -1216,7 +1209,7 @@ func (properties *HcpOpenShiftClusterProperties) ConvertToARM(resolved genruntim
 
 	// Set property "Version":
 	if properties.Version != nil {
-		version_ARM, err := (*properties.Version).ConvertToARM(resolved)
+		version_ARM, err := properties.Version.ConvertToARM(resolved)
 		if err != nil {
 			return nil, err
 		}
@@ -1441,8 +1434,6 @@ func (properties *HcpOpenShiftClusterProperties) AssignProperties_From_HcpOpenSh
 	if source.ImageDigestMirrors != nil {
 		imageDigestMirrorList := make([]ImageDigestMirror, len(source.ImageDigestMirrors))
 		for imageDigestMirrorIndex, imageDigestMirrorItem := range source.ImageDigestMirrors {
-			// Shadow the loop variable to avoid aliasing
-			imageDigestMirrorItem := imageDigestMirrorItem
 			var imageDigestMirror ImageDigestMirror
 			err := imageDigestMirror.AssignProperties_From_ImageDigestMirror(&imageDigestMirrorItem)
 			if err != nil {
@@ -1587,8 +1578,6 @@ func (properties *HcpOpenShiftClusterProperties) AssignProperties_To_HcpOpenShif
 	if properties.ImageDigestMirrors != nil {
 		imageDigestMirrorList := make([]storage.ImageDigestMirror, len(properties.ImageDigestMirrors))
 		for imageDigestMirrorIndex, imageDigestMirrorItem := range properties.ImageDigestMirrors {
-			// Shadow the loop variable to avoid aliasing
-			imageDigestMirrorItem := imageDigestMirrorItem
 			var imageDigestMirror storage.ImageDigestMirror
 			err := imageDigestMirrorItem.AssignProperties_To_ImageDigestMirror(&imageDigestMirror)
 			if err != nil {
@@ -1738,8 +1727,6 @@ func (properties *HcpOpenShiftClusterProperties) Initialize_From_HcpOpenShiftClu
 	if source.ImageDigestMirrors != nil {
 		imageDigestMirrorList := make([]ImageDigestMirror, len(source.ImageDigestMirrors))
 		for imageDigestMirrorIndex, imageDigestMirrorItem := range source.ImageDigestMirrors {
-			// Shadow the loop variable to avoid aliasing
-			imageDigestMirrorItem := imageDigestMirrorItem
 			var imageDigestMirror ImageDigestMirror
 			err := imageDigestMirror.Initialize_From_ImageDigestMirror_STATUS(&imageDigestMirrorItem)
 			if err != nil {
@@ -2124,8 +2111,6 @@ func (properties *HcpOpenShiftClusterProperties_STATUS) AssignProperties_From_Hc
 	if source.ImageDigestMirrors != nil {
 		imageDigestMirrorList := make([]ImageDigestMirror_STATUS, len(source.ImageDigestMirrors))
 		for imageDigestMirrorIndex, imageDigestMirrorItem := range source.ImageDigestMirrors {
-			// Shadow the loop variable to avoid aliasing
-			imageDigestMirrorItem := imageDigestMirrorItem
 			var imageDigestMirror ImageDigestMirror_STATUS
 			err := imageDigestMirror.AssignProperties_From_ImageDigestMirror_STATUS(&imageDigestMirrorItem)
 			if err != nil {
@@ -2303,8 +2288,6 @@ func (properties *HcpOpenShiftClusterProperties_STATUS) AssignProperties_To_HcpO
 	if properties.ImageDigestMirrors != nil {
 		imageDigestMirrorList := make([]storage.ImageDigestMirror_STATUS, len(properties.ImageDigestMirrors))
 		for imageDigestMirrorIndex, imageDigestMirrorItem := range properties.ImageDigestMirrors {
-			// Shadow the loop variable to avoid aliasing
-			imageDigestMirrorItem := imageDigestMirrorItem
 			var imageDigestMirror storage.ImageDigestMirror_STATUS
 			err := imageDigestMirrorItem.AssignProperties_To_ImageDigestMirror_STATUS(&imageDigestMirror)
 			if err != nil {
@@ -2484,8 +2467,6 @@ func (identity *ManagedServiceIdentity) AssignProperties_From_ManagedServiceIden
 	if source.UserAssignedIdentities != nil {
 		userAssignedIdentityList := make([]UserAssignedIdentityDetails, len(source.UserAssignedIdentities))
 		for userAssignedIdentityIndex, userAssignedIdentityItem := range source.UserAssignedIdentities {
-			// Shadow the loop variable to avoid aliasing
-			userAssignedIdentityItem := userAssignedIdentityItem
 			var userAssignedIdentity UserAssignedIdentityDetails
 			err := userAssignedIdentity.AssignProperties_From_UserAssignedIdentityDetails(&userAssignedIdentityItem)
 			if err != nil {
@@ -2519,8 +2500,6 @@ func (identity *ManagedServiceIdentity) AssignProperties_To_ManagedServiceIdenti
 	if identity.UserAssignedIdentities != nil {
 		userAssignedIdentityList := make([]storage.UserAssignedIdentityDetails, len(identity.UserAssignedIdentities))
 		for userAssignedIdentityIndex, userAssignedIdentityItem := range identity.UserAssignedIdentities {
-			// Shadow the loop variable to avoid aliasing
-			userAssignedIdentityItem := userAssignedIdentityItem
 			var userAssignedIdentity storage.UserAssignedIdentityDetails
 			err := userAssignedIdentityItem.AssignProperties_To_UserAssignedIdentityDetails(&userAssignedIdentity)
 			if err != nil {
@@ -2664,8 +2643,6 @@ func (identity *ManagedServiceIdentity_STATUS) AssignProperties_From_ManagedServ
 	if source.UserAssignedIdentities != nil {
 		userAssignedIdentityMap := make(map[string]UserAssignedIdentity_STATUS, len(source.UserAssignedIdentities))
 		for userAssignedIdentityKey, userAssignedIdentityValue := range source.UserAssignedIdentities {
-			// Shadow the loop variable to avoid aliasing
-			userAssignedIdentityValue := userAssignedIdentityValue
 			var userAssignedIdentity UserAssignedIdentity_STATUS
 			err := userAssignedIdentity.AssignProperties_From_UserAssignedIdentity_STATUS(&userAssignedIdentityValue)
 			if err != nil {
@@ -2705,8 +2682,6 @@ func (identity *ManagedServiceIdentity_STATUS) AssignProperties_To_ManagedServic
 	if identity.UserAssignedIdentities != nil {
 		userAssignedIdentityMap := make(map[string]storage.UserAssignedIdentity_STATUS, len(identity.UserAssignedIdentities))
 		for userAssignedIdentityKey, userAssignedIdentityValue := range identity.UserAssignedIdentities {
-			// Shadow the loop variable to avoid aliasing
-			userAssignedIdentityValue := userAssignedIdentityValue
 			var userAssignedIdentity storage.UserAssignedIdentity_STATUS
 			err := userAssignedIdentityValue.AssignProperties_To_UserAssignedIdentity_STATUS(&userAssignedIdentity)
 			if err != nil {
@@ -3848,7 +3823,7 @@ func (profile *EtcdProfile) ConvertToARM(resolved genruntime.ConvertToARMResolve
 
 	// Set property "DataEncryption":
 	if profile.DataEncryption != nil {
-		dataEncryption_ARM, err := (*profile.DataEncryption).ConvertToARM(resolved)
+		dataEncryption_ARM, err := profile.DataEncryption.ConvertToARM(resolved)
 		if err != nil {
 			return nil, err
 		}
@@ -4204,8 +4179,6 @@ func (mirror *ImageDigestMirror) AssignProperties_From_ImageDigestMirror(source 
 	if source.Mirrors != nil {
 		mirrorList := make([]ImageRepository, len(source.Mirrors))
 		for mirrorIndex, mirrorItem := range source.Mirrors {
-			// Shadow the loop variable to avoid aliasing
-			mirrorItem := mirrorItem
 			mirrorList[mirrorIndex] = ImageRepository(mirrorItem)
 		}
 		mirror.Mirrors = mirrorList
@@ -4234,8 +4207,6 @@ func (mirror *ImageDigestMirror) AssignProperties_To_ImageDigestMirror(destinati
 	if mirror.Mirrors != nil {
 		mirrorList := make([]string, len(mirror.Mirrors))
 		for mirrorIndex, mirrorItem := range mirror.Mirrors {
-			// Shadow the loop variable to avoid aliasing
-			mirrorItem := mirrorItem
 			mirrorList[mirrorIndex] = string(mirrorItem)
 		}
 		destination.Mirrors = mirrorList
@@ -4269,8 +4240,6 @@ func (mirror *ImageDigestMirror) Initialize_From_ImageDigestMirror_STATUS(source
 	if source.Mirrors != nil {
 		mirrorList := make([]ImageRepository, len(source.Mirrors))
 		for mirrorIndex, mirrorItem := range source.Mirrors {
-			// Shadow the loop variable to avoid aliasing
-			mirrorItem := mirrorItem
 			mirrorList[mirrorIndex] = ImageRepository(mirrorItem)
 		}
 		mirror.Mirrors = mirrorList
@@ -4368,8 +4337,6 @@ func (mirror *ImageDigestMirror_STATUS) AssignProperties_From_ImageDigestMirror_
 	if source.Mirrors != nil {
 		mirrorList := make([]ImageRepository_STATUS, len(source.Mirrors))
 		for mirrorIndex, mirrorItem := range source.Mirrors {
-			// Shadow the loop variable to avoid aliasing
-			mirrorItem := mirrorItem
 			mirrorList[mirrorIndex] = ImageRepository_STATUS(mirrorItem)
 		}
 		mirror.Mirrors = mirrorList
@@ -4398,8 +4365,6 @@ func (mirror *ImageDigestMirror_STATUS) AssignProperties_To_ImageDigestMirror_ST
 	if mirror.Mirrors != nil {
 		mirrorList := make([]string, len(mirror.Mirrors))
 		for mirrorIndex, mirrorItem := range mirror.Mirrors {
-			// Shadow the loop variable to avoid aliasing
-			mirrorItem := mirrorItem
 			mirrorList[mirrorIndex] = string(mirrorItem)
 		}
 		destination.Mirrors = mirrorList
@@ -5034,7 +4999,7 @@ func (profile *PlatformProfile) ConvertToARM(resolved genruntime.ConvertToARMRes
 
 	// Set property "OperatorsAuthentication":
 	if profile.OperatorsAuthentication != nil {
-		operatorsAuthentication_ARM, err := (*profile.OperatorsAuthentication).ConvertToARM(resolved)
+		operatorsAuthentication_ARM, err := profile.OperatorsAuthentication.ConvertToARM(resolved)
 		if err != nil {
 			return nil, err
 		}
@@ -5545,8 +5510,6 @@ func (status *ResourceStatus_STATUS) AssignProperties_From_ResourceStatus_STATUS
 	if source.Conditions != nil {
 		conditionList := make([]Condition_STATUS, len(source.Conditions))
 		for conditionIndex, conditionItem := range source.Conditions {
-			// Shadow the loop variable to avoid aliasing
-			conditionItem := conditionItem
 			var condition Condition_STATUS
 			err := condition.AssignProperties_From_Condition_STATUS(&conditionItem)
 			if err != nil {
@@ -5572,8 +5535,6 @@ func (status *ResourceStatus_STATUS) AssignProperties_To_ResourceStatus_STATUS(d
 	if status.Conditions != nil {
 		conditionList := make([]storage.Condition_STATUS, len(status.Conditions))
 		for conditionIndex, conditionItem := range status.Conditions {
-			// Shadow the loop variable to avoid aliasing
-			conditionItem := conditionItem
 			var condition storage.Condition_STATUS
 			err := conditionItem.AssignProperties_To_Condition_STATUS(&condition)
 			if err != nil {
@@ -6167,7 +6128,7 @@ func (profile *EtcdDataEncryptionProfile) ConvertToARM(resolved genruntime.Conve
 
 	// Set property "CustomerManaged":
 	if profile.CustomerManaged != nil {
-		customerManaged_ARM, err := (*profile.CustomerManaged).ConvertToARM(resolved)
+		customerManaged_ARM, err := profile.CustomerManaged.ConvertToARM(resolved)
 		if err != nil {
 			return nil, err
 		}
@@ -6505,7 +6466,7 @@ func (profile *OperatorsAuthenticationProfile) ConvertToARM(resolved genruntime.
 
 	// Set property "UserAssignedIdentities":
 	if profile.UserAssignedIdentities != nil {
-		userAssignedIdentities_ARM, err := (*profile.UserAssignedIdentities).ConvertToARM(resolved)
+		userAssignedIdentities_ARM, err := profile.UserAssignedIdentities.ConvertToARM(resolved)
 		if err != nil {
 			return nil, err
 		}
@@ -6757,7 +6718,7 @@ func (profile *CustomerManagedEncryptionProfile) ConvertToARM(resolved genruntim
 
 	// Set property "Kms":
 	if profile.Kms != nil {
-		kms_ARM, err := (*profile.Kms).ConvertToARM(resolved)
+		kms_ARM, err := profile.Kms.ConvertToARM(resolved)
 		if err != nil {
 			return nil, err
 		}
@@ -7139,8 +7100,6 @@ func (profile *UserAssignedIdentitiesProfile) AssignProperties_From_UserAssigned
 	if source.ControlPlaneOperatorsReferences != nil {
 		controlPlaneOperatorsReferenceMap := make(map[string]genruntime.ResourceReference, len(source.ControlPlaneOperatorsReferences))
 		for controlPlaneOperatorsReferenceKey, controlPlaneOperatorsReferenceValue := range source.ControlPlaneOperatorsReferences {
-			// Shadow the loop variable to avoid aliasing
-			controlPlaneOperatorsReferenceValue := controlPlaneOperatorsReferenceValue
 			controlPlaneOperatorsReferenceMap[controlPlaneOperatorsReferenceKey] = controlPlaneOperatorsReferenceValue.Copy()
 		}
 		profile.ControlPlaneOperatorsReferences = controlPlaneOperatorsReferenceMap
@@ -7152,8 +7111,6 @@ func (profile *UserAssignedIdentitiesProfile) AssignProperties_From_UserAssigned
 	if source.DataPlaneOperatorsReferences != nil {
 		dataPlaneOperatorsReferenceMap := make(map[string]genruntime.ResourceReference, len(source.DataPlaneOperatorsReferences))
 		for dataPlaneOperatorsReferenceKey, dataPlaneOperatorsReferenceValue := range source.DataPlaneOperatorsReferences {
-			// Shadow the loop variable to avoid aliasing
-			dataPlaneOperatorsReferenceValue := dataPlaneOperatorsReferenceValue
 			dataPlaneOperatorsReferenceMap[dataPlaneOperatorsReferenceKey] = dataPlaneOperatorsReferenceValue.Copy()
 		}
 		profile.DataPlaneOperatorsReferences = dataPlaneOperatorsReferenceMap
@@ -7182,8 +7139,6 @@ func (profile *UserAssignedIdentitiesProfile) AssignProperties_To_UserAssignedId
 	if profile.ControlPlaneOperatorsReferences != nil {
 		controlPlaneOperatorsReferenceMap := make(map[string]genruntime.ResourceReference, len(profile.ControlPlaneOperatorsReferences))
 		for controlPlaneOperatorsReferenceKey, controlPlaneOperatorsReferenceValue := range profile.ControlPlaneOperatorsReferences {
-			// Shadow the loop variable to avoid aliasing
-			controlPlaneOperatorsReferenceValue := controlPlaneOperatorsReferenceValue
 			controlPlaneOperatorsReferenceMap[controlPlaneOperatorsReferenceKey] = controlPlaneOperatorsReferenceValue.Copy()
 		}
 		destination.ControlPlaneOperatorsReferences = controlPlaneOperatorsReferenceMap
@@ -7195,8 +7150,6 @@ func (profile *UserAssignedIdentitiesProfile) AssignProperties_To_UserAssignedId
 	if profile.DataPlaneOperatorsReferences != nil {
 		dataPlaneOperatorsReferenceMap := make(map[string]genruntime.ResourceReference, len(profile.DataPlaneOperatorsReferences))
 		for dataPlaneOperatorsReferenceKey, dataPlaneOperatorsReferenceValue := range profile.DataPlaneOperatorsReferences {
-			// Shadow the loop variable to avoid aliasing
-			dataPlaneOperatorsReferenceValue := dataPlaneOperatorsReferenceValue
 			dataPlaneOperatorsReferenceMap[dataPlaneOperatorsReferenceKey] = dataPlaneOperatorsReferenceValue.Copy()
 		}
 		destination.DataPlaneOperatorsReferences = dataPlaneOperatorsReferenceMap
@@ -7381,7 +7334,7 @@ func (profile *KmsEncryptionProfile) ConvertToARM(resolved genruntime.ConvertToA
 
 	// Set property "ActiveKey":
 	if profile.ActiveKey != nil {
-		activeKey_ARM, err := (*profile.ActiveKey).ConvertToARM(resolved)
+		activeKey_ARM, err := profile.ActiveKey.ConvertToARM(resolved)
 		if err != nil {
 			return nil, err
 		}

@@ -19,6 +19,7 @@ import (
 )
 
 // +kubebuilder:object:root=true
+// +kubebuilder:resource:categories={azure,redhatopenshift}
 // +kubebuilder:subresource:status
 // +kubebuilder:printcolumn:name="Ready",type="string",JSONPath=".status.conditions[?(@.type=='Ready')].status"
 // +kubebuilder:printcolumn:name="Severity",type="string",JSONPath=".status.conditions[?(@.type=='Ready')].severity"
@@ -289,7 +290,7 @@ func (pool *HcpOpenShiftClustersNodePool_Spec) ConvertToARM(resolved genruntime.
 
 	// Set property "Identity":
 	if pool.Identity != nil {
-		identity_ARM, err := (*pool.Identity).ConvertToARM(resolved)
+		identity_ARM, err := pool.Identity.ConvertToARM(resolved)
 		if err != nil {
 			return nil, err
 		}
@@ -308,7 +309,7 @@ func (pool *HcpOpenShiftClustersNodePool_Spec) ConvertToARM(resolved genruntime.
 
 	// Set property "Properties":
 	if pool.Properties != nil {
-		properties_ARM, err := (*pool.Properties).ConvertToARM(resolved)
+		properties_ARM, err := pool.Properties.ConvertToARM(resolved)
 		if err != nil {
 			return nil, err
 		}
@@ -893,8 +894,6 @@ func (operator *HcpOpenShiftClustersNodePoolOperatorSpec) AssignProperties_From_
 	if source.ConfigMapExpressions != nil {
 		configMapExpressionList := make([]*core.DestinationExpression, len(source.ConfigMapExpressions))
 		for configMapExpressionIndex, configMapExpressionItem := range source.ConfigMapExpressions {
-			// Shadow the loop variable to avoid aliasing
-			configMapExpressionItem := configMapExpressionItem
 			if configMapExpressionItem != nil {
 				configMapExpression := *configMapExpressionItem.DeepCopy()
 				configMapExpressionList[configMapExpressionIndex] = &configMapExpression
@@ -911,8 +910,6 @@ func (operator *HcpOpenShiftClustersNodePoolOperatorSpec) AssignProperties_From_
 	if source.SecretExpressions != nil {
 		secretExpressionList := make([]*core.DestinationExpression, len(source.SecretExpressions))
 		for secretExpressionIndex, secretExpressionItem := range source.SecretExpressions {
-			// Shadow the loop variable to avoid aliasing
-			secretExpressionItem := secretExpressionItem
 			if secretExpressionItem != nil {
 				secretExpression := *secretExpressionItem.DeepCopy()
 				secretExpressionList[secretExpressionIndex] = &secretExpression
@@ -938,8 +935,6 @@ func (operator *HcpOpenShiftClustersNodePoolOperatorSpec) AssignProperties_To_Hc
 	if operator.ConfigMapExpressions != nil {
 		configMapExpressionList := make([]*core.DestinationExpression, len(operator.ConfigMapExpressions))
 		for configMapExpressionIndex, configMapExpressionItem := range operator.ConfigMapExpressions {
-			// Shadow the loop variable to avoid aliasing
-			configMapExpressionItem := configMapExpressionItem
 			if configMapExpressionItem != nil {
 				configMapExpression := *configMapExpressionItem.DeepCopy()
 				configMapExpressionList[configMapExpressionIndex] = &configMapExpression
@@ -956,8 +951,6 @@ func (operator *HcpOpenShiftClustersNodePoolOperatorSpec) AssignProperties_To_Hc
 	if operator.SecretExpressions != nil {
 		secretExpressionList := make([]*core.DestinationExpression, len(operator.SecretExpressions))
 		for secretExpressionIndex, secretExpressionItem := range operator.SecretExpressions {
-			// Shadow the loop variable to avoid aliasing
-			secretExpressionItem := secretExpressionItem
 			if secretExpressionItem != nil {
 				secretExpression := *secretExpressionItem.DeepCopy()
 				secretExpressionList[secretExpressionIndex] = &secretExpression
@@ -1040,7 +1033,7 @@ func (properties *NodePoolProperties) ConvertToARM(resolved genruntime.ConvertTo
 
 	// Set property "AutoScaling":
 	if properties.AutoScaling != nil {
-		autoScaling_ARM, err := (*properties.AutoScaling).ConvertToARM(resolved)
+		autoScaling_ARM, err := properties.AutoScaling.ConvertToARM(resolved)
 		if err != nil {
 			return nil, err
 		}
@@ -1065,7 +1058,7 @@ func (properties *NodePoolProperties) ConvertToARM(resolved genruntime.ConvertTo
 
 	// Set property "Platform":
 	if properties.Platform != nil {
-		platform_ARM, err := (*properties.Platform).ConvertToARM(resolved)
+		platform_ARM, err := properties.Platform.ConvertToARM(resolved)
 		if err != nil {
 			return nil, err
 		}
@@ -1090,7 +1083,7 @@ func (properties *NodePoolProperties) ConvertToARM(resolved genruntime.ConvertTo
 
 	// Set property "Version":
 	if properties.Version != nil {
-		version_ARM, err := (*properties.Version).ConvertToARM(resolved)
+		version_ARM, err := properties.Version.ConvertToARM(resolved)
 		if err != nil {
 			return nil, err
 		}
@@ -1214,8 +1207,6 @@ func (properties *NodePoolProperties) AssignProperties_From_NodePoolProperties(s
 	if source.Labels != nil {
 		labelList := make([]Label, len(source.Labels))
 		for labelIndex, labelItem := range source.Labels {
-			// Shadow the loop variable to avoid aliasing
-			labelItem := labelItem
 			var label Label
 			err := label.AssignProperties_From_Label(&labelItem)
 			if err != nil {
@@ -1250,8 +1241,6 @@ func (properties *NodePoolProperties) AssignProperties_From_NodePoolProperties(s
 	if source.Taints != nil {
 		taintList := make([]Taint, len(source.Taints))
 		for taintIndex, taintItem := range source.Taints {
-			// Shadow the loop variable to avoid aliasing
-			taintItem := taintItem
 			var taint Taint
 			err := taint.AssignProperties_From_Taint(&taintItem)
 			if err != nil {
@@ -1309,8 +1298,6 @@ func (properties *NodePoolProperties) AssignProperties_To_NodePoolProperties(des
 	if properties.Labels != nil {
 		labelList := make([]storage.Label, len(properties.Labels))
 		for labelIndex, labelItem := range properties.Labels {
-			// Shadow the loop variable to avoid aliasing
-			labelItem := labelItem
 			var label storage.Label
 			err := labelItem.AssignProperties_To_Label(&label)
 			if err != nil {
@@ -1345,8 +1332,6 @@ func (properties *NodePoolProperties) AssignProperties_To_NodePoolProperties(des
 	if properties.Taints != nil {
 		taintList := make([]storage.Taint, len(properties.Taints))
 		for taintIndex, taintItem := range properties.Taints {
-			// Shadow the loop variable to avoid aliasing
-			taintItem := taintItem
 			var taint storage.Taint
 			err := taintItem.AssignProperties_To_Taint(&taint)
 			if err != nil {
@@ -1549,8 +1534,6 @@ func (properties *NodePoolProperties_STATUS) AssignProperties_From_NodePoolPrope
 	if source.Labels != nil {
 		labelList := make([]Label_STATUS, len(source.Labels))
 		for labelIndex, labelItem := range source.Labels {
-			// Shadow the loop variable to avoid aliasing
-			labelItem := labelItem
 			var label Label_STATUS
 			err := label.AssignProperties_From_Label_STATUS(&labelItem)
 			if err != nil {
@@ -1594,8 +1577,6 @@ func (properties *NodePoolProperties_STATUS) AssignProperties_From_NodePoolPrope
 	if source.Taints != nil {
 		taintList := make([]Taint_STATUS, len(source.Taints))
 		for taintIndex, taintItem := range source.Taints {
-			// Shadow the loop variable to avoid aliasing
-			taintItem := taintItem
 			var taint Taint_STATUS
 			err := taint.AssignProperties_From_Taint_STATUS(&taintItem)
 			if err != nil {
@@ -1653,8 +1634,6 @@ func (properties *NodePoolProperties_STATUS) AssignProperties_To_NodePoolPropert
 	if properties.Labels != nil {
 		labelList := make([]storage.Label_STATUS, len(properties.Labels))
 		for labelIndex, labelItem := range properties.Labels {
-			// Shadow the loop variable to avoid aliasing
-			labelItem := labelItem
 			var label storage.Label_STATUS
 			err := labelItem.AssignProperties_To_Label_STATUS(&label)
 			if err != nil {
@@ -1697,8 +1676,6 @@ func (properties *NodePoolProperties_STATUS) AssignProperties_To_NodePoolPropert
 	if properties.Taints != nil {
 		taintList := make([]storage.Taint_STATUS, len(properties.Taints))
 		for taintIndex, taintItem := range properties.Taints {
-			// Shadow the loop variable to avoid aliasing
-			taintItem := taintItem
 			var taint storage.Taint_STATUS
 			err := taintItem.AssignProperties_To_Taint_STATUS(&taint)
 			if err != nil {
@@ -2140,7 +2117,7 @@ func (profile *NodePoolPlatformProfile) ConvertToARM(resolved genruntime.Convert
 
 	// Set property "OsDisk":
 	if profile.OsDisk != nil {
-		osDisk_ARM, err := (*profile.OsDisk).ConvertToARM(resolved)
+		osDisk_ARM, err := profile.OsDisk.ConvertToARM(resolved)
 		if err != nil {
 			return nil, err
 		}
