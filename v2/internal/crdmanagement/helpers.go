@@ -15,6 +15,7 @@ import (
 	"sigs.k8s.io/controller-runtime/pkg/client/apiutil"
 
 	"github.com/Azure/azure-service-operator/v2/internal/set"
+	"github.com/Azure/azure-service-operator/v2/internal/util/match"
 	"github.com/Azure/azure-service-operator/v2/pkg/genruntime/registration"
 )
 
@@ -97,6 +98,24 @@ func FilterKnownTypesByReadyCRDs(
 	}
 
 	return result, nil
+}
+
+// FilterCRDMapByDenyPatterns removes entries from the CRD map whose group/kind matches
+// the given deny patterns. This provides defense-in-depth by ensuring denied CRDs are not
+// used for reconciler or webhook registration even if they are already installed in the cluster.
+func FilterCRDMapByDenyPatterns(crdMap map[string]apiextensions.CustomResourceDefinition, denyPatterns string) {
+	if denyPatterns == "" {
+		return
+	}
+
+	denyMatcher := match.NewStringMatcher(denyPatterns)
+
+	for name, crd := range crdMap {
+		matchStr := makeMatchString(crd)
+		if denyMatcher.Matches(matchStr).Matched {
+			delete(crdMap, name)
+		}
+	}
 }
 
 func makeMatchString(crd apiextensions.CustomResourceDefinition) string {

@@ -172,11 +172,12 @@ func SetupControllerManager(ctx context.Context, setupLog logr.Logger, flgs *Fla
 		if cfg.OperatorMode.IncludesWebhooks() {
 			// Note that this step will restart the pod when it succeeds
 			err = crdManager.Install(ctx, crdmanagement.Options{
-				CRDPatterns:  flgs.CRDPatterns,
-				CRDLabels:    crdLabels,
-				ExistingCRDs: &existingCRDs,
-				Path:         crdmanagement.CRDLocation,
-				Namespace:    cfg.PodNamespace,
+				CRDPatterns:     flgs.CRDPatterns,
+				CRDDenyPatterns: flgs.CRDDenyPatterns,
+				CRDLabels:       crdLabels,
+				ExistingCRDs:    &existingCRDs,
+				Path:            crdmanagement.CRDLocation,
+				Namespace:       cfg.PodNamespace,
 			})
 			if err != nil {
 				setupLog.Error(err, "failed to apply CRDs")
@@ -204,6 +205,12 @@ func SetupControllerManager(ctx context.Context, setupLog logr.Logger, flgs *Fla
 	//    TODO: us approximating the standard operator experience we don't perform this assertion currently as most
 	//    TODO: operators don't.
 	readyResources := crdmanagement.MakeCRDMap(existingCRDs.Items)
+
+	// Defense-in-depth: remove denied CRDs from readyResources so that even manually-installed
+	// CRDs matching the deny pattern are not reconciled or have webhooks registered.
+	if flgs.CRDDenyPatterns != "" {
+		crdmanagement.FilterCRDMapByDenyPatterns(readyResources, flgs.CRDDenyPatterns)
+	}
 
 	if cfg.OperatorMode.IncludesWatchers() {
 		//nolint:contextcheck

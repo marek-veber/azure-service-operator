@@ -179,11 +179,12 @@ func Test_DetermineCRDsToInstallOrUpgrade(t *testing.T) {
 	t.Parallel()
 
 	cases := []struct {
-		name     string
-		goal     []apiextensions.CustomResourceDefinition
-		existing []apiextensions.CustomResourceDefinition
-		patterns string
-		validate func(g *WithT, instructions []*crdmanagement.CRDInstallationInstruction)
+		name         string
+		goal         []apiextensions.CustomResourceDefinition
+		existing     []apiextensions.CustomResourceDefinition
+		patterns     string
+		denyPatterns string
+		validate     func(g *WithT, instructions []*crdmanagement.CRDInstallationInstruction)
 	}{
 		{
 			name:     "Skips CRDs if no pattern or installed",
@@ -368,6 +369,88 @@ func Test_DetermineCRDsToInstallOrUpgrade(t *testing.T) {
 				}
 			},
 		},
+		{
+			name:         "Deny pattern overrides pattern-matched CRD",
+			goal:         []apiextensions.CustomResourceDefinition{makeBasicCRDWithVersion("test", "v1.0.0")},
+			existing:     nil,
+			patterns:     "testrp.azure.com/*",
+			denyPatterns: "testrp.azure.com/test",
+			validate: func(g *WithT, instructions []*crdmanagement.CRDInstallationInstruction) {
+				g.Expect(instructions).To(HaveLen(1))
+				g.Expect(instructions[0].FilterResult).To(Equal(crdmanagement.Excluded))
+				g.Expect(instructions[0].FilterReason).To(ContainSubstring("matched deny pattern"))
+				apply, _ := instructions[0].ShouldApply()
+				g.Expect(apply).To(BeFalse())
+			},
+		},
+		{
+			name:         "Deny pattern overrides existing CRD",
+			goal:         []apiextensions.CustomResourceDefinition{makeBasicCRD("test")},
+			existing:     []apiextensions.CustomResourceDefinition{makeBasicCRDWithVersion("test", "1.1")},
+			patterns:     "",
+			denyPatterns: "testrp.azure.com/test",
+			validate: func(g *WithT, instructions []*crdmanagement.CRDInstallationInstruction) {
+				g.Expect(instructions).To(HaveLen(1))
+				g.Expect(instructions[0].FilterResult).To(Equal(crdmanagement.Excluded))
+				g.Expect(instructions[0].FilterReason).To(ContainSubstring("matched deny pattern"))
+				apply, _ := instructions[0].ShouldApply()
+				g.Expect(apply).To(BeFalse())
+			},
+		},
+		{
+			name:         "Empty deny pattern changes nothing",
+			goal:         []apiextensions.CustomResourceDefinition{makeBasicCRDWithVersion("test", "v1.0.0")},
+			existing:     nil,
+			patterns:     "testrp.azure.com/*",
+			denyPatterns: "",
+			validate: func(g *WithT, instructions []*crdmanagement.CRDInstallationInstruction) {
+				g.Expect(instructions).To(HaveLen(1))
+				g.Expect(instructions[0].FilterResult).To(Equal(crdmanagement.MatchedPattern))
+				apply, _ := instructions[0].ShouldApply()
+				g.Expect(apply).To(BeTrue())
+			},
+		},
+		{
+			name:         "Glob deny pattern excludes all CRDs in group",
+			goal:         []apiextensions.CustomResourceDefinition{makeBasicCRDWithVersion("test1", "v1.0.0"), makeBasicCRDWithVersion("test2", "v1.0.0")},
+			existing:     nil,
+			patterns:     "testrp.azure.com/*",
+			denyPatterns: "testrp.azure.com/*",
+			validate: func(g *WithT, instructions []*crdmanagement.CRDInstallationInstruction) {
+				g.Expect(instructions).To(HaveLen(2))
+				for _, instruction := range instructions {
+					g.Expect(instruction.FilterResult).To(Equal(crdmanagement.Excluded))
+					g.Expect(instruction.FilterReason).To(ContainSubstring("matched deny pattern"))
+					apply, _ := instruction.ShouldApply()
+					g.Expect(apply).To(BeFalse())
+				}
+			},
+		},
+		{
+			name: "Deny pattern excludes only matching CRDs from a group",
+			goal: []apiextensions.CustomResourceDefinition{
+				makeBasicCRDWithVersion("test1", "v1.0.0"),
+				makeBasicCRDWithVersion("test2", "v1.0.0"),
+			},
+			existing:     nil,
+			patterns:     "testrp.azure.com/*",
+			denyPatterns: "testrp.azure.com/test1",
+			validate: func(g *WithT, instructions []*crdmanagement.CRDInstallationInstruction) {
+				g.Expect(instructions).To(HaveLen(2))
+				for _, instruction := range instructions {
+					if instruction.CRD.Name == "test1.testrp.azure.com" {
+						g.Expect(instruction.FilterResult).To(Equal(crdmanagement.Excluded))
+						g.Expect(instruction.FilterReason).To(ContainSubstring("matched deny pattern"))
+						apply, _ := instruction.ShouldApply()
+						g.Expect(apply).To(BeFalse())
+					} else {
+						g.Expect(instruction.FilterResult).To(Equal(crdmanagement.MatchedPattern))
+						apply, _ := instruction.ShouldApply()
+						g.Expect(apply).To(BeTrue())
+					}
+				}
+			},
+		},
 	}
 
 	for _, c := range cases {
@@ -379,7 +462,7 @@ func Test_DetermineCRDsToInstallOrUpgrade(t *testing.T) {
 			logger := testcommon.NewTestLogger(t)
 			crdManager := crdmanagement.NewManager(logger, nil, nil)
 
-			instructions, err := crdManager.DetermineCRDsToInstallOrUpgrade(c.goal, c.existing, c.patterns)
+			instructions, err := crdManager.DetermineCRDsToInstallOrUpgrade(c.goal, c.existing, c.patterns, c.denyPatterns)
 			g.Expect(err).ToNot(HaveOccurred())
 
 			c.validate(g, instructions)

@@ -293,6 +293,7 @@ func (m *Manager) DetermineCRDsToInstallOrUpgrade(
 	goalCRDs []apiextensions.CustomResourceDefinition,
 	existingCRDs []apiextensions.CustomResourceDefinition,
 	patterns string,
+	denyPatterns ...string,
 ) ([]*CRDInstallationInstruction, error) {
 	m.logger.V(Info).Info("Goal CRDs", "count", len(goalCRDs))
 	m.logger.V(Info).Info("Existing CRDs", "count", len(existingCRDs))
@@ -314,6 +315,13 @@ func (m *Manager) DetermineCRDsToInstallOrUpgrade(
 	if err != nil {
 		return nil, err
 	}
+
+	// Apply deny patterns last so they override both existing and pattern matches
+	denyPatternsStr := ""
+	if len(denyPatterns) > 0 {
+		denyPatternsStr = denyPatterns[0]
+	}
+	m.filterCRDsByDenyPatterns(denyPatternsStr, resultMap)
 
 	var filteredGoalCRDs []apiextensions.CustomResourceDefinition
 	for _, result := range resultMap {
@@ -386,7 +394,7 @@ func (m *Manager) applyCRDs(
 		if err != nil {
 			return eris.Wrap(err, "failed to list current CRDs")
 		}
-		instructions, err = m.DetermineCRDsToInstallOrUpgrade(goalCRDs, options.ExistingCRDs.Items, options.CRDPatterns)
+		instructions, err = m.DetermineCRDsToInstallOrUpgrade(goalCRDs, options.ExistingCRDs.Items, options.CRDPatterns, options.CRDDenyPatterns)
 		if err != nil {
 			return eris.Wrap(err, "failed to determine CRDs to apply")
 		}
@@ -449,11 +457,12 @@ func (m *Manager) applyCRDs(
 }
 
 type Options struct {
-	Path         string
-	Namespace    string
-	CRDPatterns  string
-	CRDLabels    map[string]string
-	ExistingCRDs *apiextensions.CustomResourceDefinitionList
+	Path            string
+	Namespace       string
+	CRDPatterns     string
+	CRDDenyPatterns string
+	CRDLabels       map[string]string
+	ExistingCRDs    *apiextensions.CustomResourceDefinitionList
 }
 
 func (m *Manager) Install(ctx context.Context, options Options) error {
@@ -464,7 +473,7 @@ func (m *Manager) Install(ctx context.Context, options Options) error {
 	}
 	applyCRDLabels(goalCRDs, options.CRDLabels)
 
-	installationInstructions, err := m.DetermineCRDsToInstallOrUpgrade(goalCRDs, options.ExistingCRDs.Items, options.CRDPatterns)
+	installationInstructions, err := m.DetermineCRDsToInstallOrUpgrade(goalCRDs, options.ExistingCRDs.Items, options.CRDPatterns, options.CRDDenyPatterns)
 	if err != nil {
 		return eris.Wrap(err, "failed to determine CRDs to apply")
 	}
@@ -670,6 +679,26 @@ func (m *Manager) filterCRDsByPatterns(patterns string, resultMap map[string]*CR
 	}
 
 	return nil
+}
+
+// filterCRDsByDenyPatterns sets any CRDs matching the deny patterns back to Excluded,
+// regardless of whether they were matched by existing CRDs or include patterns.
+// This runs AFTER both filterCRDsByExisting and filterCRDsByPatterns to provide a
+// security boundary preventing specific CRDs from being installed, upgraded, or reconciled.
+func (m *Manager) filterCRDsByDenyPatterns(denyPatterns string, resultMap map[string]*CRDInstallationInstruction) {
+	if denyPatterns == "" {
+		return
+	}
+
+	denyMatcher := match.NewStringMatcher(denyPatterns)
+
+	for _, goal := range resultMap {
+		matchStr := makeMatchString(goal.CRD)
+		if denyMatcher.Matches(matchStr).Matched {
+			goal.FilterResult = Excluded
+			goal.FilterReason = fmt.Sprintf("CRD %q matched deny pattern and was excluded", matchStr)
+		}
+	}
 }
 
 // patternsToGroupOnly takes a semicolon-separated CRD pattern string (format "group/Kind")

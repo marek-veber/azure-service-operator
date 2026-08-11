@@ -26,6 +26,7 @@ type Flags struct {
 	EnableLeaderElection bool
 	CRDManagementMode    string
 	CRDPatterns          string // This is a ';' delimited string containing a collection of patterns
+	CRDDenyPatterns      string // This is a ';' delimited string containing a collection of deny patterns
 	CRDLabels            string // This is a ',' or ';' delimited string containing labels to apply to managed CRDs
 }
 
@@ -48,7 +49,7 @@ func parseCRDLabels(value string) (map[string]string, error) {
 
 func (f Flags) String() string {
 	return fmt.Sprintf(
-		"MetricsAddr: %s, SecureMetrics: %t, ProfilingMetrics: %t, MetricsCertDir: %s, HealthAddr: %s, WebhookPort: %d, WebhookCertDir: %s, EnableLeaderElection: %t, CRDManagementMode: %s, CRDPatterns: %s, CRDLabels: %s",
+		"MetricsAddr: %s, SecureMetrics: %t, ProfilingMetrics: %t, MetricsCertDir: %s, HealthAddr: %s, WebhookPort: %d, WebhookCertDir: %s, EnableLeaderElection: %t, CRDManagementMode: %s, CRDPatterns: %s, CRDDenyPatterns: %s, CRDLabels: %s",
 		f.MetricsAddr,
 		f.SecureMetrics,
 		f.ProfilingMetrics,
@@ -59,6 +60,7 @@ func (f Flags) String() string {
 		f.EnableLeaderElection,
 		f.CRDManagementMode,
 		f.CRDPatterns,
+		f.CRDDenyPatterns,
 		f.CRDLabels,
 	)
 }
@@ -79,6 +81,9 @@ func InitFlags(flagSet *flag.FlagSet) *Flags {
 	flagSet.StringVar(&result.CRDManagementMode, "crd-management", "auto",
 		"Instructs the operator on how it should manage the Custom Resource Definitions. One of 'auto', 'none'")
 	flagSet.StringVar(&result.CRDPatterns, "crd-pattern", "", "Install these CRDs. CRDs already in the cluster will also always be upgraded.")
+	flagSet.StringVar(&result.CRDDenyPatterns, "crd-deny-pattern", "",
+		"Deny CRDs matching these patterns from being installed, upgraded, or reconciled, even if they match --crd-pattern or already exist in the cluster. "+
+			"Semicolon-delimited globs matching '<group>/<kind>', e.g. 'authorization.azure.com/*;managedidentity.azure.com/*'")
 	flagSet.StringVar(&result.CRDLabels, "crd-labels", "", "Comma-separated (or semicolon-separated) labels to apply to all managed CRDs (for example, example.com/owner=aso,environment=production). Labels reserved by the operator (app.kubernetes.io/name, app.kubernetes.io/version and the serviceoperator.azure.com/ prefix) cannot be set.")
 
 	return result
