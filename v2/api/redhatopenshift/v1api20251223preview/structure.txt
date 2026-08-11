@@ -269,7 +269,8 @@ HcpOpenShiftClustersExternalAuth: Resource
 │           │   ├── Rule 0: MaxItems: 10
 │           │   └── Rule 1: MinItems: 1
 │           ├── Ca: *string
-│           └── Url: *string
+│           └── Url: Validated<*string> (1 rule)
+│               └── Rule 0: Pattern: "^[a-zA-Z][a-zA-Z0-9+-.]*:[^\\s]*$"
 └── Status: Object (6 properties)
     ├── Conditions: conditions.Condition[]
     ├── Id: *string

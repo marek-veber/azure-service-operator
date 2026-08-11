@@ -241,16 +241,27 @@ type PlatformProfile struct {
 	// where clusterName means the hcpOpenShiftClusters resource name
 	// (up to 45 characters) followed by a 16-byte universally unique
 	// identifier per RFC 4122.
-	ManagedResourceGroup   *string `json:"managedResourceGroup,omitempty"`
+	ManagedResourceGroup *string `json:"managedResourceGroup,omitempty"`
+
+	// NetworkSecurityGroupId: ResourceId for the NSG (network security group) attached to the cluster subnet
+	// Note that NSGs cannot be reused for other ARO-HCP clusters.
 	NetworkSecurityGroupId *string `json:"networkSecurityGroupId,omitempty"`
 
 	// OperatorsAuthentication: The configuration that the operators of the cluster have to authenticate to Azure
 	OperatorsAuthentication *OperatorsAuthenticationProfile `json:"operatorsAuthentication,omitempty"`
 
 	// OutboundType: The core outgoing configuration
-	OutboundType            *PlatformProfile_OutboundType `json:"outboundType,omitempty"`
-	SubnetId                *string                       `json:"subnetId,omitempty"`
-	VnetIntegrationSubnetId *string                       `json:"vnetIntegrationSubnetId,omitempty"`
+	OutboundType *PlatformProfile_OutboundType `json:"outboundType,omitempty"`
+
+	// SubnetId: The Azure resource ID of the worker subnet
+	// Note that a subnet cannot be reused between ARO-HCP Clusters.
+	SubnetId *string `json:"subnetId,omitempty"`
+
+	// VnetIntegrationSubnetId: The Azure resource ID of a subnet that enables direct,
+	// private network connectivity between the hosted control plane
+	// and your cluster's nodes. This subnet must be dedicated to ARO HCP
+	// and cannot be shared with the cluster subnet or any node pool subnets.
+	VnetIntegrationSubnetId *string `json:"vnetIntegrationSubnetId,omitempty"`
 }
 
 // Information about the user assigned identity for the resource
@@ -371,9 +382,19 @@ var etcdDataEncryptionProfile_KeyManagementMode_Values = map[string]EtcdDataEncr
 // to perform Operators authentication
 // based on Azure User-Assigned Managed Identities
 type UserAssignedIdentitiesProfile struct {
-	ControlPlaneOperators  map[string]string `json:"controlPlaneOperators,omitempty"`
-	DataPlaneOperators     map[string]string `json:"dataPlaneOperators,omitempty"`
-	ServiceManagedIdentity *string           `json:"serviceManagedIdentity,omitempty"`
+	// ControlPlaneOperators: The set of Azure User-Assigned Managed Identities leveraged for the Control Plane
+	// operators of the cluster. The set of required managed identities is dependent on the
+	// Cluster's OpenShift version.
+	ControlPlaneOperators map[string]string `json:"controlPlaneOperators,omitempty"`
+
+	// DataPlaneOperators: The set of Azure User-Assigned Managed Identities leveraged for the Data Plane
+	// operators of the cluster. The set of required managed identities is dependent on the
+	// Cluster's OpenShift version.
+	DataPlaneOperators map[string]string `json:"dataPlaneOperators,omitempty"`
+
+	// ServiceManagedIdentity: Represents the information associated to an Azure User-Assigned Managed Identity whose
+	// purpose is to perform service level actions.
+	ServiceManagedIdentity *string `json:"serviceManagedIdentity,omitempty"`
 }
 
 // +kubebuilder:validation:Enum={"KMS"}

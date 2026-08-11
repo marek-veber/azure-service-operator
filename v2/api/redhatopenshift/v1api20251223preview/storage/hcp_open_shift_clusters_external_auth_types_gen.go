@@ -18,6 +18,7 @@ import (
 )
 
 // +kubebuilder:object:root=true
+// +kubebuilder:resource:categories={azure,redhatopenshift}
 // +kubebuilder:subresource:status
 // +kubebuilder:printcolumn:name="Ready",type="string",JSONPath=".status.conditions[?(@.type=='Ready')].status"
 // +kubebuilder:printcolumn:name="Severity",type="string",JSONPath=".status.conditions[?(@.type=='Ready')].severity"
@@ -674,8 +675,6 @@ func (properties *ExternalAuthProperties) AssignProperties_From_ExternalAuthProp
 	if source.Clients != nil {
 		clientList := make([]ExternalAuthClientProfile, len(source.Clients))
 		for clientIndex, clientItem := range source.Clients {
-			// Shadow the loop variable to avoid aliasing
-			clientItem := clientItem
 			var client ExternalAuthClientProfile
 			err := client.AssignProperties_From_ExternalAuthClientProfile(&clientItem)
 			if err != nil {
@@ -741,8 +740,6 @@ func (properties *ExternalAuthProperties) AssignProperties_To_ExternalAuthProper
 	if properties.Clients != nil {
 		clientList := make([]storage.ExternalAuthClientProfile, len(properties.Clients))
 		for clientIndex, clientItem := range properties.Clients {
-			// Shadow the loop variable to avoid aliasing
-			clientItem := clientItem
 			var client storage.ExternalAuthClientProfile
 			err := clientItem.AssignProperties_To_ExternalAuthClientProfile(&client)
 			if err != nil {
@@ -819,8 +816,6 @@ func (properties *ExternalAuthProperties_STATUS) AssignProperties_From_ExternalA
 	if source.Clients != nil {
 		clientList := make([]ExternalAuthClientProfile_STATUS, len(source.Clients))
 		for clientIndex, clientItem := range source.Clients {
-			// Shadow the loop variable to avoid aliasing
-			clientItem := clientItem
 			var client ExternalAuthClientProfile_STATUS
 			err := client.AssignProperties_From_ExternalAuthClientProfile_STATUS(&clientItem)
 			if err != nil {
@@ -909,8 +904,6 @@ func (properties *ExternalAuthProperties_STATUS) AssignProperties_To_ExternalAut
 	if properties.Clients != nil {
 		clientList := make([]storage.ExternalAuthClientProfile_STATUS, len(properties.Clients))
 		for clientIndex, clientItem := range properties.Clients {
-			// Shadow the loop variable to avoid aliasing
-			clientItem := clientItem
 			var client storage.ExternalAuthClientProfile_STATUS
 			err := clientItem.AssignProperties_To_ExternalAuthClientProfile_STATUS(&client)
 			if err != nil {
@@ -995,8 +988,6 @@ func (operator *HcpOpenShiftClustersExternalAuthOperatorSpec) AssignProperties_F
 	if source.ConfigMapExpressions != nil {
 		configMapExpressionList := make([]*core.DestinationExpression, len(source.ConfigMapExpressions))
 		for configMapExpressionIndex, configMapExpressionItem := range source.ConfigMapExpressions {
-			// Shadow the loop variable to avoid aliasing
-			configMapExpressionItem := configMapExpressionItem
 			if configMapExpressionItem != nil {
 				configMapExpression := *configMapExpressionItem.DeepCopy()
 				configMapExpressionList[configMapExpressionIndex] = &configMapExpression
@@ -1013,8 +1004,6 @@ func (operator *HcpOpenShiftClustersExternalAuthOperatorSpec) AssignProperties_F
 	if source.SecretExpressions != nil {
 		secretExpressionList := make([]*core.DestinationExpression, len(source.SecretExpressions))
 		for secretExpressionIndex, secretExpressionItem := range source.SecretExpressions {
-			// Shadow the loop variable to avoid aliasing
-			secretExpressionItem := secretExpressionItem
 			if secretExpressionItem != nil {
 				secretExpression := *secretExpressionItem.DeepCopy()
 				secretExpressionList[secretExpressionIndex] = &secretExpression
@@ -1056,8 +1045,6 @@ func (operator *HcpOpenShiftClustersExternalAuthOperatorSpec) AssignProperties_T
 	if operator.ConfigMapExpressions != nil {
 		configMapExpressionList := make([]*core.DestinationExpression, len(operator.ConfigMapExpressions))
 		for configMapExpressionIndex, configMapExpressionItem := range operator.ConfigMapExpressions {
-			// Shadow the loop variable to avoid aliasing
-			configMapExpressionItem := configMapExpressionItem
 			if configMapExpressionItem != nil {
 				configMapExpression := *configMapExpressionItem.DeepCopy()
 				configMapExpressionList[configMapExpressionIndex] = &configMapExpression
@@ -1074,8 +1061,6 @@ func (operator *HcpOpenShiftClustersExternalAuthOperatorSpec) AssignProperties_T
 	if operator.SecretExpressions != nil {
 		secretExpressionList := make([]*core.DestinationExpression, len(operator.SecretExpressions))
 		for secretExpressionIndex, secretExpressionItem := range operator.SecretExpressions {
-			// Shadow the loop variable to avoid aliasing
-			secretExpressionItem := secretExpressionItem
 			if secretExpressionItem != nil {
 				secretExpression := *secretExpressionItem.DeepCopy()
 				secretExpressionList[secretExpressionIndex] = &secretExpression
@@ -1152,8 +1137,6 @@ func (profile *ExternalAuthClaimProfile) AssignProperties_From_ExternalAuthClaim
 	if source.ValidationRules != nil {
 		validationRuleList := make([]TokenClaimValidationRule, len(source.ValidationRules))
 		for validationRuleIndex, validationRuleItem := range source.ValidationRules {
-			// Shadow the loop variable to avoid aliasing
-			validationRuleItem := validationRuleItem
 			var validationRule TokenClaimValidationRule
 			err := validationRule.AssignProperties_From_TokenClaimValidationRule(&validationRuleItem)
 			if err != nil {
@@ -1207,8 +1190,6 @@ func (profile *ExternalAuthClaimProfile) AssignProperties_To_ExternalAuthClaimPr
 	if profile.ValidationRules != nil {
 		validationRuleList := make([]storage.TokenClaimValidationRule, len(profile.ValidationRules))
 		for validationRuleIndex, validationRuleItem := range profile.ValidationRules {
-			// Shadow the loop variable to avoid aliasing
-			validationRuleItem := validationRuleItem
 			var validationRule storage.TokenClaimValidationRule
 			err := validationRuleItem.AssignProperties_To_TokenClaimValidationRule(&validationRule)
 			if err != nil {
@@ -1270,8 +1251,6 @@ func (profile *ExternalAuthClaimProfile_STATUS) AssignProperties_From_ExternalAu
 	if source.ValidationRules != nil {
 		validationRuleList := make([]TokenClaimValidationRule_STATUS, len(source.ValidationRules))
 		for validationRuleIndex, validationRuleItem := range source.ValidationRules {
-			// Shadow the loop variable to avoid aliasing
-			validationRuleItem := validationRuleItem
 			var validationRule TokenClaimValidationRule_STATUS
 			err := validationRule.AssignProperties_From_TokenClaimValidationRule_STATUS(&validationRuleItem)
 			if err != nil {
@@ -1325,8 +1304,6 @@ func (profile *ExternalAuthClaimProfile_STATUS) AssignProperties_To_ExternalAuth
 	if profile.ValidationRules != nil {
 		validationRuleList := make([]storage.TokenClaimValidationRule_STATUS, len(profile.ValidationRules))
 		for validationRuleIndex, validationRuleItem := range profile.ValidationRules {
-			// Shadow the loop variable to avoid aliasing
-			validationRuleItem := validationRuleItem
 			var validationRule storage.TokenClaimValidationRule_STATUS
 			err := validationRuleItem.AssignProperties_To_TokenClaimValidationRule_STATUS(&validationRule)
 			if err != nil {

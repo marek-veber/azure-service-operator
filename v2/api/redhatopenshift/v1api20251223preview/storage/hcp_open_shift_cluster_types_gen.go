@@ -18,6 +18,7 @@ import (
 )
 
 // +kubebuilder:object:root=true
+// +kubebuilder:resource:categories={azure,redhatopenshift}
 // +kubebuilder:subresource:status
 // +kubebuilder:printcolumn:name="Ready",type="string",JSONPath=".status.conditions[?(@.type=='Ready')].status"
 // +kubebuilder:printcolumn:name="Severity",type="string",JSONPath=".status.conditions[?(@.type=='Ready')].severity"
@@ -747,8 +748,6 @@ func (operator *HcpOpenShiftClusterOperatorSpec) AssignProperties_From_HcpOpenSh
 	if source.ConfigMapExpressions != nil {
 		configMapExpressionList := make([]*core.DestinationExpression, len(source.ConfigMapExpressions))
 		for configMapExpressionIndex, configMapExpressionItem := range source.ConfigMapExpressions {
-			// Shadow the loop variable to avoid aliasing
-			configMapExpressionItem := configMapExpressionItem
 			if configMapExpressionItem != nil {
 				configMapExpression := *configMapExpressionItem.DeepCopy()
 				configMapExpressionList[configMapExpressionIndex] = &configMapExpression
@@ -765,8 +764,6 @@ func (operator *HcpOpenShiftClusterOperatorSpec) AssignProperties_From_HcpOpenSh
 	if source.SecretExpressions != nil {
 		secretExpressionList := make([]*core.DestinationExpression, len(source.SecretExpressions))
 		for secretExpressionIndex, secretExpressionItem := range source.SecretExpressions {
-			// Shadow the loop variable to avoid aliasing
-			secretExpressionItem := secretExpressionItem
 			if secretExpressionItem != nil {
 				secretExpression := *secretExpressionItem.DeepCopy()
 				secretExpressionList[secretExpressionIndex] = &secretExpression
@@ -820,8 +817,6 @@ func (operator *HcpOpenShiftClusterOperatorSpec) AssignProperties_To_HcpOpenShif
 	if operator.ConfigMapExpressions != nil {
 		configMapExpressionList := make([]*core.DestinationExpression, len(operator.ConfigMapExpressions))
 		for configMapExpressionIndex, configMapExpressionItem := range operator.ConfigMapExpressions {
-			// Shadow the loop variable to avoid aliasing
-			configMapExpressionItem := configMapExpressionItem
 			if configMapExpressionItem != nil {
 				configMapExpression := *configMapExpressionItem.DeepCopy()
 				configMapExpressionList[configMapExpressionIndex] = &configMapExpression
@@ -838,8 +833,6 @@ func (operator *HcpOpenShiftClusterOperatorSpec) AssignProperties_To_HcpOpenShif
 	if operator.SecretExpressions != nil {
 		secretExpressionList := make([]*core.DestinationExpression, len(operator.SecretExpressions))
 		for secretExpressionIndex, secretExpressionItem := range operator.SecretExpressions {
-			// Shadow the loop variable to avoid aliasing
-			secretExpressionItem := secretExpressionItem
 			if secretExpressionItem != nil {
 				secretExpression := *secretExpressionItem.DeepCopy()
 				secretExpressionList[secretExpressionIndex] = &secretExpression
@@ -976,8 +969,6 @@ func (properties *HcpOpenShiftClusterProperties) AssignProperties_From_HcpOpenSh
 	if source.ImageDigestMirrors != nil {
 		imageDigestMirrorList := make([]ImageDigestMirror, len(source.ImageDigestMirrors))
 		for imageDigestMirrorIndex, imageDigestMirrorItem := range source.ImageDigestMirrors {
-			// Shadow the loop variable to avoid aliasing
-			imageDigestMirrorItem := imageDigestMirrorItem
 			var imageDigestMirror ImageDigestMirror
 			err := imageDigestMirror.AssignProperties_From_ImageDigestMirror(&imageDigestMirrorItem)
 			if err != nil {
@@ -1138,8 +1129,6 @@ func (properties *HcpOpenShiftClusterProperties) AssignProperties_To_HcpOpenShif
 	if properties.ImageDigestMirrors != nil {
 		imageDigestMirrorList := make([]storage.ImageDigestMirror, len(properties.ImageDigestMirrors))
 		for imageDigestMirrorIndex, imageDigestMirrorItem := range properties.ImageDigestMirrors {
-			// Shadow the loop variable to avoid aliasing
-			imageDigestMirrorItem := imageDigestMirrorItem
 			var imageDigestMirror storage.ImageDigestMirror
 			err := imageDigestMirrorItem.AssignProperties_To_ImageDigestMirror(&imageDigestMirror)
 			if err != nil {
@@ -1330,8 +1319,6 @@ func (properties *HcpOpenShiftClusterProperties_STATUS) AssignProperties_From_Hc
 	if source.ImageDigestMirrors != nil {
 		imageDigestMirrorList := make([]ImageDigestMirror_STATUS, len(source.ImageDigestMirrors))
 		for imageDigestMirrorIndex, imageDigestMirrorItem := range source.ImageDigestMirrors {
-			// Shadow the loop variable to avoid aliasing
-			imageDigestMirrorItem := imageDigestMirrorItem
 			var imageDigestMirror ImageDigestMirror_STATUS
 			err := imageDigestMirror.AssignProperties_From_ImageDigestMirror_STATUS(&imageDigestMirrorItem)
 			if err != nil {
@@ -1514,8 +1501,6 @@ func (properties *HcpOpenShiftClusterProperties_STATUS) AssignProperties_To_HcpO
 	if properties.ImageDigestMirrors != nil {
 		imageDigestMirrorList := make([]storage.ImageDigestMirror_STATUS, len(properties.ImageDigestMirrors))
 		for imageDigestMirrorIndex, imageDigestMirrorItem := range properties.ImageDigestMirrors {
-			// Shadow the loop variable to avoid aliasing
-			imageDigestMirrorItem := imageDigestMirrorItem
 			var imageDigestMirror storage.ImageDigestMirror_STATUS
 			err := imageDigestMirrorItem.AssignProperties_To_ImageDigestMirror_STATUS(&imageDigestMirror)
 			if err != nil {
@@ -1636,8 +1621,6 @@ func (identity *ManagedServiceIdentity) AssignProperties_From_ManagedServiceIden
 	if source.UserAssignedIdentities != nil {
 		userAssignedIdentityList := make([]UserAssignedIdentityDetails, len(source.UserAssignedIdentities))
 		for userAssignedIdentityIndex, userAssignedIdentityItem := range source.UserAssignedIdentities {
-			// Shadow the loop variable to avoid aliasing
-			userAssignedIdentityItem := userAssignedIdentityItem
 			var userAssignedIdentity UserAssignedIdentityDetails
 			err := userAssignedIdentity.AssignProperties_From_UserAssignedIdentityDetails(&userAssignedIdentityItem)
 			if err != nil {
@@ -1682,8 +1665,6 @@ func (identity *ManagedServiceIdentity) AssignProperties_To_ManagedServiceIdenti
 	if identity.UserAssignedIdentities != nil {
 		userAssignedIdentityList := make([]storage.UserAssignedIdentityDetails, len(identity.UserAssignedIdentities))
 		for userAssignedIdentityIndex, userAssignedIdentityItem := range identity.UserAssignedIdentities {
-			// Shadow the loop variable to avoid aliasing
-			userAssignedIdentityItem := userAssignedIdentityItem
 			var userAssignedIdentity storage.UserAssignedIdentityDetails
 			err := userAssignedIdentityItem.AssignProperties_To_UserAssignedIdentityDetails(&userAssignedIdentity)
 			if err != nil {
@@ -1744,8 +1725,6 @@ func (identity *ManagedServiceIdentity_STATUS) AssignProperties_From_ManagedServ
 	if source.UserAssignedIdentities != nil {
 		userAssignedIdentityMap := make(map[string]UserAssignedIdentity_STATUS, len(source.UserAssignedIdentities))
 		for userAssignedIdentityKey, userAssignedIdentityValue := range source.UserAssignedIdentities {
-			// Shadow the loop variable to avoid aliasing
-			userAssignedIdentityValue := userAssignedIdentityValue
 			var userAssignedIdentity UserAssignedIdentity_STATUS
 			err := userAssignedIdentity.AssignProperties_From_UserAssignedIdentity_STATUS(&userAssignedIdentityValue)
 			if err != nil {
@@ -1796,8 +1775,6 @@ func (identity *ManagedServiceIdentity_STATUS) AssignProperties_To_ManagedServic
 	if identity.UserAssignedIdentities != nil {
 		userAssignedIdentityMap := make(map[string]storage.UserAssignedIdentity_STATUS, len(identity.UserAssignedIdentities))
 		for userAssignedIdentityKey, userAssignedIdentityValue := range identity.UserAssignedIdentities {
-			// Shadow the loop variable to avoid aliasing
-			userAssignedIdentityValue := userAssignedIdentityValue
 			var userAssignedIdentity storage.UserAssignedIdentity_STATUS
 			err := userAssignedIdentityValue.AssignProperties_To_UserAssignedIdentity_STATUS(&userAssignedIdentity)
 			if err != nil {
@@ -4379,8 +4356,6 @@ func (profile *UserAssignedIdentitiesProfile) AssignProperties_From_UserAssigned
 	if source.ControlPlaneOperatorsReferences != nil {
 		controlPlaneOperatorsReferenceMap := make(map[string]genruntime.ResourceReference, len(source.ControlPlaneOperatorsReferences))
 		for controlPlaneOperatorsReferenceKey, controlPlaneOperatorsReferenceValue := range source.ControlPlaneOperatorsReferences {
-			// Shadow the loop variable to avoid aliasing
-			controlPlaneOperatorsReferenceValue := controlPlaneOperatorsReferenceValue
 			controlPlaneOperatorsReferenceMap[controlPlaneOperatorsReferenceKey] = controlPlaneOperatorsReferenceValue.Copy()
 		}
 		profile.ControlPlaneOperatorsReferences = controlPlaneOperatorsReferenceMap
@@ -4392,8 +4367,6 @@ func (profile *UserAssignedIdentitiesProfile) AssignProperties_From_UserAssigned
 	if source.DataPlaneOperatorsReferences != nil {
 		dataPlaneOperatorsReferenceMap := make(map[string]genruntime.ResourceReference, len(source.DataPlaneOperatorsReferences))
 		for dataPlaneOperatorsReferenceKey, dataPlaneOperatorsReferenceValue := range source.DataPlaneOperatorsReferences {
-			// Shadow the loop variable to avoid aliasing
-			dataPlaneOperatorsReferenceValue := dataPlaneOperatorsReferenceValue
 			dataPlaneOperatorsReferenceMap[dataPlaneOperatorsReferenceKey] = dataPlaneOperatorsReferenceValue.Copy()
 		}
 		profile.DataPlaneOperatorsReferences = dataPlaneOperatorsReferenceMap
@@ -4438,8 +4411,6 @@ func (profile *UserAssignedIdentitiesProfile) AssignProperties_To_UserAssignedId
 	if profile.ControlPlaneOperatorsReferences != nil {
 		controlPlaneOperatorsReferenceMap := make(map[string]genruntime.ResourceReference, len(profile.ControlPlaneOperatorsReferences))
 		for controlPlaneOperatorsReferenceKey, controlPlaneOperatorsReferenceValue := range profile.ControlPlaneOperatorsReferences {
-			// Shadow the loop variable to avoid aliasing
-			controlPlaneOperatorsReferenceValue := controlPlaneOperatorsReferenceValue
 			controlPlaneOperatorsReferenceMap[controlPlaneOperatorsReferenceKey] = controlPlaneOperatorsReferenceValue.Copy()
 		}
 		destination.ControlPlaneOperatorsReferences = controlPlaneOperatorsReferenceMap
@@ -4451,8 +4422,6 @@ func (profile *UserAssignedIdentitiesProfile) AssignProperties_To_UserAssignedId
 	if profile.DataPlaneOperatorsReferences != nil {
 		dataPlaneOperatorsReferenceMap := make(map[string]genruntime.ResourceReference, len(profile.DataPlaneOperatorsReferences))
 		for dataPlaneOperatorsReferenceKey, dataPlaneOperatorsReferenceValue := range profile.DataPlaneOperatorsReferences {
-			// Shadow the loop variable to avoid aliasing
-			dataPlaneOperatorsReferenceValue := dataPlaneOperatorsReferenceValue
 			dataPlaneOperatorsReferenceMap[dataPlaneOperatorsReferenceKey] = dataPlaneOperatorsReferenceValue.Copy()
 		}
 		destination.DataPlaneOperatorsReferences = dataPlaneOperatorsReferenceMap
