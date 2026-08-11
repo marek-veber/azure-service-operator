@@ -10,7 +10,9 @@ package v1api20200601
 // directory.
 
 // +kubebuilder:rbac:groups=core,resources=events,verbs=get;list;watch;create;update;patch
-// +kubebuilder:rbac:groups=core,resources=secrets,verbs=get;list;watch;create;update;patch;delete
-// +kubebuilder:rbac:groups=core,resources=configmaps,verbs=get;list;watch;create;update;patch;delete
 // +kubebuilder:rbac:groups=coordination.k8s.io,resources=leases,verbs=get;list;watch;create;update;patch;delete
 // +kubebuilder:rbac:groups=core,resources=namespaces,verbs=get;list;watch
+
+// NOTE: secrets and configmaps RBAC is intentionally NOT declared here as cluster-wide permissions.
+// Instead, it is managed via namespace-scoped Roles in config/rbac/namespace_secrets_role.yaml
+// to limit the blast radius if the operator pod is compromised. See FIND-001.
