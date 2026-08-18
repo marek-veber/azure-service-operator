@@ -1,19 +1,16 @@
 ---
 name: FFWD from main branch
 
-# Synchronization main -> backplane-5.1 is intentionally DISABLED for now.
+# Synchronization main -> backplane-5.1: every push to main is fast-forwarded
+# into backplane-5.1. Seeding is done (both branches start at the same commit),
+# so ongoing sync is now ENABLED.
 #
-# Seeding order (do this once, while sync is OFF):
-#   1. push main -> backplane-5.1  (both branches at the same commit)
-#   2. push main
-#   3. enable ongoing sync: uncomment the `push:` trigger below and push to main
-#
-# While disabled, the workflow can still be run manually via workflow_dispatch.
+# Can also be triggered manually via workflow_dispatch.
 on:
   workflow_dispatch:
-  # push:
-  #   branches:
-  #     - main
+  push:
+    branches:
+      - main
 
 
 permissions: {}
