@@ -6,7 +6,7 @@ metadata:
     controller-gen.kubebuilder.io/version: v0.18.0
   labels:
     app.kubernetes.io/name: azure-service-operator
-    app.kubernetes.io/version: v2.13.0-hcpclusters.11
+    app.kubernetes.io/version: v2.19.0-hcpclusters.1
   name: actiongroups.insights.azure.com
 spec:
   conversion:
@@ -22,6 +22,9 @@ spec:
       - v1
   group: insights.azure.com
   names:
+    categories:
+    - azure
+    - insights
     kind: ActionGroup
     listKind: ActionGroupList
     plural: actiongroups
@@ -115,6 +118,23 @@ spec:
                     serviceUri:
                       description: 'ServiceUri: The URI where webhooks should be sent.'
                       type: string
+                    serviceUriFromSecret:
+                      description: 'ServiceUriFromSecret: The URI where webhooks should
+                        be sent.'
+                      properties:
+                        key:
+                          description: Key is the key in the Kubernetes secret being
+                            referenced
+                          type: string
+                        name:
+                          description: |-
+                            Name is the name of the Kubernetes secret being referenced.
+                            The secret must be in the same namespace as the resource
+                          type: string
+                      required:
+                      - key
+                      - name
+                      type: object
                     useCommonAlertSchema:
                       description: 'UseCommonAlertSchema: Indicates whether to use
                         common alert schema.'
@@ -525,6 +545,23 @@ spec:
                     serviceUri:
                       description: 'ServiceUri: The URI where webhooks should be sent.'
                       type: string
+                    serviceUriFromSecret:
+                      description: 'ServiceUriFromSecret: The URI where webhooks should
+                        be sent.'
+                      properties:
+                        key:
+                          description: Key is the key in the Kubernetes secret being
+                            referenced
+                          type: string
+                        name:
+                          description: |-
+                            Name is the name of the Kubernetes secret being referenced.
+                            The secret must be in the same namespace as the resource
+                          type: string
+                      required:
+                      - key
+                      - name
+                      type: object
                     tenantId:
                       description: 'TenantId: Indicates the tenant id for aad auth.'
                       type: string
@@ -537,7 +574,6 @@ spec:
                       type: boolean
                   required:
                   - name
-                  - serviceUri
                   type: object
                 type: array
             required:
@@ -588,9 +624,6 @@ spec:
                       type: string
                     runbookName:
                       description: 'RunbookName: The name for this runbook.'
-                      type: string
-                    serviceUri:
-                      description: 'ServiceUri: The URI where webhooks should be sent.'
                       type: string
                     useCommonAlertSchema:
                       description: 'UseCommonAlertSchema: Indicates whether to use
@@ -885,9 +918,6 @@ spec:
                       description: 'ObjectId: Indicates the webhook app object Id
                         for aad auth.'
                       type: string
-                    serviceUri:
-                      description: 'ServiceUri: The URI where webhooks should be sent.'
-                      type: string
                     tenantId:
                       description: 'TenantId: Indicates the tenant id for aad auth.'
                       type: string
@@ -999,6 +1029,24 @@ spec:
                       type: string
                     serviceUri:
                       type: string
+                    serviceUriFromSecret:
+                      description: |-
+                        SecretReference is a reference to a Kubernetes secret and key in the same namespace as
+                        the resource it is on.
+                      properties:
+                        key:
+                          description: Key is the key in the Kubernetes secret being
+                            referenced
+                          type: string
+                        name:
+                          description: |-
+                            Name is the name of the Kubernetes secret being referenced.
+                            The secret must be in the same namespace as the resource
+                          type: string
+                      required:
+                      - key
+                      - name
+                      type: object
                     useCommonAlertSchema:
                       type: boolean
                     webhookResourceReference:
@@ -1372,6 +1420,24 @@ spec:
                       type: string
                     serviceUri:
                       type: string
+                    serviceUriFromSecret:
+                      description: |-
+                        SecretReference is a reference to a Kubernetes secret and key in the same namespace as
+                        the resource it is on.
+                      properties:
+                        key:
+                          description: Key is the key in the Kubernetes secret being
+                            referenced
+                          type: string
+                        name:
+                          description: |-
+                            Name is the name of the Kubernetes secret being referenced.
+                            The secret must be in the same namespace as the resource
+                          type: string
+                      required:
+                      - key
+                      - name
+                      type: object
                     tenantId:
                       type: string
                     useAadAuth:
@@ -1436,8 +1502,6 @@ spec:
                     name:
                       type: string
                     runbookName:
-                      type: string
-                    serviceUri:
                       type: string
                     useCommonAlertSchema:
                       type: boolean
@@ -1712,8 +1776,6 @@ spec:
                     name:
                       type: string
                     objectId:
-                      type: string
-                    serviceUri:
                       type: string
                     tenantId:
                       type: string
