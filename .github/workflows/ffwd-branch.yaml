@@ -1,0 +1,48 @@
+---
+name: FFWD from main branch
+
+# Synchronization main -> backplane-5.1 is intentionally DISABLED for now.
+#
+# Seeding order (do this once, while sync is OFF):
+#   1. push main -> backplane-5.1  (both branches at the same commit)
+#   2. push main
+#   3. enable ongoing sync: uncomment the `push:` trigger below and push to main
+#
+# While disabled, the workflow can still be run manually via workflow_dispatch.
+on:
+  workflow_dispatch:
+  # push:
+  #   branches:
+  #     - main
+
+
+permissions: {}
+
+jobs:
+  fast-forward:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    env:
+      TARGET_BRANCHES: backplane-5.1
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4.3.1
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Fetch all branches
+        run: git fetch --all
+
+      - name: Fast-forward main commits into backplane branches
+        run: |
+          git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git config --global user.name "github-actions[bot]"
+          for branch in ${TARGET_BRANCHES}; do
+            echo "--- Fast-forwarding ${branch} ---"
+            git checkout "${branch}"
+            git merge --ff-only "${{ github.sha }}"
+            git push origin "${branch}"
+          done
