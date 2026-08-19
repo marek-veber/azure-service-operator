@@ -50,23 +50,44 @@ required posture:
 > The mapping table above is authoritative. If a ruleset and this table ever
 > disagree, update whichever is wrong so they match.
 
-## Audit — customizations preserved after `main` → `release-2.13`
+## Audit — customizations after `main` → `release-2.13`
 
 The previous `main` (now `release-2.13`) accumulated repo/branch-level
-configuration. When `main` was re-seeded from `Azure/main`, all of the following
-were verified to be carried onto the new `main` so nothing was silently lost:
+configuration. When `main` was re-seeded from `Azure/main`, some stolostron
+customizations were silently reverted to their upstream form. This audit compares
+**file content** (not just presence) between `release-2.13` and the new `main`.
 
-- **GitHub Actions workflows** — full `.github/workflows/` set (CI, PR validation,
-  release, security scanning, scorecards, CodeQL, FFWD sync, etc.).
+### Preserved (content identical) ✅
+
+- **GitHub Actions workflows** — full `.github/workflows/` set; no workflow dropped.
 - **CodeRabbit** — `.coderabbit.yaml`.
-- **Renovate** — `renovate.json` + `.github/workflows/renovate.yaml`.
-- **Dependabot** — `.github/dependabot.yml`.
-- **CODEOWNERS** — `.github/CODEOWNERS`.
-- **Copilot / PR templates** — `.github/copilot-instructions.md`,
-  `.github/pull_request_template.md`, `.github/ISSUE_TEMPLATE/`.
-- **Konflux / Tekton** — `.tekton/` pipelines.
-- **stolostron downstream carry** — `v2/stolostron/` CRDs bundle, Dockerfiles,
-  governance and samples.
+- **PR template / stale bot** — `.github/pull_request_template.md`, `.github/stale.yml`.
+- **stolostron downstream carry** — `stolostron/` and `v2/stolostron/` trees
+  (CRDs bundle, Dockerfiles, governance, samples): no file dropped.
+
+### Intentional / policy-aligned changes ✅
+
+- **Renovate** — `renovate.json` now targets `main`, `release-*`,
+  `backplane-2.11`, `backplane-2.17`; the old `backplane-[0-9]+\.[0-9]+` regex was
+  dropped on purpose because `backplane-5.0`/`backplane-5.1` are FFWD-only and must
+  not receive independent Renovate PRs.
+
+### Regressions found and fixed in this change ⚠️→✅
+
+- **CODEOWNERS** (`.github/CODEOWNERS`) — the re-seed reverted this to the upstream
+  owners (`@theunrepentantgeek @matthchr @tallaxes`), dropping the stolostron
+  reviewers. Restored to `@RadekCap @marek-veber @mzazrivec`.
+- **Dependabot** (`.github/dependabot.yml`) — old `main` deliberately set
+  `updates: []` (Dependabot disabled; Renovate is the dependency tool). The re-seed
+  re-enabled the full upstream Dependabot config, which would double up with
+  Renovate. Restored to `updates: []`.
+- **Konflux / Tekton** — old `main` carried `.tekton` pipelines for `mce-217`,
+  `mce-50`, and `mce-51`. Pipelines-as-Code resolves `.tekton` files by cel
+  expression, and only files whose expression includes `target_branch == "main"`
+  need to live on `main`: `mce-51-pull-request` (present ✅) and
+  `mce-50-pull-request` (**dropped in the re-seed**). The `mce-50` pipelines are
+  restored by PR #471. `mce-217` and all `-push` pipelines target their own
+  backplane branches and correctly do not live on `main`.
 
 Branch rulesets and protection are repository-level settings (not files), so they
 are reapplied via the admin API per the table above rather than carried by the
