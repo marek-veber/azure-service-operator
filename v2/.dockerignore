@@ -1,7 +1,21 @@
 **
 
-# Ignore everything except below
+# Ignore everything except the Go module files, Go sources and the CRD bundles.
+#
+# We re-include whole source directories (rather than only "!**/*.go") because
+# buildah / the classic Docker builder do NOT descend into a directory that is
+# excluded by "**" in order to re-apply a nested negation like "!**/*.go"
+# (BuildKit does, which is why the upstream whitelist works with `docker buildx`
+# but breaks the Konflux buildah build). Listing the source directories keeps the
+# huge specs/azure-rest-api-specs submodule out of the build context while still
+# shipping all of the Go sources needed by `go build ./cmd/controller/`.
 !/go.mod
 !/go.sum
-!**/*.go
+!/api
+!/cmd
+!/internal
+!/pkg
+!/test
+!/tools
 !/out/crds
+!/stolostron/crds

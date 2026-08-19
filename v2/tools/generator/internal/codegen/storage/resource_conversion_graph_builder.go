@@ -81,7 +81,8 @@ func (b *ResourceConversionGraphBuilder) Build() (*ResourceConversionGraph, erro
 		if len(toProcess) == 0 {
 			return nil, eris.Errorf(
 				"expected at least one hub reference for %q, but all references are linked",
-				b.name)
+				b.name,
+			)
 		}
 	} else {
 		// Expect to have only the hub reference left
@@ -89,7 +90,8 @@ func (b *ResourceConversionGraphBuilder) Build() (*ResourceConversionGraph, erro
 			return nil, eris.Errorf(
 				"expected to have linked all references in with name %q, but have %d left",
 				b.name,
-				len(toProcess))
+				len(toProcess),
+			)
 		}
 	}
 
