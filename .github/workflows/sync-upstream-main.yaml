@@ -97,13 +97,15 @@ jobs:
       - name: Open or update pull request
         if: ${{ steps.check.outputs.count != '0' }}
         run: |
-          # `gh pr view` also exits 0 for MERGED/CLOSED PRs, so gate on the
-          # OPEN state explicitly. Otherwise, once a sync PR is merged, later
-          # runs would treat the stale PR as "existing" and never open a new
-          # one, silently halting the sync.
-          state="$(gh pr view "${SYNC_BRANCH}" --json state --jq '.state' 2>/dev/null || true)"
-          if [ "${state}" = "OPEN" ]; then
-            echo "Open PR for ${SYNC_BRANCH} already exists; branch push has updated it."
+          # Look up an OPEN PR whose head is the sync branch AND whose base is
+          # main. `gh pr view` would match by head only (ignoring base) and also
+          # exit 0 for MERGED/CLOSED PRs, so a merged/closed or wrong-base PR
+          # could wrongly suppress creation of the required PR to main. No error
+          # suppression here: an API failure should fail the step rather than
+          # fall through to `gh pr create`.
+          open_prs="$(gh pr list --head "${SYNC_BRANCH}" --base main --state open --json number --jq 'length')"
+          if [ "${open_prs}" -gt 0 ]; then
+            echo "Open PR for ${SYNC_BRANCH} -> main already exists; branch push has updated it."
           else
             gh pr create \
               --base main \
