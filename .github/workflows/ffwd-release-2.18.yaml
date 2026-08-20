@@ -35,6 +35,7 @@ jobs:
       - name: Checkout repo
         uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4.3.1
         with:
+          ref: release-2.18
           fetch-depth: 0
           token: ${{ secrets.GITHUB_TOKEN }}
 
@@ -45,9 +46,11 @@ jobs:
         run: |
           git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git config --global user.name "github-actions[bot]"
+          # Always sync from release-2.18 (the source of truth), never from an
+          # arbitrary ref the operator might select via workflow_dispatch.
           for branch in ${TARGET_BRANCHES}; do
             echo "--- Fast-forwarding ${branch} ---"
             git checkout "${branch}"
-            git merge --ff-only "${{ github.sha }}"
+            git merge --ff-only "origin/release-2.18"
             git push origin "${branch}"
           done
