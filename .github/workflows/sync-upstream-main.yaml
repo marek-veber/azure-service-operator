@@ -146,6 +146,7 @@ jobs:
               --repo "${GITHUB_REPOSITORY}" \
               --state open \
               --base "${TARGET_BRANCH}" \
+              --limit 200 \
               --json number,headRefName \
               --jq '[.[] | select(.headRefName | startswith("upstream-sync/'"${TARGET_BRANCH}"'/")) | .number] | .[0] // empty'
           )"
