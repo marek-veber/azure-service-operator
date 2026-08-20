@@ -70,7 +70,21 @@ jobs:
           # The checkout step only fetched `main`, so without this the lease
           # has no basis and the push is rejected with "stale info" on every
           # run after the branch is first created.
-          git fetch origin "${SYNC_BRANCH}" || true
+          #
+          # Distinguish "branch absent" (ls-remote exit 2 -> first run, fine)
+          # from transport/auth failures (any other non-zero -> fail closed),
+          # so a broken fetch can't silently leave a stale/missing tracking ref.
+          if git ls-remote --exit-code --heads origin "${SYNC_BRANCH}" >/dev/null; then
+            git fetch origin "${SYNC_BRANCH}"
+          else
+            status=$?
+            if [ "${status}" -eq 2 ]; then
+              echo "Sync branch ${SYNC_BRANCH} does not exist on origin yet; first run."
+            else
+              echo "::error::Failed to query ${SYNC_BRANCH} on origin (git ls-remote exit ${status})."
+              exit "${status}"
+            fi
+          fi
           git checkout -B "${SYNC_BRANCH}" main
           if ! git merge --no-edit "upstream/${UPSTREAM_BRANCH}"; then
             echo "::error::Merge conflicts while merging upstream/${UPSTREAM_BRANCH} into main."
