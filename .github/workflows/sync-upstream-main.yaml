@@ -179,9 +179,16 @@ jobs:
               git checkout --theirs -- "${f}" || return 1
               git add -- "${f}" || return 1
             done <<< "${conflicted}"
-            ( cd v2 && go mod tidy ) || return 1
-            ( cd v2/cmd/asoctl && go mod tidy ) || return 1
-            git add v2/go.mod v2/go.sum v2/cmd/asoctl/go.mod v2/cmd/asoctl/go.sum || return 1
+            # Tidy every module whose go.mod was conflicted, not just the
+            # known ones — the repo has multiple modules (v2/tools/generator,
+            # v2/tools/mangle-test-json, docs/hugo, hack/crossplane, etc.).
+            local mod_file mod_dir
+            while IFS= read -r mod_file; do
+              [ -n "${mod_file}" ] || continue
+              mod_dir="$(dirname "${mod_file}")"
+              ( cd "${mod_dir}" && go mod tidy ) || return 1
+              git add -- "${mod_dir}/go.mod" "${mod_dir}/go.sum" 2>/dev/null || true
+            done < <(printf '%s\n' "${conflicted}" | grep -E '(^|/)go\.mod$')
             return 0
           }
 
