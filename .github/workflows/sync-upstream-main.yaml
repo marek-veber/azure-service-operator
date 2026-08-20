@@ -334,6 +334,20 @@ jobs:
             --body-file /tmp/pr-body.md \
             --draft
 
+          if [ -n "${CONFLICT_FULL_SHA}" ]; then
+            printf '::warning::Upstream sync stopped at a conflicting commit: %s\n' "${CONFLICT_FULL_SHA}"
+            printf 'Commit title: %s\n' "${CONFLICT_TITLE}"
+            printf '::warning::Applied commits are in the draft PR. Resolve the conflict and re-run the workflow.\n'
+            {
+              echo "## ⚠️ Upstream sync partially blocked"
+              echo ""
+              printf 'Sync stopped at conflicting commit **%s**.\n' "$(printf '%s' "${CONFLICT_FULL_SHA}" | cut -c1-8)"
+              printf 'Commit title: %s\n' "${CONFLICT_TITLE}"
+              echo ""
+              echo "The applied commits are in the draft PR. Resolve the conflict manually and re-run the workflow."
+            } >> "${GITHUB_STEP_SUMMARY}"
+          fi
+
       - name: Fail if the first upstream commit conflicts
         if: ${{ steps.cherry-pick.outputs.applied == '0' && steps.cherry-pick.outputs.conflict_full_sha != '' }}
         env:
