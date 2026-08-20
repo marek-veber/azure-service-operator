@@ -225,10 +225,15 @@ jobs:
               NEW_LAST_PROCESSED="${SHA}"
               APPLIED_LINES="$(printf '%s\n- `%s` %s' "${APPLIED_LINES}" "${SHORT}" "${TITLE}")"
               echo "✅ Applied: ${SHORT} ${TITLE}"
-            elif [ -z "$(git diff --name-only --diff-filter=U)" ]; then
+            elif [ -z "$(git diff --name-only --diff-filter=U)" ] \
+                 && [ -z "$(git diff --cached --name-only)" ]; then
               git cherry-pick --skip
               NEW_LAST_PROCESSED="${SHA}"
               echo "⏭️ Already applied (empty): ${SHORT} ${TITLE}"
+            elif [ -z "$(git diff --name-only --diff-filter=U)" ]; then
+              git cherry-pick --abort 2>/dev/null || true
+              echo "::error::cherry-pick of ${SHORT} failed without conflicts (e.g. hook rejection); refusing to skip silently"
+              exit 1
             elif try_resolve_go_deps && GIT_EDITOR=true git cherry-pick --continue; then
               APPLIED=$((APPLIED + 1))
               TIDIED=$((TIDIED + 1))
