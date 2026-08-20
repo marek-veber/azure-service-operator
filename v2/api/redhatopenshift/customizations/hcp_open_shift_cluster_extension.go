@@ -140,7 +140,8 @@ func (ext *HcpOpenShiftClusterExtension) ExportKubernetesSecrets(
 		if adminCredentials == "" {
 			return nil, eris.Errorf(
 				"admin credential response for cluster %s in resource group %s contained an empty kubeconfig",
-				typedObj.AzureName(), id.ResourceGroupName)
+				typedObj.AzureName(), id.ResourceGroupName,
+			)
 		}
 	}
 
