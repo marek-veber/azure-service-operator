@@ -56,6 +56,18 @@ required posture:
 > **bypass list**. If it is not, the FFWD jobs fail at the push step even
 > though the workflow logic is correct.
 
+> **Manual-dispatch hardening (required).** The FFWD/sync workflows expose
+> `workflow_dispatch`. A dispatched run executes the workflow file *as it exists
+> on the selected ref*, so an **in-file guard cannot constrain it** — a
+> write-access actor could dispatch an altered copy from another ref and, because
+> the Actions bot is a ruleset **bypass** principal, have it push arbitrary
+> content to a protected `backplane-5.*` branch. This is a settings-level
+> control, not a code one: restrict who may run these workflows via GitHub
+> **workflow execution protections** (actor rules limiting `workflow_dispatch` to
+> maintainers), the same way the ruleset/bypass posture above is enforced through
+> settings rather than files. The `push`-triggered path is unaffected because it
+> only fires on the trusted source branch (`main` / `release-2.18`).
+
 ## Audit — customizations after `main` → `release-2.13`
 
 The previous `main` (now `release-2.13`) accumulated repo/branch-level
