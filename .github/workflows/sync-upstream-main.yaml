@@ -188,7 +188,7 @@ jobs:
               mod_dir="$(dirname "${mod_file}")"
               ( cd "${mod_dir}" && go mod tidy ) || return 1
               git add -- "${mod_dir}/go.mod" "${mod_dir}/go.sum" 2>/dev/null || true
-            done < <(printf '%s\n' "${conflicted}" | grep -E '(^|/)go\.mod$')
+            done < <(printf '%s\n' "${conflicted}" | grep -E '(^|/)go\.(mod|sum)$' | while IFS= read -r f; do dirname "${f}"; done | sort -u)
             return 0
           }
 
