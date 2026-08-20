@@ -16,6 +16,13 @@ on:
 
 permissions: {}
 
+concurrency:
+  # Serialize runs so a manual (workflow_dispatch) and the scheduled run cannot
+  # race on the sync/upstream-main branch. Queue rather than cancel so no sync
+  # is silently dropped.
+  group: sync-upstream-main
+  cancel-in-progress: false
+
 jobs:
   sync:
     # Only run on the stolostron fork; upstream and other forks must not sync.

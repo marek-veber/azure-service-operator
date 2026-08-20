@@ -16,6 +16,13 @@ on:
 
 permissions: {}
 
+concurrency:
+  # Serialize runs so a manual (workflow_dispatch) and a push-triggered run
+  # cannot race on the backplane-5.0 branch. Queue rather than cancel so no
+  # fast-forward is silently dropped.
+  group: ffwd-backplane-5.0
+  cancel-in-progress: false
+
 jobs:
   fast-forward:
     runs-on: ubuntu-latest
