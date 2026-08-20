@@ -50,6 +50,12 @@ required posture:
 > The mapping table above is authoritative. If a ruleset and this table ever
 > disagree, update whichever is wrong so they match.
 
+> **Bot bypass required.** The FFWD and sync workflows push with the Actions
+> `GITHUB_TOKEN`. For those pushes to succeed against the protected
+> `backplane-5.*` branches, the GitHub Actions bot must be on each ruleset's
+> **bypass list**. If it is not, the FFWD jobs fail at the push step even
+> though the workflow logic is correct.
+
 ## Audit — customizations after `main` → `release-2.13`
 
 The previous `main` (now `release-2.13`) accumulated repo/branch-level
