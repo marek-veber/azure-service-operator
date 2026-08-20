@@ -58,6 +58,12 @@ jobs:
       - name: Merge upstream into sync branch
         if: ${{ steps.check.outputs.count != '0' }}
         run: |
+          # Fetch the sync branch (if it already exists on origin) so that
+          # --force-with-lease has a remote-tracking ref to compare against.
+          # The checkout step only fetched `main`, so without this the lease
+          # has no basis and the push is rejected with "stale info" on every
+          # run after the branch is first created.
+          git fetch origin "${SYNC_BRANCH}" || true
           git checkout -B "${SYNC_BRANCH}" main
           if ! git merge --no-edit "upstream/${UPSTREAM_BRANCH}"; then
             echo "::error::Merge conflicts while merging upstream/${UPSTREAM_BRANCH} into main."
