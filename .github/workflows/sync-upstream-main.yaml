@@ -147,8 +147,7 @@ jobs:
               --state open \
               --base "${TARGET_BRANCH}" \
               --json number,headRefName \
-              --jq '.[] | select(.headRefName | startswith("upstream-sync/'"${TARGET_BRANCH}"'/")) | .number' \
-              | head -n1
+              --jq '[.[] | select(.headRefName | startswith("upstream-sync/'"${TARGET_BRANCH}"'/")) | .number] | .[0] // empty'
           )"
           echo "number=${PR_NUMBER}" >> "${GITHUB_OUTPUT}"
           if [ -n "${PR_NUMBER}" ]; then
@@ -274,7 +273,7 @@ jobs:
           fi
 
       - name: Push and open draft PR
-        if: ${{ steps.cherry-pick.outputs.applied != '0' }}
+        if: ${{ steps.cherry-pick.conclusion == 'success' && steps.cherry-pick.outputs.applied != '0' }}
         env:
           SYNC_BRANCH: ${{ steps.cherry-pick.outputs.branch }}
           APPLIED: ${{ steps.cherry-pick.outputs.applied }}
@@ -284,7 +283,7 @@ jobs:
           CONFLICT_FULL_SHA: ${{ steps.cherry-pick.outputs.conflict_full_sha }}
           CONFLICT_TITLE: ${{ steps.cherry-pick.outputs.conflict_title }}
         run: |
-          git push origin "${SYNC_BRANCH}"
+          git push --force origin "${SYNC_BRANCH}"
           {
             echo "## Upstream sync — \`${TARGET_BRANCH}\` ← Azure/\`${UPSTREAM_BRANCH}\`"
             echo ""
