@@ -28,7 +28,7 @@ upstream sync workflow, and the Konflux build configuration.
 
 | Concern | Where it lives | Notes |
 |---------|----------------|-------|
-| Upstream sync | [`.github/workflows/sync-upstream-main.yaml`](../.github/workflows/sync-upstream-main.yaml) | Weekly (Mon 06:00 UTC) + manual dispatch. Cherry-picks new upstream commits onto a `sync/upstream-main` branch and opens a draft PR. Go module conflicts auto-resolved; other conflicts stop the run and report resolution steps. |
+| Upstream sync | [`.github/workflows/sync-upstream-main.yaml`](../.github/workflows/sync-upstream-main.yaml) | Weekly (Mon 06:00 UTC) + manual dispatch. Merges `upstream/main` into a `sync/upstream-main` branch and opens a regular PR. On any conflict the job fails; resolve the merge manually on `sync/upstream-main` and push to unblock. |
 | Branch fast-forward | [`.github/workflows/ffwd-branch.yaml`](../.github/workflows/ffwd-branch.yaml) | Every push to `main` is fast-forwarded into `backplane-5.1`. One-directional — direct PRs to `backplane-5.*` are rejected. |
 | Downstream build | [`stolostron/Dockerfile.stolostron`](../stolostron/Dockerfile.stolostron) | Red Hat UBI9-based image for MCE packaging. Built by Konflux. |
 | Konflux pipelines | [`.tekton/`](../.tekton) | Tekton `PipelineRun` definitions for MCE releases, split into `-pull-request` and `-push` variants. |
@@ -41,7 +41,7 @@ Summary:
 
 | Branch | Source | Sync mechanism |
 |--------|--------|----------------|
-| `main` | `Azure/main` + ARO-HCP customizations | Weekly cherry-pick sync via `sync-upstream-main.yaml` (PR-based, not fast-forward) |
+| `main` | `Azure/main` + ARO-HCP customizations | Weekly merge-based sync via `sync-upstream-main.yaml` (PR-based, not fast-forward) |
 | `backplane-5.1` | `main` | FFWD-only via `ffwd-branch.yaml` on every push to `main` |
 | `backplane-5.0` | `release-2.18` | FFWD-only via `ffwd-release-2.18.yaml` |
 | `release-2.18`, `release-2.19` | upstream release branches + ARO-HCP | Manual, security updates only |
@@ -55,10 +55,9 @@ Summary:
 - **Keep changes upstream-friendly.** Prefer contributing fixes upstream and
   letting them flow down via the sync. Downstream-only patches make every future
   sync harder to merge.
-- **Upstream sync conflicts.** When the sync workflow stops at a conflict, it
-  emits a GitHub Actions warning and a step summary with copy-pasteable
-  resolution steps. Resolve on the `sync/upstream-main` branch and push to
-  unblock.
+- **Upstream sync conflicts.** When the sync workflow fails on a conflict, it
+  emits an error in the Actions log. Resolve the merge manually on the
+  `sync/upstream-main` branch and push to unblock.
 - **Do not edit upstream-tracked content to add downstream notes.** Put
   downstream-specific context in this file instead.
 
