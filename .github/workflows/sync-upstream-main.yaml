@@ -1,13 +1,36 @@
 ---
 name: Sync main from upstream (Azure/main)
 
-# Periodically merges the upstream Azure/azure-service-operator main branch into
+# Periodically syncs the upstream Azure/azure-service-operator main branch into
 # this fork's main. Our main carries ARO-HCP customizations, so this CANNOT be a
-# pure fast-forward; instead we open a pull request with the merge result so the
-# customizations are preserved and the merge can be reviewed.
+# pure fast-forward.
 #
-# On a clean merge a PR is opened/updated on the sync/upstream-main branch.
-# On conflicts the job fails so the merge can be resolved manually.
+# Rather than one big `git merge` (which aborts the entire sync on the first
+# conflict and makes no progress), this workflow cherry-picks new upstream
+# commits one at a time onto a sync branch and opens a DRAFT pull request:
+#
+#   * Clean commits are applied and included in the PR.
+#   * Commits whose ONLY conflicts are in go.mod/go.sum are auto-resolved by
+#     preferring upstream's module files and re-running `go mod tidy`, since
+#     dependency churn is the most common and least interesting conflict class.
+#     (Purpose of the sync is to pull upstream, so incoming versions win; a
+#     reverted downstream pin is easy to spot in review, a dropped upstream
+#     bump is not.)
+#   * The first commit that conflicts in any other file stops the run: the
+#     cleanly-applied commits are still published as a draft PR, and the
+#     conflicting commit is reported with copy-pasteable resolution steps.
+#   * Commits listed in .github/upstream-sync-state.json:excluded_commits are
+#     never applied (escape hatch for changes already carried downstream).
+#
+# Progress is tracked in .github/upstream-sync-state.json (last_processed_commit)
+# so successive runs converge incrementally. The state file is committed onto the
+# sync branch and lands via the PR; nothing is ever pushed directly to main
+# (branch protection friendly).
+#
+# NOTE: pushes here use the default GITHUB_TOKEN. Pushes made with GITHUB_TOKEN
+# do NOT trigger other workflows, so the sync PR's own CI will not run
+# automatically -- close/reopen the PR (or push a commit) to kick CI if needed.
+# Wire up a dedicated PAT secret if automatic CI on the sync PR becomes required.
 on:
   workflow_dispatch:
   schedule:
@@ -18,8 +41,7 @@ permissions: {}
 
 concurrency:
   # Serialize runs so a manual (workflow_dispatch) and the scheduled run cannot
-  # race on the sync/upstream-main branch. Queue rather than cancel so no sync
-  # is silently dropped.
+  # race on the sync branch. Queue rather than cancel so no sync is dropped.
   group: sync-upstream-main
   cancel-in-progress: false
 
@@ -31,11 +53,16 @@ jobs:
     permissions:
       contents: write
       pull-requests: write
+    timeout-minutes: 30
     env:
-      SYNC_BRANCH: sync/upstream-main
       UPSTREAM_URL: https://github.com/Azure/azure-service-operator.git
       UPSTREAM_BRANCH: main
+      TARGET_BRANCH: main
+      STATE_FILE: .github/upstream-sync-state.json
       GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    defaults:
+      run:
+        shell: bash
 
     steps:
       - name: Checkout main
@@ -45,75 +72,290 @@ jobs:
           fetch-depth: 0
           token: ${{ secrets.GITHUB_TOKEN }}
 
+      - name: Set up Go
+        uses: actions/setup-go@4b73464bb391d4059bd26b0524d20df3927bd417 # v6.3.0
+        with:
+          go-version-file: v2/go.mod
+          cache: false
+
       - name: Configure git
         run: |
           git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git config --global user.name "github-actions[bot]"
 
-      - name: Fetch upstream
+      - name: Add upstream remote and fetch
         run: |
           git remote add upstream "${UPSTREAM_URL}"
           git fetch upstream "${UPSTREAM_BRANCH}"
 
-      - name: Check for new upstream commits
-        id: check
+      - name: Read sync state
+        id: sync-state
         run: |
-          count="$(git rev-list --count "main..upstream/${UPSTREAM_BRANCH}")"
-          echo "Upstream is ${count} commit(s) ahead of main."
-          echo "count=${count}" >> "${GITHUB_OUTPUT}"
-
-      - name: Merge upstream into sync branch
-        if: ${{ steps.check.outputs.count != '0' }}
-        run: |
-          # Fetch the sync branch (if it already exists on origin) so that
-          # --force-with-lease has a remote-tracking ref to compare against.
-          # The checkout step only fetched `main`, so without this the lease
-          # has no basis and the push is rejected with "stale info" on every
-          # run after the branch is first created.
-          #
-          # Distinguish "branch absent" (ls-remote exit 2 -> first run, fine)
-          # from transport/auth failures (any other non-zero -> fail closed),
-          # so a broken fetch can't silently leave a stale/missing tracking ref.
-          if git ls-remote --exit-code --heads origin "${SYNC_BRANCH}" >/dev/null; then
-            git fetch origin "${SYNC_BRANCH}"
+          if [ -f "${STATE_FILE}" ]; then
+            if ! jq empty "${STATE_FILE}" 2>/dev/null; then
+              echo "::error::Invalid JSON in ${STATE_FILE}"
+              exit 1
+            fi
+            LAST_PROCESSED="$(jq -r '.last_processed_commit // ""' "${STATE_FILE}")"
+            jq -r '.excluded_commits | keys[]' "${STATE_FILE}" > /tmp/excluded-shas.txt 2>/dev/null || true
           else
-            status=$?
-            if [ "${status}" -eq 2 ]; then
-              echo "Sync branch ${SYNC_BRANCH} does not exist on origin yet; first run."
+            LAST_PROCESSED=""
+            : > /tmp/excluded-shas.txt
+          fi
+          echo "last_processed=${LAST_PROCESSED}" >> "${GITHUB_OUTPUT}"
+          if [ -n "${LAST_PROCESSED}" ]; then
+            echo "Last processed commit: ${LAST_PROCESSED}"
+          fi
+
+      - name: Find new upstream commits
+        id: find-commits
+        env:
+          LAST_PROCESSED: ${{ steps.sync-state.outputs.last_processed }}
+        run: |
+          CHERRY_ARGS=("${TARGET_BRANCH}" "upstream/${UPSTREAM_BRANCH}")
+          if [ -n "${LAST_PROCESSED}" ]; then
+            if git cat-file -e "${LAST_PROCESSED}^{commit}" 2>/dev/null; then
+              CHERRY_ARGS+=("${LAST_PROCESSED}")
             else
-              echo "::error::Failed to query ${SYNC_BRANCH} on origin (git ls-remote exit ${status})."
-              exit "${status}"
+              echo "::warning::Ignoring invalid last_processed_commit: ${LAST_PROCESSED}"
             fi
           fi
-          git checkout -B "${SYNC_BRANCH}" main
-          if ! git merge --no-edit "upstream/${UPSTREAM_BRANCH}"; then
-            echo "::error::Merge conflicts while merging upstream/${UPSTREAM_BRANCH} into main."
-            echo "::error::Resolve the merge manually and push to ${SYNC_BRANCH}."
-            git merge --abort
-            exit 1
-          fi
-          git push --force-with-lease origin "${SYNC_BRANCH}"
-
-      - name: Open or update pull request
-        if: ${{ steps.check.outputs.count != '0' }}
-        run: |
-          # Look up an OPEN PR whose head is the sync branch AND whose base is
-          # main. `gh pr view` would match by head only (ignoring base) and also
-          # exit 0 for MERGED/CLOSED PRs, so a merged/closed or wrong-base PR
-          # could wrongly suppress creation of the required PR to main. No error
-          # suppression here: an API failure should fail the step rather than
-          # fall through to `gh pr create`.
-          open_prs="$(gh pr list --head "${SYNC_BRANCH}" --base main --state open --json number --jq 'length')"
-          if [ "${open_prs}" -gt 0 ]; then
-            echo "Open PR for ${SYNC_BRANCH} -> main already exists; branch push has updated it."
+          # `git cherry` lists upstream commits not yet present on our branch
+          # (by patch-id); '+' means "not applied". Filter out merge commits and
+          # excluded SHAs to get the real work list.
+          mapfile -t ALL_COMMITS < <(git cherry "${CHERRY_ARGS[@]}" | awk '/^\+ / {print $2}')
+          COUNT=0
+          for SHA in "${ALL_COMMITS[@]}"; do
+            [ "$(git rev-list --parents -n1 "${SHA}" | awk '{print NF-1}')" -gt 1 ] && continue
+            grep -qx "${SHA}" /tmp/excluded-shas.txt 2>/dev/null && continue
+            COUNT=$((COUNT + 1))
+          done
+          echo "count=${COUNT}" >> "${GITHUB_OUTPUT}"
+          if [ "${COUNT}" -eq 0 ]; then
+            echo "No new upstream commits to apply."
           else
-            gh pr create \
-              --base main \
-              --head "${SYNC_BRANCH}" \
-              --title "chore: sync main from upstream Azure/main" \
-              --body "Automated periodic merge of \`upstream/${UPSTREAM_BRANCH}\` (Azure/azure-service-operator) into \`main\`.
-
-          Our \`main\` carries ARO-HCP customizations, so this is a merge (not a fast-forward). Review to ensure no downstream customization is lost before merging.
-
-          Generated by the \`sync-upstream-main\` workflow."
+            echo "Found ${COUNT} new upstream commit(s) to apply."
           fi
+
+      - name: Check for existing sync PR
+        if: ${{ steps.find-commits.outputs.count != '0' }}
+        id: existing-pr
+        run: |
+          PR_NUMBER="$(
+            gh pr list \
+              --repo "${GITHUB_REPOSITORY}" \
+              --state open \
+              --base "${TARGET_BRANCH}" \
+              --limit 200 \
+              --json number,headRefName \
+              --jq '[.[] | select(.headRefName | startswith("upstream-sync/'"${TARGET_BRANCH}"'/")) | .number] | .[0] // empty'
+          )"
+          echo "number=${PR_NUMBER}" >> "${GITHUB_OUTPUT}"
+          if [ -n "${PR_NUMBER}" ]; then
+            echo "Open sync PR #${PR_NUMBER} already exists; skipping."
+          fi
+
+      - name: Cherry-pick commits
+        if: ${{ steps.find-commits.outputs.count != '0' && steps.existing-pr.outputs.number == '' }}
+        id: cherry-pick
+        env:
+          LAST_PROCESSED: ${{ steps.sync-state.outputs.last_processed }}
+          GH_RUN_ID: ${{ github.run_id }}
+        run: |
+          # Try to auto-resolve a cherry-pick conflict that touches ONLY
+          # go.mod/go.sum: prefer upstream's module files, then re-tidy so
+          # go.sum matches the actual imports of the merged tree. Returns 0 on
+          # success, 1 if any non-dependency file conflicts (caller must stop).
+          try_resolve_go_deps() {
+            local conflicted
+            conflicted="$(git diff --name-only --diff-filter=U)"
+            [ -n "${conflicted}" ] || return 1
+            if printf '%s\n' "${conflicted}" | grep -qvE '(^|/)go\.(mod|sum)$'; then
+              return 1
+            fi
+            local f
+            while IFS= read -r f; do
+              [ -n "${f}" ] || continue
+              git checkout --theirs -- "${f}" || return 1
+              git add -- "${f}" || return 1
+            done <<< "${conflicted}"
+            # Tidy every module whose go.mod was conflicted, not just the
+            # known ones — the repo has multiple modules (v2/tools/generator,
+            # v2/tools/mangle-test-json, docs/hugo, hack/crossplane, etc.).
+            local mod_file mod_dir
+            while IFS= read -r mod_file; do
+              [ -n "${mod_file}" ] || continue
+              mod_dir="$(dirname "${mod_file}")"
+              ( cd "${mod_dir}" && go mod tidy ) || return 1
+              git add -- "${mod_dir}/go.mod" "${mod_dir}/go.sum" 2>/dev/null || true
+            done < <(printf '%s\n' "${conflicted}" | grep -E '(^|/)go\.(mod|sum)$' | while IFS= read -r f; do dirname "${f}"; done | sort -u)
+            return 0
+          }
+
+          BRANCH="upstream-sync/${TARGET_BRANCH}/run-${GH_RUN_ID}"
+          git checkout -b "${BRANCH}"
+          echo "branch=${BRANCH}" >> "${GITHUB_OUTPUT}"
+
+          CHERRY_ARGS=("${TARGET_BRANCH}" "upstream/${UPSTREAM_BRANCH}")
+          if [ -n "${LAST_PROCESSED}" ] && git cat-file -e "${LAST_PROCESSED}^{commit}" 2>/dev/null; then
+            CHERRY_ARGS+=("${LAST_PROCESSED}")
+          fi
+          mapfile -t SHAS < <(git cherry "${CHERRY_ARGS[@]}" | awk '/^\+ / {print $2}')
+
+          APPLIED=0
+          TIDIED=0
+          CONFLICT_FULL_SHA=""
+          CONFLICT_TITLE=""
+          APPLIED_LINES=""
+          REMAINING_LINES=""
+          NEW_LAST_PROCESSED=""
+          HIT_CONFLICT=false
+
+          for SHA in "${SHAS[@]}"; do
+            TITLE="$(git log --format='%s' -1 "${SHA}" | tr -d '\r\n')"
+            SHORT="$(git rev-parse --short "${SHA}")"
+            [ "$(git rev-list --parents -n1 "${SHA}" | awk '{print NF-1}')" -gt 1 ] && continue
+
+            if [ "${HIT_CONFLICT}" = true ]; then
+              REMAINING_LINES="$(printf '%s\n- `%s` %s' "${REMAINING_LINES}" "${SHORT}" "${TITLE}")"
+              continue
+            fi
+
+            if grep -qx "${SHA}" /tmp/excluded-shas.txt 2>/dev/null; then
+              NEW_LAST_PROCESSED="${SHA}"
+              echo "🚫 Excluded: ${SHORT} ${TITLE}"
+              continue
+            fi
+
+            if git cherry-pick --no-edit "${SHA}"; then
+              APPLIED=$((APPLIED + 1))
+              NEW_LAST_PROCESSED="${SHA}"
+              APPLIED_LINES="$(printf '%s\n- `%s` %s' "${APPLIED_LINES}" "${SHORT}" "${TITLE}")"
+              echo "✅ Applied: ${SHORT} ${TITLE}"
+            elif [ -z "$(git diff --name-only --diff-filter=U)" ] \
+                 && [ -z "$(git diff --cached --name-only)" ]; then
+              git cherry-pick --skip
+              NEW_LAST_PROCESSED="${SHA}"
+              echo "⏭️ Already applied (empty): ${SHORT} ${TITLE}"
+            elif [ -z "$(git diff --name-only --diff-filter=U)" ]; then
+              git cherry-pick --abort 2>/dev/null || true
+              echo "::error::cherry-pick of ${SHORT} failed without conflicts (e.g. hook rejection); refusing to skip silently"
+              exit 1
+            elif try_resolve_go_deps && GIT_EDITOR=true git cherry-pick --continue; then
+              APPLIED=$((APPLIED + 1))
+              TIDIED=$((TIDIED + 1))
+              NEW_LAST_PROCESSED="${SHA}"
+              APPLIED_LINES="$(printf '%s\n- `%s` %s _(deps auto-resolved: upstream go.mod/go.sum + go mod tidy)_' "${APPLIED_LINES}" "${SHORT}" "${TITLE}")"
+              echo "🔧 Applied with dep auto-resolution: ${SHORT} ${TITLE}"
+            else
+              git cherry-pick --abort 2>/dev/null || true
+              HIT_CONFLICT=true
+              CONFLICT_FULL_SHA="${SHA}"
+              CONFLICT_TITLE="${TITLE}"
+              echo "❌ Conflict: ${SHORT} ${TITLE}"
+            fi
+          done
+
+          {
+            echo "applied=${APPLIED}"
+            echo "tidied=${TIDIED}"
+            echo "last_processed=${NEW_LAST_PROCESSED}"
+            echo "conflict_full_sha=${CONFLICT_FULL_SHA}"
+          } >> "${GITHUB_OUTPUT}"
+
+          DELIM="EOF_$(openssl rand -hex 16)"
+          {
+            echo "conflict_title<<${DELIM}"; echo "${CONFLICT_TITLE}"; echo "${DELIM}"
+            echo "applied_lines<<${DELIM}"; echo "${APPLIED_LINES}"; echo "${DELIM}"
+            echo "remaining_lines<<${DELIM}"; echo "${REMAINING_LINES}"; echo "${DELIM}"
+          } >> "${GITHUB_OUTPUT}"
+
+      - name: Commit updated sync state
+        if: ${{ steps.cherry-pick.outputs.applied != '0' && steps.cherry-pick.outputs.last_processed != '' }}
+        env:
+          LAST_PROCESSED: ${{ steps.cherry-pick.outputs.last_processed }}
+        run: |
+          if [ ! -f "${STATE_FILE}" ]; then
+            echo '{"last_processed_commit":"","excluded_commits":{}}' > "${STATE_FILE}"
+          fi
+          jq --arg sha "${LAST_PROCESSED}" '.last_processed_commit = $sha' "${STATE_FILE}" > /tmp/state.json
+          mv /tmp/state.json "${STATE_FILE}"
+          git add "${STATE_FILE}"
+          if ! git diff --cached --quiet; then
+            git commit -m "chore: advance upstream sync state to ${LAST_PROCESSED}"
+          fi
+
+      - name: Push and open draft PR
+        if: ${{ steps.cherry-pick.conclusion == 'success' && steps.cherry-pick.outputs.applied != '0' }}
+        env:
+          SYNC_BRANCH: ${{ steps.cherry-pick.outputs.branch }}
+          APPLIED: ${{ steps.cherry-pick.outputs.applied }}
+          TIDIED: ${{ steps.cherry-pick.outputs.tidied }}
+          APPLIED_LINES: ${{ steps.cherry-pick.outputs.applied_lines }}
+          REMAINING_LINES: ${{ steps.cherry-pick.outputs.remaining_lines }}
+          CONFLICT_FULL_SHA: ${{ steps.cherry-pick.outputs.conflict_full_sha }}
+          CONFLICT_TITLE: ${{ steps.cherry-pick.outputs.conflict_title }}
+        run: |
+          git push --force origin "${SYNC_BRANCH}"
+          {
+            echo "## Upstream sync — \`${TARGET_BRANCH}\` ← Azure/\`${UPSTREAM_BRANCH}\`"
+            echo ""
+            echo "Applied **${APPLIED}** upstream commit(s) from [Azure/azure-service-operator](https://github.com/Azure/azure-service-operator) into \`${TARGET_BRANCH}\`."
+            [ "${TIDIED:-0}" -gt 0 ] && echo "" && echo "> ⚠️ **${TIDIED}** commit(s) had go.mod/go.sum conflicts auto-resolved via \`go mod tidy\` (upstream module files preferred). Review dependency versions carefully — a deliberate downstream pin could have been reverted."
+            echo ""
+            echo "### Applied"
+            echo "${APPLIED_LINES}"
+            if [ -n "${CONFLICT_FULL_SHA}" ]; then
+              echo ""
+              echo "### ❌ Stopped at a conflicting commit"
+              echo "- \`$(printf '%s' "${CONFLICT_FULL_SHA}" | cut -c1-8)\` ${CONFLICT_TITLE}"
+              [ -n "${REMAINING_LINES}" ] && echo "" && echo "### Remaining (not attempted)" && echo "${REMAINING_LINES}"
+              echo ""
+              echo "### How to resolve"
+              echo "1. **Merge this PR** — it holds every cleanly-applied commit."
+              echo "2. **Resolve the conflict locally:**"
+              echo '```bash'
+              echo "git checkout ${TARGET_BRANCH} && git pull"
+              echo "git cherry-pick ${CONFLICT_FULL_SHA}"
+              echo "# resolve conflicts, then:"
+              echo "git add . && git cherry-pick --continue && git push origin ${TARGET_BRANCH}"
+              echo '```'
+              echo "3. **Re-run** the *Sync main from upstream* workflow and repeat until fully synced."
+            fi
+            echo ""
+            echo "_Generated by the \`sync-upstream-main\` workflow. Excluded commits live in \`${STATE_FILE}\`._"
+          } > /tmp/pr-body.md
+
+          gh pr create \
+            --repo "${GITHUB_REPOSITORY}" \
+            --base "${TARGET_BRANCH}" \
+            --head "${SYNC_BRANCH}" \
+            --title "chore: sync ${TARGET_BRANCH} from upstream Azure/${UPSTREAM_BRANCH} (${APPLIED} commit(s))" \
+            --body-file /tmp/pr-body.md \
+            --draft
+
+          if [ -n "${CONFLICT_FULL_SHA}" ]; then
+            printf '::warning::Upstream sync stopped at a conflicting commit: %s\n' "${CONFLICT_FULL_SHA}"
+            printf 'Commit title: %s\n' "${CONFLICT_TITLE}"
+            printf '::warning::Applied commits are in the draft PR. Resolve the conflict and re-run the workflow.\n'
+            {
+              echo "## ⚠️ Upstream sync partially blocked"
+              echo ""
+              printf 'Sync stopped at conflicting commit **%s**.\n' "$(printf '%s' "${CONFLICT_FULL_SHA}" | cut -c1-8)"
+              printf 'Commit title: %s\n' "${CONFLICT_TITLE}"
+              echo ""
+              echo "The applied commits are in the draft PR. Resolve the conflict manually and re-run the workflow."
+            } >> "${GITHUB_STEP_SUMMARY}"
+          fi
+
+      - name: Fail if the first upstream commit conflicts
+        if: ${{ steps.cherry-pick.outputs.applied == '0' && steps.cherry-pick.outputs.conflict_full_sha != '' }}
+        env:
+          CONFLICT_FULL_SHA: ${{ steps.cherry-pick.outputs.conflict_full_sha }}
+          CONFLICT_TITLE: ${{ steps.cherry-pick.outputs.conflict_title }}
+        run: |
+          echo "::error::The first upstream commit conflicts, so no PR was created."
+          printf '::error::Conflicting commit: %s\n' "${CONFLICT_FULL_SHA}"
+          printf 'Commit title: %s\n' "${CONFLICT_TITLE}"
+          echo "::error::Resolve manually: git checkout ${TARGET_BRANCH} && git cherry-pick ${CONFLICT_FULL_SHA} (resolve) && git push, then re-run this workflow."
+          exit 1
