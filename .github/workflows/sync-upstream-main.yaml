@@ -27,10 +27,12 @@ name: Sync main from upstream (Azure/main)
 # sync branch and lands via the PR; nothing is ever pushed directly to main
 # (branch protection friendly).
 #
-# NOTE: pushes here use the default GITHUB_TOKEN. Pushes made with GITHUB_TOKEN
-# do NOT trigger other workflows, so the sync PR's own CI will not run
-# automatically -- close/reopen the PR (or push a commit) to kick CI if needed.
-# Wire up a dedicated PAT secret if automatic CI on the sync PR becomes required.
+# NOTE: pushes here use the SYNC_TOKEN secret (a fine-grained PAT with Contents,
+# Pull requests and Workflows write). The default GITHUB_TOKEN is NOT sufficient:
+# it cannot push changes under .github/workflows/ (GitHub rejects the push
+# without the `workflows` scope, which the permissions block cannot grant), and
+# pushes made with it do not trigger other workflows. Using a PAT both allows
+# workflow-file syncs and lets the sync PR's own CI run automatically.
 on:
   workflow_dispatch:
   schedule:
@@ -50,16 +52,15 @@ jobs:
     # Only run on the stolostron fork; upstream and other forks must not sync.
     if: ${{ github.repository == 'stolostron/azure-service-operator' }}
     runs-on: ubuntu-latest
-    permissions:
-      contents: write
-      pull-requests: write
+    # No job `permissions:` block: the default GITHUB_TOKEN is unused (checkout,
+    # push and gh all authenticate with the SYNC_TOKEN PAT), so the job inherits
+    # the top-level `permissions: {}` and the GITHUB_TOKEN gets no scopes.
     timeout-minutes: 30
     env:
       UPSTREAM_URL: https://github.com/Azure/azure-service-operator.git
       UPSTREAM_BRANCH: main
       TARGET_BRANCH: main
       STATE_FILE: .github/upstream-sync-state.json
-      GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     defaults:
       run:
         shell: bash
@@ -70,7 +71,10 @@ jobs:
         with:
           ref: main
           fetch-depth: 0
-          token: ${{ secrets.GITHUB_TOKEN }}
+          token: ${{ secrets.SYNC_TOKEN }}
+          # Don't persist the PAT in .git/config for the whole job. The push
+          # step below authenticates explicitly for just that one command.
+          persist-credentials: false
 
       - name: Set up Go
         uses: actions/setup-go@4b73464bb391d4059bd26b0524d20df3927bd417 # v6.3.0
@@ -140,6 +144,8 @@ jobs:
       - name: Check for existing sync PR
         if: ${{ steps.find-commits.outputs.count != '0' }}
         id: existing-pr
+        env:
+          GH_TOKEN: ${{ secrets.SYNC_TOKEN }}
         run: |
           PR_NUMBER="$(
             gh pr list \
@@ -288,6 +294,8 @@ jobs:
       - name: Push and open draft PR
         if: ${{ steps.cherry-pick.conclusion == 'success' && steps.cherry-pick.outputs.applied != '0' }}
         env:
+          GH_TOKEN: ${{ secrets.SYNC_TOKEN }}
+          SYNC_TOKEN: ${{ secrets.SYNC_TOKEN }}
           SYNC_BRANCH: ${{ steps.cherry-pick.outputs.branch }}
           APPLIED: ${{ steps.cherry-pick.outputs.applied }}
           TIDIED: ${{ steps.cherry-pick.outputs.tidied }}
@@ -296,7 +304,14 @@ jobs:
           CONFLICT_FULL_SHA: ${{ steps.cherry-pick.outputs.conflict_full_sha }}
           CONFLICT_TITLE: ${{ steps.cherry-pick.outputs.conflict_title }}
         run: |
-          git push --force origin "${SYNC_BRANCH}"
+          # Checkout ran with persist-credentials:false, so authenticate this
+          # single push explicitly via http.extraheader (the same mechanism
+          # actions/checkout uses). Mask the derived header so it can never
+          # surface in logs.
+          AUTH_B64="$(printf 'x-access-token:%s' "${SYNC_TOKEN}" | base64 | tr -d '\n')"
+          echo "::add-mask::${AUTH_B64}"
+          git -c http.extraheader="AUTHORIZATION: basic ${AUTH_B64}" \
+            push --force origin "${SYNC_BRANCH}"
           {
             echo "## Upstream sync — \`${TARGET_BRANCH}\` ← Azure/\`${UPSTREAM_BRANCH}\`"
             echo ""
