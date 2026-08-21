@@ -71,6 +71,10 @@ jobs:
         with:
           ref: main
           fetch-depth: 0
+          # Upstream code-generation commits bump the azure-rest-api-specs
+          # submodule; check it out so the tree is consistent for cherry-picks
+          # and so the post-sync CRD/index regeneration sees the matching specs.
+          submodules: recursive
           token: ${{ secrets.SYNC_TOKEN }}
           # Don't persist the PAT in .git/config for the whole job. The push
           # step below authenticates explicitly for just that one command.
@@ -275,6 +279,50 @@ jobs:
             echo "applied_lines<<${DELIM}"; echo "${APPLIED_LINES}"; echo "${DELIM}"
             echo "remaining_lines<<${DELIM}"; echo "${REMAINING_LINES}"; echo "${DELIM}"
           } >> "${GITHUB_OUTPUT}"
+
+      - name: Rebuild CRDs and indexes
+        # Upstream code-generation commits (new API versions, resource imports)
+        # ship regenerated code AND bump the azure-rest-api-specs submodule.
+        # Cherry-picking replays those commits but does not reconcile the
+        # generated tree with this fork's customizations, nor does it prove the
+        # merged tree still generates and compiles. Regenerate here so any
+        # committed generated files (e.g. zz_generated.* deepcopy) are refreshed
+        # onto the sync branch, and so a broken generation/build fails the sync
+        # loudly instead of shipping a broken draft PR.
+        #
+        # The build runs inside the standard ASO devcontainer image (the same
+        # one pr-validation.yml uses) so task/controller-gen/kustomize/python
+        # are all present without bootstrapping the toolchain on the runner.
+        if: ${{ steps.cherry-pick.outputs.applied != '0' }}
+        run: |
+          # Sync the submodule working tree to whatever gitlink the
+          # cherry-picked commits landed on, so generation sees matching specs.
+          git submodule update --init --recursive
+
+          docker pull ghcr.io/azure/azure-service-operator/aso-devcontainer:latest
+          CONTAINER_ID="$(docker create -w /workspace \
+            -v "${GITHUB_WORKSPACE}:/workspace" \
+            --network=host \
+            ghcr.io/azure/azure-service-operator/aso-devcontainer:latest)"
+          docker start "${CONTAINER_ID}"
+          # -f forces regeneration, ignoring task's up-to-date cache.
+          docker exec "${CONTAINER_ID}" task controller:build controller:bundle-crds -f
+          docker rm -f "${CONTAINER_ID}"
+
+          # Generated files may be written as the container user; normalize
+          # ownership so the runner's git can stage them.
+          sudo chown -R "$(id -u):$(id -g)" . 2>/dev/null || true
+
+          # Stage only tracked/committed changes (gitignore excludes the throwaway
+          # out/ CRD bundle, bin/, venv, and config/**/generated); zz_generated.*
+          # deepcopy files are tracked and land in the PR when they change.
+          git add -A
+          if git diff --cached --quiet; then
+            echo "No committed generated changes after rebuild."
+          else
+            git commit -m "chore: regenerate CRDs and indexes after upstream sync"
+            echo "Committed regenerated CRDs/indexes onto the sync branch."
+          fi
 
       - name: Commit updated sync state
         if: ${{ steps.cherry-pick.outputs.applied != '0' && steps.cherry-pick.outputs.last_processed != '' }}
