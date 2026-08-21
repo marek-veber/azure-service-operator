@@ -43,7 +43,7 @@ Summary:
 |--------|--------|----------------|
 | `main` | `Azure/main` + ARO-HCP customizations | Weekly merge-based sync via `sync-upstream-main.yaml` (PR-based, not fast-forward) |
 | `backplane-5.1` | `main` | FFWD-only via `ffwd-branch.yaml` on every push to `main` |
-| `backplane-5.0` | `release-2.18` | FFWD-only via `ffwd-release-2.18.yaml` |
+| `backplane-5.0` | `release-2.18` | Manual (no automated sync) |
 | `release-2.18`, `release-2.19` | upstream release branches + ARO-HCP | Manual, security updates only |
 | `backplane-2.17`, `backplane-2.11` | — | Manual, security findings only |
 
