@@ -3,7 +3,6 @@ module github.com/Azure/azure-service-operator/v2
 go 1.25.7
 
 require (
-	github.com/Azure/ARO-HCP/test/sdk/resourcemanager/redhatopenshifthcp/armredhatopenshifthcp v0.0.0-20260709163751-8c7d6f781c48
 	github.com/Azure/azure-sdk-for-go/sdk/azcore v1.21.0
 	github.com/Azure/azure-sdk-for-go/sdk/azidentity v1.13.1
 	github.com/Azure/azure-sdk-for-go/sdk/resourcemanager/apimanagement/armapimanagement/v2 v2.1.0
@@ -162,3 +161,5 @@ require (
 )
 
 require github.com/shopspring/decimal v1.4.0 // indirect
+
+require github.com/Azure/ARO-HCP/test/sdk/v20260630preview/resourcemanager/redhatopenshifthcp/armredhatopenshifthcp v0.0.0-20260827105250-f9c0941bedcc
