@@ -3,7 +3,6 @@ module github.com/Azure/azure-service-operator/v2
 go 1.26.0
 
 require (
-	github.com/Azure/ARO-HCP/test/sdk/resourcemanager/redhatopenshifthcp/armredhatopenshifthcp v0.0.0-20260709163751-8c7d6f781c48
 	github.com/Azure/azure-sdk-for-go/sdk/azcore v1.22.0
 	github.com/Azure/azure-sdk-for-go/sdk/azidentity v1.14.0
 	github.com/Azure/azure-sdk-for-go/sdk/resourcemanager/apimanagement/armapimanagement/v2 v2.1.0
@@ -162,6 +161,8 @@ require (
 	sigs.k8s.io/randfill v1.0.0 // indirect
 	sigs.k8s.io/structured-merge-diff/v6 v6.3.3 // indirect
 )
+
+require github.com/Azure/ARO-HCP/test/sdk/v20260630preview/resourcemanager/redhatopenshifthcp/armredhatopenshifthcp v0.0.0-20260827105250-f9c0941bedcc
 
 require (
 	github.com/cenkalti/backoff/v5 v5.0.3 // indirect
