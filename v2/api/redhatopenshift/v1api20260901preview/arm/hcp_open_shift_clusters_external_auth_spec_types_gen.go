@@ -14,9 +14,9 @@ type HcpOpenShiftClustersExternalAuth_Spec struct {
 
 var _ genruntime.ARMResourceSpec = &HcpOpenShiftClustersExternalAuth_Spec{}
 
-// GetAPIVersion returns the ARM API version of the resource. This is always "2026-06-30-preview"
+// GetAPIVersion returns the ARM API version of the resource. This is always "2026-09-01-preview"
 func (auth HcpOpenShiftClustersExternalAuth_Spec) GetAPIVersion() string {
-	return "2026-06-30-preview"
+	return "2026-09-01-preview"
 }
 
 // GetName returns the Name of the resource

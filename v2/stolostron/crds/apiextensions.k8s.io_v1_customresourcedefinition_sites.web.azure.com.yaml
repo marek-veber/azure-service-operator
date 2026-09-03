@@ -6,7 +6,7 @@ metadata:
     controller-gen.kubebuilder.io/version: v0.18.0
   labels:
     app.kubernetes.io/name: azure-service-operator
-    app.kubernetes.io/version: v2.20.0-rev.118
+    app.kubernetes.io/version: v2.20.0-rev.118-rev.66
   name: sites.web.azure.com
 spec:
   conversion:
@@ -9785,7 +9785,7 @@ spec:
                         type: integer
                       maximumInstanceCount:
                         description: 'MaximumInstanceCount: The maximum number of
-                          instances for the function app.'
+                          on demand instances per function group.'
                         type: integer
                       triggers:
                         description: 'Triggers: Scale and concurrency settings for
@@ -11472,7 +11472,7 @@ spec:
                         type: integer
                       maximumInstanceCount:
                         description: 'MaximumInstanceCount: The maximum number of
-                          instances for the function app.'
+                          on demand instances per function group.'
                         type: integer
                       triggers:
                         description: 'Triggers: Scale and concurrency settings for

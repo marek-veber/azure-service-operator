@@ -6,7 +6,7 @@ metadata:
     controller-gen.kubebuilder.io/version: v0.18.0
   labels:
     app.kubernetes.io/name: azure-service-operator
-    app.kubernetes.io/version: v2.20.0-rev.118
+    app.kubernetes.io/version: v2.20.0-rev.118-rev.66
   name: diagnosticsettings.insights.azure.com
 spec:
   conversion:
@@ -50,7 +50,7 @@ spec:
       openAPIV3Schema:
         description: |-
           Generator information:
-          - Generated from: /monitor/resource-manager/Microsoft.Insights/Insights/preview/2021-05-01-preview/diagnosticsSettings_API.json
+          - Generated from: /monitor/resource-manager/Microsoft.Insights/Insights/preview/2021-05-01-preview/openapi.json
           - ARM URI: /{resourceUri}/providers/Microsoft.Insights/diagnosticSettings/{name}
         properties:
           apiVersion:
@@ -434,8 +434,8 @@ spec:
                 type: string
               id:
                 description: |-
-                  Id: Fully qualified resource ID for the resource. Ex -
-                  /subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/{resourceProviderNamespace}/{resourceType}/{resourceName}
+                  Id: Fully qualified resource ID for the resource. E.g.
+                  "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/{resourceProviderNamespace}/{resourceType}/{resourceName}"
                 type: string
               logAnalyticsDestinationType:
                 description: |-
@@ -529,7 +529,8 @@ spec:
                   to which you would like to send Diagnostic Logs.'
                 type: string
               systemData:
-                description: 'SystemData: The system metadata related to this resource.'
+                description: 'SystemData: Azure Resource Manager metadata containing
+                  createdBy and modifiedBy information.'
                 properties:
                   createdAt:
                     description: 'CreatedAt: The timestamp of resource creation (UTC).'
@@ -589,7 +590,7 @@ spec:
         description: |-
           Storage version of v1api20210501preview.DiagnosticSetting
           Generator information:
-          - Generated from: /monitor/resource-manager/Microsoft.Insights/Insights/preview/2021-05-01-preview/diagnosticsSettings_API.json
+          - Generated from: /monitor/resource-manager/Microsoft.Insights/Insights/preview/2021-05-01-preview/openapi.json
           - ARM URI: /{resourceUri}/providers/Microsoft.Insights/diagnosticSettings/{name}
         properties:
           apiVersion:
@@ -652,7 +653,7 @@ spec:
               logs:
                 items:
                   description: |-
-                    Storage version of v1api20210501preview.LogSettings
+                    Storage version of v1api20210501preview.DiagnosticsLogSettings
                     Part of MultiTenantDiagnosticSettings. Specifies the settings for a particular log.
                   properties:
                     $propertyBag:
@@ -670,7 +671,7 @@ spec:
                       type: boolean
                     retentionPolicy:
                       description: |-
-                        Storage version of v1api20210501preview.RetentionPolicy
+                        Storage version of v1api20210501preview.MicrosoftCommonRetentionPolicy
                         Specifies the retention policy for the log.
                       properties:
                         $propertyBag:
@@ -712,7 +713,7 @@ spec:
               metrics:
                 items:
                   description: |-
-                    Storage version of v1api20210501preview.MetricSettings
+                    Storage version of v1api20210501preview.DiagnosticsMetricSettings
                     Part of MultiTenantDiagnosticSettings. Specifies the settings for a particular metric.
                   properties:
                     $propertyBag:
@@ -728,7 +729,7 @@ spec:
                       type: boolean
                     retentionPolicy:
                       description: |-
-                        Storage version of v1api20210501preview.RetentionPolicy
+                        Storage version of v1api20210501preview.MicrosoftCommonRetentionPolicy
                         Specifies the retention policy for the log.
                       properties:
                         $propertyBag:
@@ -981,7 +982,7 @@ spec:
               logs:
                 items:
                   description: |-
-                    Storage version of v1api20210501preview.LogSettings_STATUS
+                    Storage version of v1api20210501preview.DiagnosticsLogSettings_STATUS
                     Part of MultiTenantDiagnosticSettings. Specifies the settings for a particular log.
                   properties:
                     $propertyBag:
@@ -999,7 +1000,7 @@ spec:
                       type: boolean
                     retentionPolicy:
                       description: |-
-                        Storage version of v1api20210501preview.RetentionPolicy_STATUS
+                        Storage version of v1api20210501preview.MicrosoftCommonRetentionPolicy_STATUS
                         Specifies the retention policy for the log.
                       properties:
                         $propertyBag:
@@ -1021,7 +1022,7 @@ spec:
               metrics:
                 items:
                   description: |-
-                    Storage version of v1api20210501preview.MetricSettings_STATUS
+                    Storage version of v1api20210501preview.DiagnosticsMetricSettings_STATUS
                     Part of MultiTenantDiagnosticSettings. Specifies the settings for a particular metric.
                   properties:
                     $propertyBag:
@@ -1037,7 +1038,7 @@ spec:
                       type: boolean
                     retentionPolicy:
                       description: |-
-                        Storage version of v1api20210501preview.RetentionPolicy_STATUS
+                        Storage version of v1api20210501preview.MicrosoftCommonRetentionPolicy_STATUS
                         Specifies the retention policy for the log.
                       properties:
                         $propertyBag:
