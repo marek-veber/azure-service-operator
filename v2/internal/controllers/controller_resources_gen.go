@@ -1336,6 +1336,7 @@ func getKnownStorageTypes() []*registration.StorageType {
 	result = append(result, &registration.StorageType{Obj: new(containerservice_v20250301s.FleetsMember)})
 	result = append(result, &registration.StorageType{Obj: new(containerservice_v20250301s.FleetsUpdateRun)})
 	result = append(result, &registration.StorageType{Obj: new(containerservice_v20250301s.FleetsUpdateStrategy)})
+	result = append(result, &registration.StorageType{Obj: new(containerservice_v20260501s.IdentityBinding)})
 	result = append(result, &registration.StorageType{Obj: new(containerservice_v20260501s.MaintenanceConfiguration)})
 	result = append(result, &registration.StorageType{
 		Obj: new(containerservice_v20260501s.ManagedCluster),
@@ -5147,6 +5148,11 @@ func getKnownTypes() []*registration.KnownType {
 	result = append(
 		result,
 		&registration.KnownType{
+			Obj:       new(containerservice_v20260501.IdentityBinding),
+			Defaulter: &containerservice_v20260501w.IdentityBinding{},
+			Validator: &containerservice_v20260501w.IdentityBinding{},
+		},
+		&registration.KnownType{
 			Obj:       new(containerservice_v20260501.MaintenanceConfiguration),
 			Defaulter: &containerservice_v20260501w.MaintenanceConfiguration{},
 			Validator: &containerservice_v20260501w.MaintenanceConfiguration{},
@@ -5168,6 +5174,7 @@ func getKnownTypes() []*registration.KnownType {
 		})
 	result = append(
 		result,
+		&registration.KnownType{Obj: new(containerservice_v20260501s.IdentityBinding)},
 		&registration.KnownType{Obj: new(containerservice_v20260501s.MaintenanceConfiguration)},
 		&registration.KnownType{Obj: new(containerservice_v20260501s.ManagedCluster)},
 		&registration.KnownType{Obj: new(containerservice_v20260501s.ManagedClustersAgentPool)},
@@ -8804,6 +8811,7 @@ func getResourceExtensions() []genruntime.ResourceExtension {
 	result = append(result, &containerservice_customizations.FleetsMemberExtension{})
 	result = append(result, &containerservice_customizations.FleetsUpdateRunExtension{})
 	result = append(result, &containerservice_customizations.FleetsUpdateStrategyExtension{})
+	result = append(result, &containerservice_customizations.IdentityBindingExtension{})
 	result = append(result, &containerservice_customizations.MaintenanceConfigurationExtension{})
 	result = append(result, &containerservice_customizations.ManagedClusterExtension{})
 	result = append(result, &containerservice_customizations.ManagedClustersAgentPoolExtension{})
