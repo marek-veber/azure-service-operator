@@ -30,7 +30,7 @@ RUN --mount=type=cache,target=/root/.cache/go-build \
     SHORT_COMMIT=$(echo "${GIT_COMMIT}" | cut -c1-7) && \
     if [ "${GO_BUILD_DEBUG}" = "true" ]; then \
       CGO_ENABLED=1 GOOS=linux GOARCH=${ARCH} \
-      go build -x -v -ldflags "-X 'github.com/Azure/azure-service-operator/v2/internal/version.BuildVersion=${MCE_VERSION}-${SHORT_COMMIT}'" \
+      go build -v -ldflags "-X 'github.com/Azure/azure-service-operator/v2/internal/version.BuildVersion=${MCE_VERSION}-${SHORT_COMMIT}'" \
       -o ./aso-controller ./cmd/controller/; \
     else \
       CGO_ENABLED=1 GOOS=linux GOARCH=${ARCH} \
