@@ -17,6 +17,11 @@ metadata:
   name: azure-service-operator-mce-52-on-push
   namespace: crt-redhat-acm-tenant
 spec:
+  timeouts:
+    pipeline: 1h
+  taskRunSpecs:
+  - pipelineTaskName: build-images
+    timeout: 50m
   params:
   - name: git-url
     value: '{{source_url}}'
