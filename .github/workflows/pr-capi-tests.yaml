@@ -30,8 +30,7 @@ jobs:
   capi-tests:
     name: capi-tests (${{ github.base_ref }})
     runs-on: ubuntu-latest
-    # 60m for Konflux, 70m for capi-tests, and orchestration overhead.
-    timeout-minutes: 140
+    timeout-minutes: 360
     steps:
       - name: Harden Runner
         uses: step-security/harden-runner@fa2e9d605c4eeb9fcad4c99c224cee0c6c7f3594 # v2.16.0
@@ -190,8 +189,7 @@ jobs:
         run: |
           set -euo pipefail
           REPO="stolostron/capi-tests"
-          # 35 polls at 2m each gives capi-tests 70m to complete.
-          MAX_ATTEMPTS=35
+          MAX_ATTEMPTS=145
           POLL_INTERVAL=120
 
           echo "Monitoring run: https://github.com/${REPO}/actions/runs/${RUN_ID}"

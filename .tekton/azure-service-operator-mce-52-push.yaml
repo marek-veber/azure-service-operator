@@ -22,6 +22,15 @@ spec:
   taskRunSpecs:
   - pipelineTaskName: build-images
     timeout: 50m
+    stepSpecs:
+    - name: build
+      computeResources:
+        requests:
+          cpu: "8"
+          memory: 16Gi
+        limits:
+          cpu: "8"
+          memory: 16Gi
   params:
   - name: git-url
     value: '{{source_url}}'
