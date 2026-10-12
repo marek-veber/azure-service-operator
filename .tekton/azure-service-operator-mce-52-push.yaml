@@ -18,10 +18,10 @@ metadata:
   namespace: crt-redhat-acm-tenant
 spec:
   timeouts:
-    pipeline: 1h
+    pipeline: 2h
   taskRunSpecs:
   - pipelineTaskName: build-images
-    timeout: 50m
+    timeout: 1h50m
     stepSpecs:
     - name: build
       computeResources:
