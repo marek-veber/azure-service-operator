@@ -30,7 +30,7 @@ spec:
           memory: 16Gi
         limits:
           cpu: "8"
-          memory: 16Gi
+          memory: 24Gi
   params:
   - name: git-url
     value: '{{source_url}}'
