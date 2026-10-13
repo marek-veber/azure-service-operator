@@ -63,7 +63,7 @@ spec:
   - name: konflux-application-name
     value: release-mce-52
   - name: slack-member-id
-    value: "Marek Veber"
+    value: "U02L1L0HTD0"
   pipelineRef:
     resolver: git
     params:
