@@ -45,7 +45,7 @@ spec:
   - name: build-platforms
     value:
     - linux/x86_64
-    - linux/arm64
+    - linux-mxlarge/arm64
     - linux/ppc64le
     - linux/s390x
   - name: dockerfile
@@ -63,7 +63,7 @@ spec:
   - name: konflux-application-name
     value: release-mce-52
   - name: slack-member-id
-    value: C07JR0ARW1E # capi-squad channel-id.
+    value: "Marek Veber"
   pipelineRef:
     resolver: git
     params:
