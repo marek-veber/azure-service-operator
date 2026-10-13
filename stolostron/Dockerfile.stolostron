@@ -6,6 +6,11 @@ ENV GOPROXY=$goproxy
 
 FROM toolchain AS builder
 
+ARG BUILDPLATFORM
+ARG TARGETPLATFORM
+ARG TARGETOS
+ARG TARGETARCH
+
 USER 0
 WORKDIR /workspace
 
@@ -27,8 +32,12 @@ RUN  --mount=type=cache,target=/root/.local/share/golang \
 RUN --mount=type=cache,target=/root/.cache/go-build \
     --mount=type=cache,target=/go/pkg/mod \
     --mount=type=cache,target=/root/.local/share/golang \
-    echo "Build target platform: linux/${ARCH}" && \
-    echo "Build host platform: $(uname -m)" && \
+    build_target_os="${TARGETOS:-linux}" && \
+    build_target_arch="${TARGETARCH:-${ARCH:-$(go env GOARCH)}}" && \
+    build_target_platform="${TARGETPLATFORM:-${build_target_os}/${build_target_arch}}" && \
+    echo "Build target platform: ${build_target_platform}" && \
+    echo "Build host platform: ${BUILDPLATFORM:-$(uname -m)}" && \
+    echo "Build host architecture: $(uname -m)" && \
     echo "Available system memory from /proc/meminfo:" && \
     grep -E '^(MemTotal|MemAvailable|SwapTotal|SwapFree):' /proc/meminfo && \
     if [ -r /sys/fs/cgroup/memory.max ] && [ -r /sys/fs/cgroup/memory.current ]; then \
@@ -54,7 +63,7 @@ RUN --mount=type=cache,target=/root/.cache/go-build \
         *) GO_BUILD_FLAGS="" ;; \
     esac && \
     SHORT_COMMIT=$(echo "${GIT_COMMIT}" | cut -c1-7) && \
-    CGO_ENABLED=1 GOOS=linux GOARCH=${ARCH} \
+    CGO_ENABLED=1 GOOS="${build_target_os}" GOARCH="${build_target_arch}" \
     go build ${GO_BUILD_FLAGS} -ldflags "-X 'github.com/Azure/azure-service-operator/v2/internal/version.BuildVersion=${MCE_VERSION}-${SHORT_COMMIT}'" \
     -o ./aso-controller ./cmd/controller/
 
