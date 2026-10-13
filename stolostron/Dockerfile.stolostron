@@ -13,6 +13,7 @@ ENV GOFLAGS="-buildvcs=false"
 
 ARG MCE_VERSION=dev
 ARG GIT_COMMIT=unknown
+ARG DEBUG=false
 
 COPY v2/ ./
 
@@ -26,9 +27,35 @@ RUN  --mount=type=cache,target=/root/.local/share/golang \
 RUN --mount=type=cache,target=/root/.cache/go-build \
     --mount=type=cache,target=/go/pkg/mod \
     --mount=type=cache,target=/root/.local/share/golang \
+    echo "Build target platform: linux/${ARCH}" && \
+    echo "Build host platform: $(uname -m)" && \
+    echo "Available system memory from /proc/meminfo:" && \
+    grep -E '^(MemTotal|MemAvailable|SwapTotal|SwapFree):' /proc/meminfo && \
+    if [ -r /sys/fs/cgroup/memory.max ] && [ -r /sys/fs/cgroup/memory.current ]; then \
+        memory_limit=$(cat /sys/fs/cgroup/memory.max) && \
+        memory_current=$(cat /sys/fs/cgroup/memory.current) && \
+        if [ "${memory_limit}" = "max" ]; then \
+            echo "Cgroup memory: current=${memory_current} bytes, limit=unlimited"; \
+        else \
+            memory_available=$((memory_limit - memory_current)) && \
+            echo "Cgroup memory: current=${memory_current} bytes, limit=${memory_limit} bytes, available=${memory_available} bytes"; \
+        fi; \
+    elif [ -r /sys/fs/cgroup/memory/memory.limit_in_bytes ] && [ -r /sys/fs/cgroup/memory/memory.usage_in_bytes ]; then \
+        memory_limit=$(cat /sys/fs/cgroup/memory/memory.limit_in_bytes) && \
+        memory_current=$(cat /sys/fs/cgroup/memory/memory.usage_in_bytes) && \
+        memory_available=$((memory_limit - memory_current)) && \
+        echo "Cgroup memory: current=${memory_current} bytes, limit=${memory_limit} bytes, available=${memory_available} bytes"; \
+    else \
+        echo "Cgroup memory information is unavailable"; \
+    fi && \
+    case "${DEBUG}" in \
+        verbose) GO_BUILD_FLAGS="-v -x" ;; \
+        true) GO_BUILD_FLAGS="-v" ;; \
+        *) GO_BUILD_FLAGS="" ;; \
+    esac && \
     SHORT_COMMIT=$(echo "${GIT_COMMIT}" | cut -c1-7) && \
     CGO_ENABLED=1 GOOS=linux GOARCH=${ARCH} \
-    go build -ldflags "-X 'github.com/Azure/azure-service-operator/v2/internal/version.BuildVersion=${MCE_VERSION}-${SHORT_COMMIT}'" \
+    go build ${GO_BUILD_FLAGS} -ldflags "-X 'github.com/Azure/azure-service-operator/v2/internal/version.BuildVersion=${MCE_VERSION}-${SHORT_COMMIT}'" \
     -o ./aso-controller ./cmd/controller/
 
 # Copy the aso-controller into a thin image
