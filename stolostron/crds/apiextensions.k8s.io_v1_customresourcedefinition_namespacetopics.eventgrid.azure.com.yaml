@@ -3,11 +3,11 @@ kind: CustomResourceDefinition
 metadata:
   annotations:
     cert-manager.io/inject-ca-from: azureserviceoperator-system/azureserviceoperator-serving-cert
-    controller-gen.kubebuilder.io/version: v0.18.0
+    controller-gen.kubebuilder.io/version: v0.19.0
   labels:
     app.kubernetes.io/name: azure-service-operator
-    app.kubernetes.io/version: v2.20.0-hcpclusters.1
-  name: configurations.dbformariadb.azure.com
+    app.kubernetes.io/version: v2.22.0
+  name: namespacetopics.eventgrid.azure.com
 spec:
   conversion:
     strategy: Webhook
@@ -20,15 +20,15 @@ spec:
           port: 443
       conversionReviewVersions:
       - v1
-  group: dbformariadb.azure.com
+  group: eventgrid.azure.com
   names:
     categories:
     - azure
-    - dbformariadb
-    kind: Configuration
-    listKind: ConfigurationList
-    plural: configurations
-    singular: configuration
+    - eventgrid
+    kind: NamespaceTopic
+    listKind: NamespaceTopicList
+    plural: namespacetopics
+    singular: namespacetopic
   preserveUnknownFields: false
   scope: Namespaced
   versions:
@@ -45,13 +45,13 @@ spec:
     - jsonPath: .status.conditions[?(@.type=='Ready')].message
       name: Message
       type: string
-    name: v1api20180601
+    name: v20250215
     schema:
       openAPIV3Schema:
         description: |-
           Generator information:
-          - Generated from: /mariadb/resource-manager/Microsoft.DBforMariaDB/stable/2018-06-01/mariadb.json
-          - ARM URI: /subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.DBforMariaDB/servers/{serverName}/configurations/{configurationName}
+          - Generated from: /eventgrid/resource-manager/Microsoft.EventGrid/EventGrid/stable/2025-02-15/EventGrid.json
+          - ARM URI: /subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.EventGrid/namespaces/{namespaceName}/topics/{topicName}
         properties:
           apiVersion:
             description: |-
@@ -76,6 +76,20 @@ spec:
                 description: |-
                   AzureName: The name of the resource in Azure. This is often the same as the name of the resource in Kubernetes but it
                   doesn't have to be.
+                maxLength: 50
+                minLength: 3
+                pattern: ^[a-zA-Z0-9-]*$
+                type: string
+              eventRetentionInDays:
+                description: |-
+                  EventRetentionInDays: Event retention for the namespace topic expressed in days. The property default value is 1 day.
+                  Min event retention duration value is 1 day and max event retention duration value is 1 day.
+                type: integer
+              inputSchema:
+                description: 'InputSchema: This determines the format that is expected
+                  for incoming events published to the topic.'
+                enum:
+                - CloudEventSchemaV1_0
                 type: string
               operatorSpec:
                 description: |-
@@ -168,12 +182,77 @@ spec:
                       - value
                       type: object
                     type: array
+                  secrets:
+                    description: 'Secrets: configures where to place Azure generated
+                      secrets.'
+                    properties:
+                      key1:
+                        description: 'Key1: indicates where the Key1 secret should
+                          be placed. If omitted, the secret will not be retrieved
+                          from Azure.'
+                        properties:
+                          annotations:
+                            additionalProperties:
+                              type: string
+                            description: Annotations is an optional set of annotations
+                              to apply to the secret.
+                            type: object
+                          key:
+                            description: Key is the key in the Kubernetes secret being
+                              referenced.
+                            type: string
+                          labels:
+                            additionalProperties:
+                              type: string
+                            description: Labels is an optional set of labels to apply
+                              to the secret.
+                            type: object
+                          name:
+                            description: |-
+                              Name is the name of the Kubernetes secret to write to.
+                              The secret will be created in the same namespace as the resource.
+                            type: string
+                        required:
+                        - key
+                        - name
+                        type: object
+                      key2:
+                        description: 'Key2: indicates where the Key2 secret should
+                          be placed. If omitted, the secret will not be retrieved
+                          from Azure.'
+                        properties:
+                          annotations:
+                            additionalProperties:
+                              type: string
+                            description: Annotations is an optional set of annotations
+                              to apply to the secret.
+                            type: object
+                          key:
+                            description: Key is the key in the Kubernetes secret being
+                              referenced.
+                            type: string
+                          labels:
+                            additionalProperties:
+                              type: string
+                            description: Labels is an optional set of labels to apply
+                              to the secret.
+                            type: object
+                          name:
+                            description: |-
+                              Name is the name of the Kubernetes secret to write to.
+                              The secret will be created in the same namespace as the resource.
+                            type: string
+                        required:
+                        - key
+                        - name
+                        type: object
+                    type: object
                 type: object
               owner:
                 description: |-
                   Owner: The owner of the resource. The owner controls where the resource goes when it is deployed. The owner also
                   controls the resources lifecycle. When the owner is deleted the resource will also be deleted. Owner is expected to be a
-                  reference to a dbformariadb.azure.com/Server resource
+                  reference to a eventgrid.azure.com/Namespace resource
                 properties:
                   armId:
                     pattern: (?i)(^(/subscriptions/([^/]+)(/resourcegroups/([^/]+))?)?/providers/([^/]+)/([^/]+/[^/]+)(/([^/]+/[^/]+))*$|^/subscriptions/([^/]+)(/resourcegroups/([^/]+))?$)
@@ -182,20 +261,16 @@ spec:
                     description: This is the name of the Kubernetes resource to reference.
                     type: string
                 type: object
-              source:
-                description: 'Source: Source of the configuration.'
-                type: string
-              value:
-                description: 'Value: Value of the configuration.'
+              publisherType:
+                description: 'PublisherType: Publisher type of the namespace topic.'
+                enum:
+                - Custom
                 type: string
             required:
             - owner
             type: object
           status:
             properties:
-              allowedValues:
-                description: 'AllowedValues: Allowed values of the configuration.'
-                type: string
               conditions:
                 description: 'Conditions: The observed state of the resource'
                 items:
@@ -244,32 +319,57 @@ spec:
                   - type
                   type: object
                 type: array
-              dataType:
-                description: 'DataType: Data type of the configuration.'
-                type: string
-              defaultValue:
-                description: 'DefaultValue: Default value of the configuration.'
-                type: string
-              description:
-                description: 'Description: Description of the configuration.'
-                type: string
-              id:
+              eventRetentionInDays:
                 description: |-
-                  Id: Fully qualified resource ID for the resource. Ex -
-                  /subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/{resourceProviderNamespace}/{resourceType}/{resourceName}
+                  EventRetentionInDays: Event retention for the namespace topic expressed in days. The property default value is 1 day.
+                  Min event retention duration value is 1 day and max event retention duration value is 1 day.
+                type: integer
+              id:
+                description: 'Id: Fully qualified identifier of the resource.'
+                type: string
+              inputSchema:
+                description: 'InputSchema: This determines the format that is expected
+                  for incoming events published to the topic.'
                 type: string
               name:
-                description: 'Name: The name of the resource'
+                description: 'Name: Name of the resource.'
                 type: string
-              source:
-                description: 'Source: Source of the configuration.'
+              provisioningState:
+                description: 'ProvisioningState: Provisioning state of the namespace
+                  topic.'
                 type: string
+              publisherType:
+                description: 'PublisherType: Publisher type of the namespace topic.'
+                type: string
+              systemData:
+                description: 'SystemData: The system metadata relating to the Event
+                  Grid resource.'
+                properties:
+                  createdAt:
+                    description: 'CreatedAt: The timestamp of resource creation (UTC).'
+                    type: string
+                  createdBy:
+                    description: 'CreatedBy: The identity that created the resource.'
+                    type: string
+                  createdByType:
+                    description: 'CreatedByType: The type of identity that created
+                      the resource.'
+                    type: string
+                  lastModifiedAt:
+                    description: 'LastModifiedAt: The timestamp of resource last modification
+                      (UTC)'
+                    type: string
+                  lastModifiedBy:
+                    description: 'LastModifiedBy: The identity that last modified
+                      the resource.'
+                    type: string
+                  lastModifiedByType:
+                    description: 'LastModifiedByType: The type of identity that last
+                      modified the resource.'
+                    type: string
+                type: object
               type:
-                description: 'Type: The type of the resource. E.g. "Microsoft.Compute/virtualMachines"
-                  or "Microsoft.Storage/storageAccounts"'
-                type: string
-              value:
-                description: 'Value: Value of the configuration.'
+                description: 'Type: Type of the resource.'
                 type: string
             type: object
         type: object
@@ -290,14 +390,14 @@ spec:
     - jsonPath: .status.conditions[?(@.type=='Ready')].message
       name: Message
       type: string
-    name: v1api20180601storage
+    name: v20250215storage
     schema:
       openAPIV3Schema:
         description: |-
-          Storage version of v1api20180601.Configuration
+          Storage version of v20250215.NamespaceTopic
           Generator information:
-          - Generated from: /mariadb/resource-manager/Microsoft.DBforMariaDB/stable/2018-06-01/mariadb.json
-          - ARM URI: /subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.DBforMariaDB/servers/{serverName}/configurations/{configurationName}
+          - Generated from: /eventgrid/resource-manager/Microsoft.EventGrid/EventGrid/stable/2025-02-15/EventGrid.json
+          - ARM URI: /subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.EventGrid/namespaces/{namespaceName}/topics/{topicName}
         properties:
           apiVersion:
             description: |-
@@ -317,7 +417,7 @@ spec:
           metadata:
             type: object
           spec:
-            description: Storage version of v1api20180601.Configuration_Spec
+            description: Storage version of v20250215.NamespaceTopic_Spec
             properties:
               $propertyBag:
                 additionalProperties:
@@ -331,9 +431,13 @@ spec:
                   AzureName: The name of the resource in Azure. This is often the same as the name of the resource in Kubernetes but it
                   doesn't have to be.
                 type: string
+              eventRetentionInDays:
+                type: integer
+              inputSchema:
+                type: string
               operatorSpec:
                 description: |-
-                  Storage version of v1api20180601.ConfigurationOperatorSpec
+                  Storage version of v20250215.NamespaceTopicOperatorSpec
                   Details for configuring operator behavior. Fields in this struct are interpreted by the operator directly rather than being passed to Azure
                 properties:
                   $propertyBag:
@@ -425,6 +529,79 @@ spec:
                       - value
                       type: object
                     type: array
+                  secrets:
+                    description: Storage version of v20250215.NamespaceTopicOperatorSecrets
+                    properties:
+                      $propertyBag:
+                        additionalProperties:
+                          type: string
+                        description: |-
+                          PropertyBag is an unordered set of stashed information that used for properties not directly supported by storage
+                          resources, allowing for full fidelity round trip conversions
+                        type: object
+                      key1:
+                        description: |-
+                          SecretDestination describes the location to store a single secret value.
+                          Note: This is similar to: ConfigMapDestination in configmaps.go.
+                          Changes to one may need to be made to the others as well.
+                        properties:
+                          annotations:
+                            additionalProperties:
+                              type: string
+                            description: Annotations is an optional set of annotations
+                              to apply to the secret.
+                            type: object
+                          key:
+                            description: Key is the key in the Kubernetes secret being
+                              referenced.
+                            type: string
+                          labels:
+                            additionalProperties:
+                              type: string
+                            description: Labels is an optional set of labels to apply
+                              to the secret.
+                            type: object
+                          name:
+                            description: |-
+                              Name is the name of the Kubernetes secret to write to.
+                              The secret will be created in the same namespace as the resource.
+                            type: string
+                        required:
+                        - key
+                        - name
+                        type: object
+                      key2:
+                        description: |-
+                          SecretDestination describes the location to store a single secret value.
+                          Note: This is similar to: ConfigMapDestination in configmaps.go.
+                          Changes to one may need to be made to the others as well.
+                        properties:
+                          annotations:
+                            additionalProperties:
+                              type: string
+                            description: Annotations is an optional set of annotations
+                              to apply to the secret.
+                            type: object
+                          key:
+                            description: Key is the key in the Kubernetes secret being
+                              referenced.
+                            type: string
+                          labels:
+                            additionalProperties:
+                              type: string
+                            description: Labels is an optional set of labels to apply
+                              to the secret.
+                            type: object
+                          name:
+                            description: |-
+                              Name is the name of the Kubernetes secret to write to.
+                              The secret will be created in the same namespace as the resource.
+                            type: string
+                        required:
+                        - key
+                        - name
+                        type: object
+                    type: object
                 type: object
               originalVersion:
                 type: string
@@ -432,7 +609,7 @@ spec:
                 description: |-
                   Owner: The owner of the resource. The owner controls where the resource goes when it is deployed. The owner also
                   controls the resources lifecycle. When the owner is deleted the resource will also be deleted. Owner is expected to be a
-                  reference to a dbformariadb.azure.com/Server resource
+                  reference to a eventgrid.azure.com/Namespace resource
                 properties:
                   armId:
                     pattern: (?i)(^(/subscriptions/([^/]+)(/resourcegroups/([^/]+))?)?/providers/([^/]+)/([^/]+/[^/]+)(/([^/]+/[^/]+))*$|^/subscriptions/([^/]+)(/resourcegroups/([^/]+))?$)
@@ -441,15 +618,13 @@ spec:
                     description: This is the name of the Kubernetes resource to reference.
                     type: string
                 type: object
-              source:
-                type: string
-              value:
+              publisherType:
                 type: string
             required:
             - owner
             type: object
           status:
-            description: Storage version of v1api20180601.Configuration_STATUS
+            description: Storage version of v20250215.NamespaceTopic_STATUS
             properties:
               $propertyBag:
                 additionalProperties:
@@ -458,8 +633,6 @@ spec:
                   PropertyBag is an unordered set of stashed information that used for properties not directly supported by storage
                   resources, allowing for full fidelity round trip conversions
                 type: object
-              allowedValues:
-                type: string
               conditions:
                 items:
                   description: Condition defines an extension to status (an observation)
@@ -507,21 +680,44 @@ spec:
                   - type
                   type: object
                 type: array
-              dataType:
-                type: string
-              defaultValue:
-                type: string
-              description:
-                type: string
+              eventRetentionInDays:
+                type: integer
               id:
+                type: string
+              inputSchema:
                 type: string
               name:
                 type: string
-              source:
+              provisioningState:
                 type: string
+              publisherType:
+                type: string
+              systemData:
+                description: |-
+                  Storage version of v20250215.SystemData_STATUS
+                  Metadata pertaining to creation and last modification of the resource.
+                properties:
+                  $propertyBag:
+                    additionalProperties:
+                      type: string
+                    description: |-
+                      PropertyBag is an unordered set of stashed information that used for properties not directly supported by storage
+                      resources, allowing for full fidelity round trip conversions
+                    type: object
+                  createdAt:
+                    type: string
+                  createdBy:
+                    type: string
+                  createdByType:
+                    type: string
+                  lastModifiedAt:
+                    type: string
+                  lastModifiedBy:
+                    type: string
+                  lastModifiedByType:
+                    type: string
+                type: object
               type:
-                type: string
-              value:
                 type: string
             type: object
         type: object

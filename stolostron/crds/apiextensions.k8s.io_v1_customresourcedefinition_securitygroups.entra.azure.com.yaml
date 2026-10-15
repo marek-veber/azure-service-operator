@@ -3,10 +3,10 @@ kind: CustomResourceDefinition
 metadata:
   annotations:
     cert-manager.io/inject-ca-from: azureserviceoperator-system/azureserviceoperator-serving-cert
-    controller-gen.kubebuilder.io/version: v0.18.0
+    controller-gen.kubebuilder.io/version: v0.19.0
   labels:
     app.kubernetes.io/name: azure-service-operator
-    app.kubernetes.io/version: v2.20.0-hcpclusters.1
+    app.kubernetes.io/version: v2.22.0
   name: securitygroups.entra.azure.com
 spec:
   conversion:
@@ -85,13 +85,52 @@ spec:
                   MailNickname: The email address of the group, specified either as a mail nickname (`mygroup`)
                   or as a full email address (`mygroup@mydomain.com`).
                 type: string
+              members:
+                description: |-
+                  Members: Directory objects (users, service principals, groups) to assign as members of the security group.
+                  Applied during the initial POST to Microsoft Graph via `members@odata.bind` and then used as desired member state
+                  for later reconciliation.
+                items:
+                  description: |-
+                    SecurityGroupMemberReference is a reference to a directory object (user, service principal, or group) by its
+                    Entra Object ID.
+                  properties:
+                    objectID:
+                      description: 'ObjectID: The Entra Object ID (GUID) of the directory
+                        object.'
+                      pattern: ^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$
+                      type: string
+                    objectIDFromConfig:
+                      description: 'ObjectIDFromConfig: Reference to a configmap value
+                        containing the Entra Object ID.'
+                      properties:
+                        key:
+                          description: Key is the key in the Kubernetes configmap
+                            being referenced
+                          type: string
+                        name:
+                          description: |-
+                            Name is the name of the Kubernetes configmap being referenced.
+                            The configmap must be in the same namespace as the resource
+                          type: string
+                      required:
+                      - key
+                      - name
+                      type: object
+                  type: object
+                  x-kubernetes-validations:
+                  - message: exactly one of objectID or objectIDFromConfig must be
+                      specified
+                    rule: has(self.objectID) != has(self.objectIDFromConfig)
+                maxItems: 20
+                type: array
               membershipType:
                 description: 'MembershipType: The membership type of the group.'
                 enum:
                 - assigned
-                - enabled
+                - dynamic
                 - assignedm365
-                - enabledm365
+                - dynamicm365
                 type: string
               operatorSpec:
                 description: 'OperatorSpec: The operator specific configuration for
@@ -141,10 +180,55 @@ spec:
                     - AlwaysCreate
                     type: string
                 type: object
+              owners:
+                description: |-
+                  Owners: Directory objects (users, service principals) to assign as owners of the security
+                  group. Applied during the initial POST to Microsoft Graph via `owners@odata.bind` and then used as desired owner
+                  state for later reconciliation.
+                  Required when ASO authenticates with an app-only token and the calling principal lacks Group.ReadWrite.All —
+                  otherwise the created group has no owners and is unmanageable.
+                items:
+                  description: |-
+                    SecurityGroupMemberReference is a reference to a directory object (user, service principal, or group) by its
+                    Entra Object ID.
+                  properties:
+                    objectID:
+                      description: 'ObjectID: The Entra Object ID (GUID) of the directory
+                        object.'
+                      pattern: ^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$
+                      type: string
+                    objectIDFromConfig:
+                      description: 'ObjectIDFromConfig: Reference to a configmap value
+                        containing the Entra Object ID.'
+                      properties:
+                        key:
+                          description: Key is the key in the Kubernetes configmap
+                            being referenced
+                          type: string
+                        name:
+                          description: |-
+                            Name is the name of the Kubernetes configmap being referenced.
+                            The configmap must be in the same namespace as the resource
+                          type: string
+                      required:
+                      - key
+                      - name
+                      type: object
+                  type: object
+                  x-kubernetes-validations:
+                  - message: exactly one of objectID or objectIDFromConfig must be
+                      specified
+                    rule: has(self.objectID) != has(self.objectIDFromConfig)
+                maxItems: 20
+                type: array
             required:
             - displayName
             - mailNickname
             type: object
+            x-kubernetes-validations:
+            - message: the combined number of owners and members must not exceed 20
+              rule: '(has(self.owners) ? size(self.owners) : 0) + (has(self.members)
+                ? size(self.members) : 0) <= 20'
           status:
             properties:
               conditions:
@@ -207,6 +291,18 @@ spec:
               groupEmailAddress:
                 description: 'MailNickname: The email address of the group.'
                 type: string
+              members:
+                description: 'Members: Directory objects (users, service principals,
+                  groups) assigned as members of the security group.'
+                items:
+                  type: string
+                type: array
+              owners:
+                description: 'Owners: Directory objects (users, service principals,
+                  groups) assigned as owners of the security group'
+                items:
+                  type: string
+                type: array
             required:
             - groupEmailAddress
             type: object
