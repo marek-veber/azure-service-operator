@@ -47,6 +47,10 @@ var wholeSampleExclusions = []*regexp.Regexp{
 	regexp.MustCompile(`/redhatopenshift/v20260901preview(?:/|$)`),
 	regexp.MustCompile(`/documentdb/sqldatabase/v1api20210515`), // This is blocked by corp policy (can't set DisableLocalAuth)
 	regexp.MustCompile(`/compute/v20250401`),                    // Quota restrictions mean we can't rerecord capacity reservation
+	// TODO: remove once Test_Keyvault_v20230701_CreationAndDeletion.yaml has been recorded. The VaultKey
+	// samples need a recording that captures both ARM and the Key Vault data plane (the VaultKeyExtension
+	// adopts, updates and deletes keys via azkeys), and without one the test needs live credentials.
+	regexp.MustCompile(`/keyvault/v20230701(?:/|$)`),
 }
 
 var exclusions = []*regexp.Regexp{
@@ -85,6 +89,14 @@ var exclusions = []*regexp.Regexp{
 
 	// Requires creating multiple linked SQL servers which is hard to do in the samples
 	regexp.MustCompile(`sql/.*_serversfailovergroup.yaml`),
+
+	// SQL Managed Instance takes 30-60 minutes to create and needs a delegated subnet, so it's too slow and expensive
+	// to include in the shared sql samples test. The managed instance resources are covered by dedicated CRUD tests
+	// instead. Keep the sample files present so scripts/v2/check_samples.py is satisfied.
+	regexp.MustCompile(`sql/.*_managedinstance.*\.yaml`),
+
+	// An instance failover group needs two managed instances in different regions with connected networks
+	regexp.MustCompile(`sql/.*_instancefailovergroup.yaml`),
 
 	// Excluding sql serverskey and serversencryptionprotector as they require a keyvault key URI
 	// which can't be created via ASO (no Keyvault/Keys resource support)
