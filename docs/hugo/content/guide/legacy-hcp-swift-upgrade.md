@@ -7,6 +7,23 @@ This release temporarily serves the `2024-06-10-preview` HCP Kubernetes APIs so 
 read and delete clusters, node pools, and external auth resources created with that API.
 The CRD storage version remains `v20260901previewstorage`.
 
+To plan a migration of HCP resources referenced by CAPZ `AROCluster`,
+`AROControlPlane`, and `AROMachinePool` objects across all namespaces, run:
+
+```bash
+scripts/v2/migrate-hcp-original-version.sh --context <management-cluster-context>
+```
+
+After reviewing the plan, add `--apply` to change CAPZ's embedded HCP API versions
+and each child's `spec.originalVersion` to `v20260901preview`. The script leaves
+already migrated objects with a safe reconcile policy alone. For a legacy SWIFT
+cluster without an integration subnet, it first sets `observe-delete` on the
+cluster, node pools, and external
+auth resources, then adds a marked synthetic subnet reference to the cluster to
+satisfy the 2026 Kubernetes schema. This reference must never be sent to Azure.
+The script does not migrate etcd storage or clear CRD
+`status.storedVersions`; verify those separately before removing old CRD versions.
+
 Existing SWIFT clusters do not have a VNet integration subnet. The 2025 Kubernetes API
 requires `spec.properties.platform.vnetIntegrationSubnetReference`, although the Azure
 resource has no such subnet. A syntactically valid placeholder reference can satisfy
