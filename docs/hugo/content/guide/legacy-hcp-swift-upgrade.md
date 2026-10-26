@@ -3,9 +3,9 @@ title: Temporary compatibility for legacy ARO HCP SWIFT clusters
 weight: 100
 ---
 
-This release temporarily serves the `2024-06-10-preview` HCP Kubernetes APIs so ASO can
-read and delete clusters, node pools, and external auth resources created with that API.
-The CRD storage version remains `v20260901previewstorage`.
+This release keeps the `2024-06-10-preview` HCP schemas in the CRDs for decoding
+existing stored objects, but sets both 2024 versions to `served: false`. Clients
+must use a served version. The CRD storage version remains `v20260901previewstorage`.
 
 To plan a migration of HCP resources referenced by CAPZ `AROCluster`,
 `AROControlPlane`, and `AROMachinePool` objects across all namespaces, run:

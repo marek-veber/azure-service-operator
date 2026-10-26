@@ -21,8 +21,8 @@ their API version changes. They receive a clearly marked, synthetic subnet
 reference to satisfy the 2026 schema. ASO must never send this reference to
 Azure. The policy still permits ARM DELETE when the HCP object is deleted.
 
-Requires oc and jq. Run with the transitional ASO build that serves the 2024,
-2025, and 2026 HCP API versions.
+Requires oc and jq. Run with the transitional ASO build that retains the 2024
+schemas for storage decoding and serves the 2025 and 2026 HCP API versions.
 EOF
 }
 
