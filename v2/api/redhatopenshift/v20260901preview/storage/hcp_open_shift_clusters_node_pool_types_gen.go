@@ -5,7 +5,8 @@ package storage
 
 import (
 	"fmt"
-	storage "github.com/Azure/azure-service-operator/v2/api/redhatopenshift/v20261001/storage"
+	v20231122s "github.com/Azure/azure-service-operator/v2/api/redhatopenshift/v1api20231122/storage"
+	v20261001s "github.com/Azure/azure-service-operator/v2/api/redhatopenshift/v20261001/storage"
 	"github.com/Azure/azure-service-operator/v2/pkg/genruntime"
 	"github.com/Azure/azure-service-operator/v2/pkg/genruntime/conditions"
 	"github.com/Azure/azure-service-operator/v2/pkg/genruntime/configmaps"
@@ -51,7 +52,7 @@ var _ conversion.Convertible = &HcpOpenShiftClustersNodePool{}
 
 // ConvertFrom populates our HcpOpenShiftClustersNodePool from the provided hub HcpOpenShiftClustersNodePool
 func (pool *HcpOpenShiftClustersNodePool) ConvertFrom(hub conversion.Hub) error {
-	source, ok := hub.(*storage.HcpOpenShiftClustersNodePool)
+	source, ok := hub.(*v20261001s.HcpOpenShiftClustersNodePool)
 	if !ok {
 		return fmt.Errorf("expected redhatopenshift/v20261001/storage/HcpOpenShiftClustersNodePool but received %T instead", hub)
 	}
@@ -61,7 +62,7 @@ func (pool *HcpOpenShiftClustersNodePool) ConvertFrom(hub conversion.Hub) error 
 
 // ConvertTo populates the provided hub HcpOpenShiftClustersNodePool from our HcpOpenShiftClustersNodePool
 func (pool *HcpOpenShiftClustersNodePool) ConvertTo(hub conversion.Hub) error {
-	destination, ok := hub.(*storage.HcpOpenShiftClustersNodePool)
+	destination, ok := hub.(*v20261001s.HcpOpenShiftClustersNodePool)
 	if !ok {
 		return fmt.Errorf("expected redhatopenshift/v20261001/storage/HcpOpenShiftClustersNodePool but received %T instead", hub)
 	}
@@ -165,7 +166,7 @@ func (pool *HcpOpenShiftClustersNodePool) SetStatus(status genruntime.Convertibl
 }
 
 // AssignProperties_From_HcpOpenShiftClustersNodePool populates our HcpOpenShiftClustersNodePool from the provided source HcpOpenShiftClustersNodePool
-func (pool *HcpOpenShiftClustersNodePool) AssignProperties_From_HcpOpenShiftClustersNodePool(source *storage.HcpOpenShiftClustersNodePool) error {
+func (pool *HcpOpenShiftClustersNodePool) AssignProperties_From_HcpOpenShiftClustersNodePool(source *v20261001s.HcpOpenShiftClustersNodePool) error {
 
 	// ObjectMeta
 	pool.ObjectMeta = *source.ObjectMeta.DeepCopy()
@@ -200,13 +201,13 @@ func (pool *HcpOpenShiftClustersNodePool) AssignProperties_From_HcpOpenShiftClus
 }
 
 // AssignProperties_To_HcpOpenShiftClustersNodePool populates the provided destination HcpOpenShiftClustersNodePool from our HcpOpenShiftClustersNodePool
-func (pool *HcpOpenShiftClustersNodePool) AssignProperties_To_HcpOpenShiftClustersNodePool(destination *storage.HcpOpenShiftClustersNodePool) error {
+func (pool *HcpOpenShiftClustersNodePool) AssignProperties_To_HcpOpenShiftClustersNodePool(destination *v20261001s.HcpOpenShiftClustersNodePool) error {
 
 	// ObjectMeta
 	destination.ObjectMeta = *pool.ObjectMeta.DeepCopy()
 
 	// Spec
-	var spec storage.HcpOpenShiftClustersNodePool_Spec
+	var spec v20261001s.HcpOpenShiftClustersNodePool_Spec
 	err := pool.Spec.AssignProperties_To_HcpOpenShiftClustersNodePool_Spec(&spec)
 	if err != nil {
 		return eris.Wrap(err, "calling AssignProperties_To_HcpOpenShiftClustersNodePool_Spec() to populate field Spec")
@@ -214,7 +215,7 @@ func (pool *HcpOpenShiftClustersNodePool) AssignProperties_To_HcpOpenShiftCluste
 	destination.Spec = spec
 
 	// Status
-	var status storage.HcpOpenShiftClustersNodePool_STATUS
+	var status v20261001s.HcpOpenShiftClustersNodePool_STATUS
 	err = pool.Status.AssignProperties_To_HcpOpenShiftClustersNodePool_STATUS(&status)
 	if err != nil {
 		return eris.Wrap(err, "calling AssignProperties_To_HcpOpenShiftClustersNodePool_STATUS() to populate field Status")
@@ -255,8 +256,8 @@ type HcpOpenShiftClustersNodePoolList struct {
 }
 
 type augmentConversionForHcpOpenShiftClustersNodePool interface {
-	AssignPropertiesFrom(src *storage.HcpOpenShiftClustersNodePool) error
-	AssignPropertiesTo(dst *storage.HcpOpenShiftClustersNodePool) error
+	AssignPropertiesFrom(src *v20261001s.HcpOpenShiftClustersNodePool) error
+	AssignPropertiesTo(dst *v20261001s.HcpOpenShiftClustersNodePool) error
 }
 
 // Storage version of v20260901preview.HcpOpenShiftClustersNodePool_Spec
@@ -283,14 +284,14 @@ var _ genruntime.ConvertibleSpec = &HcpOpenShiftClustersNodePool_Spec{}
 
 // ConvertSpecFrom populates our HcpOpenShiftClustersNodePool_Spec from the provided source
 func (pool *HcpOpenShiftClustersNodePool_Spec) ConvertSpecFrom(source genruntime.ConvertibleSpec) error {
-	src, ok := source.(*storage.HcpOpenShiftClustersNodePool_Spec)
+	src, ok := source.(*v20261001s.HcpOpenShiftClustersNodePool_Spec)
 	if ok {
 		// Populate our instance from source
 		return pool.AssignProperties_From_HcpOpenShiftClustersNodePool_Spec(src)
 	}
 
 	// Convert to an intermediate form
-	src = &storage.HcpOpenShiftClustersNodePool_Spec{}
+	src = &v20261001s.HcpOpenShiftClustersNodePool_Spec{}
 	err := src.ConvertSpecFrom(source)
 	if err != nil {
 		return eris.Wrap(err, "initial step of conversion in ConvertSpecFrom()")
@@ -307,14 +308,14 @@ func (pool *HcpOpenShiftClustersNodePool_Spec) ConvertSpecFrom(source genruntime
 
 // ConvertSpecTo populates the provided destination from our HcpOpenShiftClustersNodePool_Spec
 func (pool *HcpOpenShiftClustersNodePool_Spec) ConvertSpecTo(destination genruntime.ConvertibleSpec) error {
-	dst, ok := destination.(*storage.HcpOpenShiftClustersNodePool_Spec)
+	dst, ok := destination.(*v20261001s.HcpOpenShiftClustersNodePool_Spec)
 	if ok {
 		// Populate destination from our instance
 		return pool.AssignProperties_To_HcpOpenShiftClustersNodePool_Spec(dst)
 	}
 
 	// Convert to an intermediate form
-	dst = &storage.HcpOpenShiftClustersNodePool_Spec{}
+	dst = &v20261001s.HcpOpenShiftClustersNodePool_Spec{}
 	err := pool.AssignProperties_To_HcpOpenShiftClustersNodePool_Spec(dst)
 	if err != nil {
 		return eris.Wrap(err, "initial step of conversion in ConvertSpecTo()")
@@ -330,7 +331,7 @@ func (pool *HcpOpenShiftClustersNodePool_Spec) ConvertSpecTo(destination genrunt
 }
 
 // AssignProperties_From_HcpOpenShiftClustersNodePool_Spec populates our HcpOpenShiftClustersNodePool_Spec from the provided source HcpOpenShiftClustersNodePool_Spec
-func (pool *HcpOpenShiftClustersNodePool_Spec) AssignProperties_From_HcpOpenShiftClustersNodePool_Spec(source *storage.HcpOpenShiftClustersNodePool_Spec) error {
+func (pool *HcpOpenShiftClustersNodePool_Spec) AssignProperties_From_HcpOpenShiftClustersNodePool_Spec(source *v20261001s.HcpOpenShiftClustersNodePool_Spec) error {
 	// Clone the existing property bag
 	propertyBag := genruntime.NewPropertyBag(source.PropertyBag)
 
@@ -411,7 +412,7 @@ func (pool *HcpOpenShiftClustersNodePool_Spec) AssignProperties_From_HcpOpenShif
 }
 
 // AssignProperties_To_HcpOpenShiftClustersNodePool_Spec populates the provided destination HcpOpenShiftClustersNodePool_Spec from our HcpOpenShiftClustersNodePool_Spec
-func (pool *HcpOpenShiftClustersNodePool_Spec) AssignProperties_To_HcpOpenShiftClustersNodePool_Spec(destination *storage.HcpOpenShiftClustersNodePool_Spec) error {
+func (pool *HcpOpenShiftClustersNodePool_Spec) AssignProperties_To_HcpOpenShiftClustersNodePool_Spec(destination *v20261001s.HcpOpenShiftClustersNodePool_Spec) error {
 	// Clone the existing property bag
 	propertyBag := genruntime.NewPropertyBag(pool.PropertyBag)
 
@@ -420,7 +421,7 @@ func (pool *HcpOpenShiftClustersNodePool_Spec) AssignProperties_To_HcpOpenShiftC
 
 	// Identity
 	if pool.Identity != nil {
-		var identity storage.ManagedServiceIdentity
+		var identity v20261001s.ManagedServiceIdentity
 		err := pool.Identity.AssignProperties_To_ManagedServiceIdentity(&identity)
 		if err != nil {
 			return eris.Wrap(err, "calling AssignProperties_To_ManagedServiceIdentity() to populate field Identity")
@@ -435,7 +436,7 @@ func (pool *HcpOpenShiftClustersNodePool_Spec) AssignProperties_To_HcpOpenShiftC
 
 	// OperatorSpec
 	if pool.OperatorSpec != nil {
-		var operatorSpec storage.HcpOpenShiftClustersNodePoolOperatorSpec
+		var operatorSpec v20261001s.HcpOpenShiftClustersNodePoolOperatorSpec
 		err := pool.OperatorSpec.AssignProperties_To_HcpOpenShiftClustersNodePoolOperatorSpec(&operatorSpec)
 		if err != nil {
 			return eris.Wrap(err, "calling AssignProperties_To_HcpOpenShiftClustersNodePoolOperatorSpec() to populate field OperatorSpec")
@@ -458,7 +459,7 @@ func (pool *HcpOpenShiftClustersNodePool_Spec) AssignProperties_To_HcpOpenShiftC
 
 	// Properties
 	if pool.Properties != nil {
-		var property storage.NodePoolProperties
+		var property v20261001s.NodePoolProperties
 		err := pool.Properties.AssignProperties_To_NodePoolProperties(&property)
 		if err != nil {
 			return eris.Wrap(err, "calling AssignProperties_To_NodePoolProperties() to populate field Properties")
@@ -509,14 +510,14 @@ var _ genruntime.ConvertibleStatus = &HcpOpenShiftClustersNodePool_STATUS{}
 
 // ConvertStatusFrom populates our HcpOpenShiftClustersNodePool_STATUS from the provided source
 func (pool *HcpOpenShiftClustersNodePool_STATUS) ConvertStatusFrom(source genruntime.ConvertibleStatus) error {
-	src, ok := source.(*storage.HcpOpenShiftClustersNodePool_STATUS)
+	src, ok := source.(*v20261001s.HcpOpenShiftClustersNodePool_STATUS)
 	if ok {
 		// Populate our instance from source
 		return pool.AssignProperties_From_HcpOpenShiftClustersNodePool_STATUS(src)
 	}
 
 	// Convert to an intermediate form
-	src = &storage.HcpOpenShiftClustersNodePool_STATUS{}
+	src = &v20261001s.HcpOpenShiftClustersNodePool_STATUS{}
 	err := src.ConvertStatusFrom(source)
 	if err != nil {
 		return eris.Wrap(err, "initial step of conversion in ConvertStatusFrom()")
@@ -533,14 +534,14 @@ func (pool *HcpOpenShiftClustersNodePool_STATUS) ConvertStatusFrom(source genrun
 
 // ConvertStatusTo populates the provided destination from our HcpOpenShiftClustersNodePool_STATUS
 func (pool *HcpOpenShiftClustersNodePool_STATUS) ConvertStatusTo(destination genruntime.ConvertibleStatus) error {
-	dst, ok := destination.(*storage.HcpOpenShiftClustersNodePool_STATUS)
+	dst, ok := destination.(*v20261001s.HcpOpenShiftClustersNodePool_STATUS)
 	if ok {
 		// Populate destination from our instance
 		return pool.AssignProperties_To_HcpOpenShiftClustersNodePool_STATUS(dst)
 	}
 
 	// Convert to an intermediate form
-	dst = &storage.HcpOpenShiftClustersNodePool_STATUS{}
+	dst = &v20261001s.HcpOpenShiftClustersNodePool_STATUS{}
 	err := pool.AssignProperties_To_HcpOpenShiftClustersNodePool_STATUS(dst)
 	if err != nil {
 		return eris.Wrap(err, "initial step of conversion in ConvertStatusTo()")
@@ -556,7 +557,7 @@ func (pool *HcpOpenShiftClustersNodePool_STATUS) ConvertStatusTo(destination gen
 }
 
 // AssignProperties_From_HcpOpenShiftClustersNodePool_STATUS populates our HcpOpenShiftClustersNodePool_STATUS from the provided source HcpOpenShiftClustersNodePool_STATUS
-func (pool *HcpOpenShiftClustersNodePool_STATUS) AssignProperties_From_HcpOpenShiftClustersNodePool_STATUS(source *storage.HcpOpenShiftClustersNodePool_STATUS) error {
+func (pool *HcpOpenShiftClustersNodePool_STATUS) AssignProperties_From_HcpOpenShiftClustersNodePool_STATUS(source *v20261001s.HcpOpenShiftClustersNodePool_STATUS) error {
 	// Clone the existing property bag
 	propertyBag := genruntime.NewPropertyBag(source.PropertyBag)
 
@@ -598,10 +599,15 @@ func (pool *HcpOpenShiftClustersNodePool_STATUS) AssignProperties_From_HcpOpenSh
 
 	// SystemData
 	if source.SystemData != nil {
-		var systemDatum SystemData_STATUS
-		err := systemDatum.AssignProperties_From_SystemData_STATUS(source.SystemData)
+		var systemDataSTATUSStash v20231122s.SystemData_STATUS
+		err := systemDataSTATUSStash.AssignProperties_From_SystemData_STATUS(source.SystemData)
 		if err != nil {
-			return eris.Wrap(err, "calling AssignProperties_From_SystemData_STATUS() to populate field SystemData")
+			return eris.Wrap(err, "calling AssignProperties_From_SystemData_STATUS() to populate field SystemData_STATUSStash from SystemData")
+		}
+		var systemDatum SystemData_STATUS
+		err = systemDatum.AssignProperties_From_SystemData_STATUS(&systemDataSTATUSStash)
+		if err != nil {
+			return eris.Wrap(err, "calling AssignProperties_From_SystemData_STATUS() to populate field SystemData from SystemData_STATUSStash")
 		}
 		pool.SystemData = &systemDatum
 	} else {
@@ -635,7 +641,7 @@ func (pool *HcpOpenShiftClustersNodePool_STATUS) AssignProperties_From_HcpOpenSh
 }
 
 // AssignProperties_To_HcpOpenShiftClustersNodePool_STATUS populates the provided destination HcpOpenShiftClustersNodePool_STATUS from our HcpOpenShiftClustersNodePool_STATUS
-func (pool *HcpOpenShiftClustersNodePool_STATUS) AssignProperties_To_HcpOpenShiftClustersNodePool_STATUS(destination *storage.HcpOpenShiftClustersNodePool_STATUS) error {
+func (pool *HcpOpenShiftClustersNodePool_STATUS) AssignProperties_To_HcpOpenShiftClustersNodePool_STATUS(destination *v20261001s.HcpOpenShiftClustersNodePool_STATUS) error {
 	// Clone the existing property bag
 	propertyBag := genruntime.NewPropertyBag(pool.PropertyBag)
 
@@ -647,7 +653,7 @@ func (pool *HcpOpenShiftClustersNodePool_STATUS) AssignProperties_To_HcpOpenShif
 
 	// Identity
 	if pool.Identity != nil {
-		var identity storage.ManagedServiceIdentity_STATUS
+		var identity v20261001s.ManagedServiceIdentity_STATUS
 		err := pool.Identity.AssignProperties_To_ManagedServiceIdentity_STATUS(&identity)
 		if err != nil {
 			return eris.Wrap(err, "calling AssignProperties_To_ManagedServiceIdentity_STATUS() to populate field Identity")
@@ -665,7 +671,7 @@ func (pool *HcpOpenShiftClustersNodePool_STATUS) AssignProperties_To_HcpOpenShif
 
 	// Properties
 	if pool.Properties != nil {
-		var property storage.NodePoolProperties_STATUS
+		var property v20261001s.NodePoolProperties_STATUS
 		err := pool.Properties.AssignProperties_To_NodePoolProperties_STATUS(&property)
 		if err != nil {
 			return eris.Wrap(err, "calling AssignProperties_To_NodePoolProperties_STATUS() to populate field Properties")
@@ -677,10 +683,15 @@ func (pool *HcpOpenShiftClustersNodePool_STATUS) AssignProperties_To_HcpOpenShif
 
 	// SystemData
 	if pool.SystemData != nil {
-		var systemDatum storage.SystemData_STATUS
-		err := pool.SystemData.AssignProperties_To_SystemData_STATUS(&systemDatum)
+		var systemDataSTATUSStash v20231122s.SystemData_STATUS
+		err := pool.SystemData.AssignProperties_To_SystemData_STATUS(&systemDataSTATUSStash)
 		if err != nil {
-			return eris.Wrap(err, "calling AssignProperties_To_SystemData_STATUS() to populate field SystemData")
+			return eris.Wrap(err, "calling AssignProperties_To_SystemData_STATUS() to populate field SystemData_STATUSStash from SystemData")
+		}
+		var systemDatum v20261001s.SystemData_STATUS
+		err = systemDataSTATUSStash.AssignProperties_To_SystemData_STATUS(&systemDatum)
+		if err != nil {
+			return eris.Wrap(err, "calling AssignProperties_To_SystemData_STATUS() to populate field SystemData from SystemData_STATUSStash")
 		}
 		destination.SystemData = &systemDatum
 	} else {
@@ -714,13 +725,13 @@ func (pool *HcpOpenShiftClustersNodePool_STATUS) AssignProperties_To_HcpOpenShif
 }
 
 type augmentConversionForHcpOpenShiftClustersNodePool_Spec interface {
-	AssignPropertiesFrom(src *storage.HcpOpenShiftClustersNodePool_Spec) error
-	AssignPropertiesTo(dst *storage.HcpOpenShiftClustersNodePool_Spec) error
+	AssignPropertiesFrom(src *v20261001s.HcpOpenShiftClustersNodePool_Spec) error
+	AssignPropertiesTo(dst *v20261001s.HcpOpenShiftClustersNodePool_Spec) error
 }
 
 type augmentConversionForHcpOpenShiftClustersNodePool_STATUS interface {
-	AssignPropertiesFrom(src *storage.HcpOpenShiftClustersNodePool_STATUS) error
-	AssignPropertiesTo(dst *storage.HcpOpenShiftClustersNodePool_STATUS) error
+	AssignPropertiesFrom(src *v20261001s.HcpOpenShiftClustersNodePool_STATUS) error
+	AssignPropertiesTo(dst *v20261001s.HcpOpenShiftClustersNodePool_STATUS) error
 }
 
 // Storage version of v20260901preview.HcpOpenShiftClustersNodePoolOperatorSpec
@@ -732,7 +743,7 @@ type HcpOpenShiftClustersNodePoolOperatorSpec struct {
 }
 
 // AssignProperties_From_HcpOpenShiftClustersNodePoolOperatorSpec populates our HcpOpenShiftClustersNodePoolOperatorSpec from the provided source HcpOpenShiftClustersNodePoolOperatorSpec
-func (operator *HcpOpenShiftClustersNodePoolOperatorSpec) AssignProperties_From_HcpOpenShiftClustersNodePoolOperatorSpec(source *storage.HcpOpenShiftClustersNodePoolOperatorSpec) error {
+func (operator *HcpOpenShiftClustersNodePoolOperatorSpec) AssignProperties_From_HcpOpenShiftClustersNodePoolOperatorSpec(source *v20261001s.HcpOpenShiftClustersNodePoolOperatorSpec) error {
 	// Clone the existing property bag
 	propertyBag := genruntime.NewPropertyBag(source.PropertyBag)
 
@@ -789,7 +800,7 @@ func (operator *HcpOpenShiftClustersNodePoolOperatorSpec) AssignProperties_From_
 }
 
 // AssignProperties_To_HcpOpenShiftClustersNodePoolOperatorSpec populates the provided destination HcpOpenShiftClustersNodePoolOperatorSpec from our HcpOpenShiftClustersNodePoolOperatorSpec
-func (operator *HcpOpenShiftClustersNodePoolOperatorSpec) AssignProperties_To_HcpOpenShiftClustersNodePoolOperatorSpec(destination *storage.HcpOpenShiftClustersNodePoolOperatorSpec) error {
+func (operator *HcpOpenShiftClustersNodePoolOperatorSpec) AssignProperties_To_HcpOpenShiftClustersNodePoolOperatorSpec(destination *v20261001s.HcpOpenShiftClustersNodePoolOperatorSpec) error {
 	// Clone the existing property bag
 	propertyBag := genruntime.NewPropertyBag(operator.PropertyBag)
 
@@ -860,7 +871,7 @@ type NodePoolProperties struct {
 }
 
 // AssignProperties_From_NodePoolProperties populates our NodePoolProperties from the provided source NodePoolProperties
-func (properties *NodePoolProperties) AssignProperties_From_NodePoolProperties(source *storage.NodePoolProperties) error {
+func (properties *NodePoolProperties) AssignProperties_From_NodePoolProperties(source *v20261001s.NodePoolProperties) error {
 	// Clone the existing property bag
 	propertyBag := genruntime.NewPropertyBag(source.PropertyBag)
 
@@ -967,7 +978,7 @@ func (properties *NodePoolProperties) AssignProperties_From_NodePoolProperties(s
 }
 
 // AssignProperties_To_NodePoolProperties populates the provided destination NodePoolProperties from our NodePoolProperties
-func (properties *NodePoolProperties) AssignProperties_To_NodePoolProperties(destination *storage.NodePoolProperties) error {
+func (properties *NodePoolProperties) AssignProperties_To_NodePoolProperties(destination *v20261001s.NodePoolProperties) error {
 	// Clone the existing property bag
 	propertyBag := genruntime.NewPropertyBag(properties.PropertyBag)
 
@@ -981,7 +992,7 @@ func (properties *NodePoolProperties) AssignProperties_To_NodePoolProperties(des
 
 	// AutoScaling
 	if properties.AutoScaling != nil {
-		var autoScaling storage.NodePoolAutoScaling
+		var autoScaling v20261001s.NodePoolAutoScaling
 		err := properties.AutoScaling.AssignProperties_To_NodePoolAutoScaling(&autoScaling)
 		if err != nil {
 			return eris.Wrap(err, "calling AssignProperties_To_NodePoolAutoScaling() to populate field AutoScaling")
@@ -993,9 +1004,9 @@ func (properties *NodePoolProperties) AssignProperties_To_NodePoolProperties(des
 
 	// Labels
 	if properties.Labels != nil {
-		labelList := make([]storage.Label, len(properties.Labels))
+		labelList := make([]v20261001s.Label, len(properties.Labels))
 		for labelIndex, labelItem := range properties.Labels {
-			var label storage.Label
+			var label v20261001s.Label
 			err := labelItem.AssignProperties_To_Label(&label)
 			if err != nil {
 				return eris.Wrap(err, "calling AssignProperties_To_Label() to populate field Labels")
@@ -1012,7 +1023,7 @@ func (properties *NodePoolProperties) AssignProperties_To_NodePoolProperties(des
 
 	// Platform
 	if properties.Platform != nil {
-		var platform storage.NodePoolPlatformProfile
+		var platform v20261001s.NodePoolPlatformProfile
 		err := properties.Platform.AssignProperties_To_NodePoolPlatformProfile(&platform)
 		if err != nil {
 			return eris.Wrap(err, "calling AssignProperties_To_NodePoolPlatformProfile() to populate field Platform")
@@ -1027,9 +1038,9 @@ func (properties *NodePoolProperties) AssignProperties_To_NodePoolProperties(des
 
 	// Taints
 	if properties.Taints != nil {
-		taintList := make([]storage.Taint, len(properties.Taints))
+		taintList := make([]v20261001s.Taint, len(properties.Taints))
 		for taintIndex, taintItem := range properties.Taints {
-			var taint storage.Taint
+			var taint v20261001s.Taint
 			err := taintItem.AssignProperties_To_Taint(&taint)
 			if err != nil {
 				return eris.Wrap(err, "calling AssignProperties_To_Taint() to populate field Taints")
@@ -1043,7 +1054,7 @@ func (properties *NodePoolProperties) AssignProperties_To_NodePoolProperties(des
 
 	// Version
 	if properties.Version != nil {
-		var version storage.NodePoolVersionProfile
+		var version v20261001s.NodePoolVersionProfile
 		err := properties.Version.AssignProperties_To_NodePoolVersionProfile(&version)
 		if err != nil {
 			return eris.Wrap(err, "calling AssignProperties_To_NodePoolVersionProfile() to populate field Version")
@@ -1090,7 +1101,7 @@ type NodePoolProperties_STATUS struct {
 }
 
 // AssignProperties_From_NodePoolProperties_STATUS populates our NodePoolProperties_STATUS from the provided source NodePoolProperties_STATUS
-func (properties *NodePoolProperties_STATUS) AssignProperties_From_NodePoolProperties_STATUS(source *storage.NodePoolProperties_STATUS) error {
+func (properties *NodePoolProperties_STATUS) AssignProperties_From_NodePoolProperties_STATUS(source *v20261001s.NodePoolProperties_STATUS) error {
 	// Clone the existing property bag
 	propertyBag := genruntime.NewPropertyBag(source.PropertyBag)
 
@@ -1200,7 +1211,7 @@ func (properties *NodePoolProperties_STATUS) AssignProperties_From_NodePoolPrope
 }
 
 // AssignProperties_To_NodePoolProperties_STATUS populates the provided destination NodePoolProperties_STATUS from our NodePoolProperties_STATUS
-func (properties *NodePoolProperties_STATUS) AssignProperties_To_NodePoolProperties_STATUS(destination *storage.NodePoolProperties_STATUS) error {
+func (properties *NodePoolProperties_STATUS) AssignProperties_To_NodePoolProperties_STATUS(destination *v20261001s.NodePoolProperties_STATUS) error {
 	// Clone the existing property bag
 	propertyBag := genruntime.NewPropertyBag(properties.PropertyBag)
 
@@ -1214,7 +1225,7 @@ func (properties *NodePoolProperties_STATUS) AssignProperties_To_NodePoolPropert
 
 	// AutoScaling
 	if properties.AutoScaling != nil {
-		var autoScaling storage.NodePoolAutoScaling_STATUS
+		var autoScaling v20261001s.NodePoolAutoScaling_STATUS
 		err := properties.AutoScaling.AssignProperties_To_NodePoolAutoScaling_STATUS(&autoScaling)
 		if err != nil {
 			return eris.Wrap(err, "calling AssignProperties_To_NodePoolAutoScaling_STATUS() to populate field AutoScaling")
@@ -1226,9 +1237,9 @@ func (properties *NodePoolProperties_STATUS) AssignProperties_To_NodePoolPropert
 
 	// Labels
 	if properties.Labels != nil {
-		labelList := make([]storage.Label_STATUS, len(properties.Labels))
+		labelList := make([]v20261001s.Label_STATUS, len(properties.Labels))
 		for labelIndex, labelItem := range properties.Labels {
-			var label storage.Label_STATUS
+			var label v20261001s.Label_STATUS
 			err := labelItem.AssignProperties_To_Label_STATUS(&label)
 			if err != nil {
 				return eris.Wrap(err, "calling AssignProperties_To_Label_STATUS() to populate field Labels")
@@ -1245,7 +1256,7 @@ func (properties *NodePoolProperties_STATUS) AssignProperties_To_NodePoolPropert
 
 	// Platform
 	if properties.Platform != nil {
-		var platform storage.NodePoolPlatformProfile_STATUS
+		var platform v20261001s.NodePoolPlatformProfile_STATUS
 		err := properties.Platform.AssignProperties_To_NodePoolPlatformProfile_STATUS(&platform)
 		if err != nil {
 			return eris.Wrap(err, "calling AssignProperties_To_NodePoolPlatformProfile_STATUS() to populate field Platform")
@@ -1263,9 +1274,9 @@ func (properties *NodePoolProperties_STATUS) AssignProperties_To_NodePoolPropert
 
 	// Taints
 	if properties.Taints != nil {
-		taintList := make([]storage.Taint_STATUS, len(properties.Taints))
+		taintList := make([]v20261001s.Taint_STATUS, len(properties.Taints))
 		for taintIndex, taintItem := range properties.Taints {
-			var taint storage.Taint_STATUS
+			var taint v20261001s.Taint_STATUS
 			err := taintItem.AssignProperties_To_Taint_STATUS(&taint)
 			if err != nil {
 				return eris.Wrap(err, "calling AssignProperties_To_Taint_STATUS() to populate field Taints")
@@ -1279,7 +1290,7 @@ func (properties *NodePoolProperties_STATUS) AssignProperties_To_NodePoolPropert
 
 	// Version
 	if properties.Version != nil {
-		var version storage.NodePoolVersionProfile_STATUS
+		var version v20261001s.NodePoolVersionProfile_STATUS
 		err := properties.Version.AssignProperties_To_NodePoolVersionProfile_STATUS(&version)
 		if err != nil {
 			return eris.Wrap(err, "calling AssignProperties_To_NodePoolVersionProfile_STATUS() to populate field Version")
@@ -1310,18 +1321,18 @@ func (properties *NodePoolProperties_STATUS) AssignProperties_To_NodePoolPropert
 }
 
 type augmentConversionForHcpOpenShiftClustersNodePoolOperatorSpec interface {
-	AssignPropertiesFrom(src *storage.HcpOpenShiftClustersNodePoolOperatorSpec) error
-	AssignPropertiesTo(dst *storage.HcpOpenShiftClustersNodePoolOperatorSpec) error
+	AssignPropertiesFrom(src *v20261001s.HcpOpenShiftClustersNodePoolOperatorSpec) error
+	AssignPropertiesTo(dst *v20261001s.HcpOpenShiftClustersNodePoolOperatorSpec) error
 }
 
 type augmentConversionForNodePoolProperties interface {
-	AssignPropertiesFrom(src *storage.NodePoolProperties) error
-	AssignPropertiesTo(dst *storage.NodePoolProperties) error
+	AssignPropertiesFrom(src *v20261001s.NodePoolProperties) error
+	AssignPropertiesTo(dst *v20261001s.NodePoolProperties) error
 }
 
 type augmentConversionForNodePoolProperties_STATUS interface {
-	AssignPropertiesFrom(src *storage.NodePoolProperties_STATUS) error
-	AssignPropertiesTo(dst *storage.NodePoolProperties_STATUS) error
+	AssignPropertiesFrom(src *v20261001s.NodePoolProperties_STATUS) error
+	AssignPropertiesTo(dst *v20261001s.NodePoolProperties_STATUS) error
 }
 
 // Storage version of v20260901preview.Label
@@ -1333,7 +1344,7 @@ type Label struct {
 }
 
 // AssignProperties_From_Label populates our Label from the provided source Label
-func (label *Label) AssignProperties_From_Label(source *storage.Label) error {
+func (label *Label) AssignProperties_From_Label(source *v20261001s.Label) error {
 	// Clone the existing property bag
 	propertyBag := genruntime.NewPropertyBag(source.PropertyBag)
 
@@ -1364,7 +1375,7 @@ func (label *Label) AssignProperties_From_Label(source *storage.Label) error {
 }
 
 // AssignProperties_To_Label populates the provided destination Label from our Label
-func (label *Label) AssignProperties_To_Label(destination *storage.Label) error {
+func (label *Label) AssignProperties_To_Label(destination *v20261001s.Label) error {
 	// Clone the existing property bag
 	propertyBag := genruntime.NewPropertyBag(label.PropertyBag)
 
@@ -1403,7 +1414,7 @@ type Label_STATUS struct {
 }
 
 // AssignProperties_From_Label_STATUS populates our Label_STATUS from the provided source Label_STATUS
-func (label *Label_STATUS) AssignProperties_From_Label_STATUS(source *storage.Label_STATUS) error {
+func (label *Label_STATUS) AssignProperties_From_Label_STATUS(source *v20261001s.Label_STATUS) error {
 	// Clone the existing property bag
 	propertyBag := genruntime.NewPropertyBag(source.PropertyBag)
 
@@ -1434,7 +1445,7 @@ func (label *Label_STATUS) AssignProperties_From_Label_STATUS(source *storage.La
 }
 
 // AssignProperties_To_Label_STATUS populates the provided destination Label_STATUS from our Label_STATUS
-func (label *Label_STATUS) AssignProperties_To_Label_STATUS(destination *storage.Label_STATUS) error {
+func (label *Label_STATUS) AssignProperties_To_Label_STATUS(destination *v20261001s.Label_STATUS) error {
 	// Clone the existing property bag
 	propertyBag := genruntime.NewPropertyBag(label.PropertyBag)
 
@@ -1473,7 +1484,7 @@ type NodePoolAutoScaling struct {
 }
 
 // AssignProperties_From_NodePoolAutoScaling populates our NodePoolAutoScaling from the provided source NodePoolAutoScaling
-func (scaling *NodePoolAutoScaling) AssignProperties_From_NodePoolAutoScaling(source *storage.NodePoolAutoScaling) error {
+func (scaling *NodePoolAutoScaling) AssignProperties_From_NodePoolAutoScaling(source *v20261001s.NodePoolAutoScaling) error {
 	// Clone the existing property bag
 	propertyBag := genruntime.NewPropertyBag(source.PropertyBag)
 
@@ -1504,7 +1515,7 @@ func (scaling *NodePoolAutoScaling) AssignProperties_From_NodePoolAutoScaling(so
 }
 
 // AssignProperties_To_NodePoolAutoScaling populates the provided destination NodePoolAutoScaling from our NodePoolAutoScaling
-func (scaling *NodePoolAutoScaling) AssignProperties_To_NodePoolAutoScaling(destination *storage.NodePoolAutoScaling) error {
+func (scaling *NodePoolAutoScaling) AssignProperties_To_NodePoolAutoScaling(destination *v20261001s.NodePoolAutoScaling) error {
 	// Clone the existing property bag
 	propertyBag := genruntime.NewPropertyBag(scaling.PropertyBag)
 
@@ -1543,7 +1554,7 @@ type NodePoolAutoScaling_STATUS struct {
 }
 
 // AssignProperties_From_NodePoolAutoScaling_STATUS populates our NodePoolAutoScaling_STATUS from the provided source NodePoolAutoScaling_STATUS
-func (scaling *NodePoolAutoScaling_STATUS) AssignProperties_From_NodePoolAutoScaling_STATUS(source *storage.NodePoolAutoScaling_STATUS) error {
+func (scaling *NodePoolAutoScaling_STATUS) AssignProperties_From_NodePoolAutoScaling_STATUS(source *v20261001s.NodePoolAutoScaling_STATUS) error {
 	// Clone the existing property bag
 	propertyBag := genruntime.NewPropertyBag(source.PropertyBag)
 
@@ -1574,7 +1585,7 @@ func (scaling *NodePoolAutoScaling_STATUS) AssignProperties_From_NodePoolAutoSca
 }
 
 // AssignProperties_To_NodePoolAutoScaling_STATUS populates the provided destination NodePoolAutoScaling_STATUS from our NodePoolAutoScaling_STATUS
-func (scaling *NodePoolAutoScaling_STATUS) AssignProperties_To_NodePoolAutoScaling_STATUS(destination *storage.NodePoolAutoScaling_STATUS) error {
+func (scaling *NodePoolAutoScaling_STATUS) AssignProperties_To_NodePoolAutoScaling_STATUS(destination *v20261001s.NodePoolAutoScaling_STATUS) error {
 	// Clone the existing property bag
 	propertyBag := genruntime.NewPropertyBag(scaling.PropertyBag)
 
@@ -1620,7 +1631,7 @@ type NodePoolPlatformProfile struct {
 }
 
 // AssignProperties_From_NodePoolPlatformProfile populates our NodePoolPlatformProfile from the provided source NodePoolPlatformProfile
-func (profile *NodePoolPlatformProfile) AssignProperties_From_NodePoolPlatformProfile(source *storage.NodePoolPlatformProfile) error {
+func (profile *NodePoolPlatformProfile) AssignProperties_From_NodePoolPlatformProfile(source *v20261001s.NodePoolPlatformProfile) error {
 	// Clone the existing property bag
 	propertyBag := genruntime.NewPropertyBag(source.PropertyBag)
 
@@ -1679,7 +1690,7 @@ func (profile *NodePoolPlatformProfile) AssignProperties_From_NodePoolPlatformPr
 }
 
 // AssignProperties_To_NodePoolPlatformProfile populates the provided destination NodePoolPlatformProfile from our NodePoolPlatformProfile
-func (profile *NodePoolPlatformProfile) AssignProperties_To_NodePoolPlatformProfile(destination *storage.NodePoolPlatformProfile) error {
+func (profile *NodePoolPlatformProfile) AssignProperties_To_NodePoolPlatformProfile(destination *v20261001s.NodePoolPlatformProfile) error {
 	// Clone the existing property bag
 	propertyBag := genruntime.NewPropertyBag(profile.PropertyBag)
 
@@ -1696,7 +1707,7 @@ func (profile *NodePoolPlatformProfile) AssignProperties_To_NodePoolPlatformProf
 
 	// OsDisk
 	if profile.OsDisk != nil {
-		var osDisk storage.OsDiskProfile
+		var osDisk v20261001s.OsDiskProfile
 		err := profile.OsDisk.AssignProperties_To_OsDiskProfile(&osDisk)
 		if err != nil {
 			return eris.Wrap(err, "calling AssignProperties_To_OsDiskProfile() to populate field OsDisk")
@@ -1749,7 +1760,7 @@ type NodePoolPlatformProfile_STATUS struct {
 }
 
 // AssignProperties_From_NodePoolPlatformProfile_STATUS populates our NodePoolPlatformProfile_STATUS from the provided source NodePoolPlatformProfile_STATUS
-func (profile *NodePoolPlatformProfile_STATUS) AssignProperties_From_NodePoolPlatformProfile_STATUS(source *storage.NodePoolPlatformProfile_STATUS) error {
+func (profile *NodePoolPlatformProfile_STATUS) AssignProperties_From_NodePoolPlatformProfile_STATUS(source *v20261001s.NodePoolPlatformProfile_STATUS) error {
 	// Clone the existing property bag
 	propertyBag := genruntime.NewPropertyBag(source.PropertyBag)
 
@@ -1803,7 +1814,7 @@ func (profile *NodePoolPlatformProfile_STATUS) AssignProperties_From_NodePoolPla
 }
 
 // AssignProperties_To_NodePoolPlatformProfile_STATUS populates the provided destination NodePoolPlatformProfile_STATUS from our NodePoolPlatformProfile_STATUS
-func (profile *NodePoolPlatformProfile_STATUS) AssignProperties_To_NodePoolPlatformProfile_STATUS(destination *storage.NodePoolPlatformProfile_STATUS) error {
+func (profile *NodePoolPlatformProfile_STATUS) AssignProperties_To_NodePoolPlatformProfile_STATUS(destination *v20261001s.NodePoolPlatformProfile_STATUS) error {
 	// Clone the existing property bag
 	propertyBag := genruntime.NewPropertyBag(profile.PropertyBag)
 
@@ -1820,7 +1831,7 @@ func (profile *NodePoolPlatformProfile_STATUS) AssignProperties_To_NodePoolPlatf
 
 	// OsDisk
 	if profile.OsDisk != nil {
-		var osDisk storage.OsDiskProfile_STATUS
+		var osDisk v20261001s.OsDiskProfile_STATUS
 		err := profile.OsDisk.AssignProperties_To_OsDiskProfile_STATUS(&osDisk)
 		if err != nil {
 			return eris.Wrap(err, "calling AssignProperties_To_OsDiskProfile_STATUS() to populate field OsDisk")
@@ -1865,7 +1876,7 @@ type NodePoolVersionProfile struct {
 }
 
 // AssignProperties_From_NodePoolVersionProfile populates our NodePoolVersionProfile from the provided source NodePoolVersionProfile
-func (profile *NodePoolVersionProfile) AssignProperties_From_NodePoolVersionProfile(source *storage.NodePoolVersionProfile) error {
+func (profile *NodePoolVersionProfile) AssignProperties_From_NodePoolVersionProfile(source *v20261001s.NodePoolVersionProfile) error {
 	// Clone the existing property bag
 	propertyBag := genruntime.NewPropertyBag(source.PropertyBag)
 
@@ -1896,7 +1907,7 @@ func (profile *NodePoolVersionProfile) AssignProperties_From_NodePoolVersionProf
 }
 
 // AssignProperties_To_NodePoolVersionProfile populates the provided destination NodePoolVersionProfile from our NodePoolVersionProfile
-func (profile *NodePoolVersionProfile) AssignProperties_To_NodePoolVersionProfile(destination *storage.NodePoolVersionProfile) error {
+func (profile *NodePoolVersionProfile) AssignProperties_To_NodePoolVersionProfile(destination *v20261001s.NodePoolVersionProfile) error {
 	// Clone the existing property bag
 	propertyBag := genruntime.NewPropertyBag(profile.PropertyBag)
 
@@ -1935,7 +1946,7 @@ type NodePoolVersionProfile_STATUS struct {
 }
 
 // AssignProperties_From_NodePoolVersionProfile_STATUS populates our NodePoolVersionProfile_STATUS from the provided source NodePoolVersionProfile_STATUS
-func (profile *NodePoolVersionProfile_STATUS) AssignProperties_From_NodePoolVersionProfile_STATUS(source *storage.NodePoolVersionProfile_STATUS) error {
+func (profile *NodePoolVersionProfile_STATUS) AssignProperties_From_NodePoolVersionProfile_STATUS(source *v20261001s.NodePoolVersionProfile_STATUS) error {
 	// Clone the existing property bag
 	propertyBag := genruntime.NewPropertyBag(source.PropertyBag)
 
@@ -1966,7 +1977,7 @@ func (profile *NodePoolVersionProfile_STATUS) AssignProperties_From_NodePoolVers
 }
 
 // AssignProperties_To_NodePoolVersionProfile_STATUS populates the provided destination NodePoolVersionProfile_STATUS from our NodePoolVersionProfile_STATUS
-func (profile *NodePoolVersionProfile_STATUS) AssignProperties_To_NodePoolVersionProfile_STATUS(destination *storage.NodePoolVersionProfile_STATUS) error {
+func (profile *NodePoolVersionProfile_STATUS) AssignProperties_To_NodePoolVersionProfile_STATUS(destination *v20261001s.NodePoolVersionProfile_STATUS) error {
 	// Clone the existing property bag
 	propertyBag := genruntime.NewPropertyBag(profile.PropertyBag)
 
@@ -2006,7 +2017,7 @@ type Taint struct {
 }
 
 // AssignProperties_From_Taint populates our Taint from the provided source Taint
-func (taint *Taint) AssignProperties_From_Taint(source *storage.Taint) error {
+func (taint *Taint) AssignProperties_From_Taint(source *v20261001s.Taint) error {
 	// Clone the existing property bag
 	propertyBag := genruntime.NewPropertyBag(source.PropertyBag)
 
@@ -2040,7 +2051,7 @@ func (taint *Taint) AssignProperties_From_Taint(source *storage.Taint) error {
 }
 
 // AssignProperties_To_Taint populates the provided destination Taint from our Taint
-func (taint *Taint) AssignProperties_To_Taint(destination *storage.Taint) error {
+func (taint *Taint) AssignProperties_To_Taint(destination *v20261001s.Taint) error {
 	// Clone the existing property bag
 	propertyBag := genruntime.NewPropertyBag(taint.PropertyBag)
 
@@ -2083,7 +2094,7 @@ type Taint_STATUS struct {
 }
 
 // AssignProperties_From_Taint_STATUS populates our Taint_STATUS from the provided source Taint_STATUS
-func (taint *Taint_STATUS) AssignProperties_From_Taint_STATUS(source *storage.Taint_STATUS) error {
+func (taint *Taint_STATUS) AssignProperties_From_Taint_STATUS(source *v20261001s.Taint_STATUS) error {
 	// Clone the existing property bag
 	propertyBag := genruntime.NewPropertyBag(source.PropertyBag)
 
@@ -2117,7 +2128,7 @@ func (taint *Taint_STATUS) AssignProperties_From_Taint_STATUS(source *storage.Ta
 }
 
 // AssignProperties_To_Taint_STATUS populates the provided destination Taint_STATUS from our Taint_STATUS
-func (taint *Taint_STATUS) AssignProperties_To_Taint_STATUS(destination *storage.Taint_STATUS) error {
+func (taint *Taint_STATUS) AssignProperties_To_Taint_STATUS(destination *v20261001s.Taint_STATUS) error {
 	// Clone the existing property bag
 	propertyBag := genruntime.NewPropertyBag(taint.PropertyBag)
 
@@ -2151,53 +2162,53 @@ func (taint *Taint_STATUS) AssignProperties_To_Taint_STATUS(destination *storage
 }
 
 type augmentConversionForLabel interface {
-	AssignPropertiesFrom(src *storage.Label) error
-	AssignPropertiesTo(dst *storage.Label) error
+	AssignPropertiesFrom(src *v20261001s.Label) error
+	AssignPropertiesTo(dst *v20261001s.Label) error
 }
 
 type augmentConversionForLabel_STATUS interface {
-	AssignPropertiesFrom(src *storage.Label_STATUS) error
-	AssignPropertiesTo(dst *storage.Label_STATUS) error
+	AssignPropertiesFrom(src *v20261001s.Label_STATUS) error
+	AssignPropertiesTo(dst *v20261001s.Label_STATUS) error
 }
 
 type augmentConversionForNodePoolAutoScaling interface {
-	AssignPropertiesFrom(src *storage.NodePoolAutoScaling) error
-	AssignPropertiesTo(dst *storage.NodePoolAutoScaling) error
+	AssignPropertiesFrom(src *v20261001s.NodePoolAutoScaling) error
+	AssignPropertiesTo(dst *v20261001s.NodePoolAutoScaling) error
 }
 
 type augmentConversionForNodePoolAutoScaling_STATUS interface {
-	AssignPropertiesFrom(src *storage.NodePoolAutoScaling_STATUS) error
-	AssignPropertiesTo(dst *storage.NodePoolAutoScaling_STATUS) error
+	AssignPropertiesFrom(src *v20261001s.NodePoolAutoScaling_STATUS) error
+	AssignPropertiesTo(dst *v20261001s.NodePoolAutoScaling_STATUS) error
 }
 
 type augmentConversionForNodePoolPlatformProfile interface {
-	AssignPropertiesFrom(src *storage.NodePoolPlatformProfile) error
-	AssignPropertiesTo(dst *storage.NodePoolPlatformProfile) error
+	AssignPropertiesFrom(src *v20261001s.NodePoolPlatformProfile) error
+	AssignPropertiesTo(dst *v20261001s.NodePoolPlatformProfile) error
 }
 
 type augmentConversionForNodePoolPlatformProfile_STATUS interface {
-	AssignPropertiesFrom(src *storage.NodePoolPlatformProfile_STATUS) error
-	AssignPropertiesTo(dst *storage.NodePoolPlatformProfile_STATUS) error
+	AssignPropertiesFrom(src *v20261001s.NodePoolPlatformProfile_STATUS) error
+	AssignPropertiesTo(dst *v20261001s.NodePoolPlatformProfile_STATUS) error
 }
 
 type augmentConversionForNodePoolVersionProfile interface {
-	AssignPropertiesFrom(src *storage.NodePoolVersionProfile) error
-	AssignPropertiesTo(dst *storage.NodePoolVersionProfile) error
+	AssignPropertiesFrom(src *v20261001s.NodePoolVersionProfile) error
+	AssignPropertiesTo(dst *v20261001s.NodePoolVersionProfile) error
 }
 
 type augmentConversionForNodePoolVersionProfile_STATUS interface {
-	AssignPropertiesFrom(src *storage.NodePoolVersionProfile_STATUS) error
-	AssignPropertiesTo(dst *storage.NodePoolVersionProfile_STATUS) error
+	AssignPropertiesFrom(src *v20261001s.NodePoolVersionProfile_STATUS) error
+	AssignPropertiesTo(dst *v20261001s.NodePoolVersionProfile_STATUS) error
 }
 
 type augmentConversionForTaint interface {
-	AssignPropertiesFrom(src *storage.Taint) error
-	AssignPropertiesTo(dst *storage.Taint) error
+	AssignPropertiesFrom(src *v20261001s.Taint) error
+	AssignPropertiesTo(dst *v20261001s.Taint) error
 }
 
 type augmentConversionForTaint_STATUS interface {
-	AssignPropertiesFrom(src *storage.Taint_STATUS) error
-	AssignPropertiesTo(dst *storage.Taint_STATUS) error
+	AssignPropertiesFrom(src *v20261001s.Taint_STATUS) error
+	AssignPropertiesTo(dst *v20261001s.Taint_STATUS) error
 }
 
 // Storage version of v20260901preview.OsDiskProfile
@@ -2219,7 +2230,7 @@ type OsDiskProfile struct {
 }
 
 // AssignProperties_From_OsDiskProfile populates our OsDiskProfile from the provided source OsDiskProfile
-func (profile *OsDiskProfile) AssignProperties_From_OsDiskProfile(source *storage.OsDiskProfile) error {
+func (profile *OsDiskProfile) AssignProperties_From_OsDiskProfile(source *v20261001s.OsDiskProfile) error {
 	// Clone the existing property bag
 	propertyBag := genruntime.NewPropertyBag(source.PropertyBag)
 
@@ -2261,7 +2272,7 @@ func (profile *OsDiskProfile) AssignProperties_From_OsDiskProfile(source *storag
 }
 
 // AssignProperties_To_OsDiskProfile populates the provided destination OsDiskProfile from our OsDiskProfile
-func (profile *OsDiskProfile) AssignProperties_To_OsDiskProfile(destination *storage.OsDiskProfile) error {
+func (profile *OsDiskProfile) AssignProperties_To_OsDiskProfile(destination *v20261001s.OsDiskProfile) error {
 	// Clone the existing property bag
 	propertyBag := genruntime.NewPropertyBag(profile.PropertyBag)
 
@@ -2313,7 +2324,7 @@ type OsDiskProfile_STATUS struct {
 }
 
 // AssignProperties_From_OsDiskProfile_STATUS populates our OsDiskProfile_STATUS from the provided source OsDiskProfile_STATUS
-func (profile *OsDiskProfile_STATUS) AssignProperties_From_OsDiskProfile_STATUS(source *storage.OsDiskProfile_STATUS) error {
+func (profile *OsDiskProfile_STATUS) AssignProperties_From_OsDiskProfile_STATUS(source *v20261001s.OsDiskProfile_STATUS) error {
 	// Clone the existing property bag
 	propertyBag := genruntime.NewPropertyBag(source.PropertyBag)
 
@@ -2350,7 +2361,7 @@ func (profile *OsDiskProfile_STATUS) AssignProperties_From_OsDiskProfile_STATUS(
 }
 
 // AssignProperties_To_OsDiskProfile_STATUS populates the provided destination OsDiskProfile_STATUS from our OsDiskProfile_STATUS
-func (profile *OsDiskProfile_STATUS) AssignProperties_To_OsDiskProfile_STATUS(destination *storage.OsDiskProfile_STATUS) error {
+func (profile *OsDiskProfile_STATUS) AssignProperties_To_OsDiskProfile_STATUS(destination *v20261001s.OsDiskProfile_STATUS) error {
 	// Clone the existing property bag
 	propertyBag := genruntime.NewPropertyBag(profile.PropertyBag)
 
@@ -2387,13 +2398,13 @@ func (profile *OsDiskProfile_STATUS) AssignProperties_To_OsDiskProfile_STATUS(de
 }
 
 type augmentConversionForOsDiskProfile interface {
-	AssignPropertiesFrom(src *storage.OsDiskProfile) error
-	AssignPropertiesTo(dst *storage.OsDiskProfile) error
+	AssignPropertiesFrom(src *v20261001s.OsDiskProfile) error
+	AssignPropertiesTo(dst *v20261001s.OsDiskProfile) error
 }
 
 type augmentConversionForOsDiskProfile_STATUS interface {
-	AssignPropertiesFrom(src *storage.OsDiskProfile_STATUS) error
-	AssignPropertiesTo(dst *storage.OsDiskProfile_STATUS) error
+	AssignPropertiesFrom(src *v20261001s.OsDiskProfile_STATUS) error
+	AssignPropertiesTo(dst *v20261001s.OsDiskProfile_STATUS) error
 }
 
 func init() {

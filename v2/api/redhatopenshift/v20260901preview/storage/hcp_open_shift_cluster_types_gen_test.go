@@ -5,7 +5,8 @@ package storage
 
 import (
 	"encoding/json"
-	storage "github.com/Azure/azure-service-operator/v2/api/redhatopenshift/v20261001/storage"
+	v20231122s "github.com/Azure/azure-service-operator/v2/api/redhatopenshift/v1api20231122/storage"
+	v20261001s "github.com/Azure/azure-service-operator/v2/api/redhatopenshift/v20261001/storage"
 	"github.com/google/go-cmp/cmp"
 	"github.com/google/go-cmp/cmp/cmpopts"
 	"github.com/kr/pretty"
@@ -28,7 +29,7 @@ func Test_ApiProfile_WhenPropertiesConverted_RoundTripsWithoutLoss(t *testing.T)
 		copied := subject.DeepCopy()
 
 		// Use AssignPropertiesTo() for the first stage of conversion
-		var other storage.ApiProfile
+		var other v20261001s.ApiProfile
 		err := copied.AssignProperties_To_ApiProfile(&other)
 		if err != nil {
 			t.Fatal("AssignPropertiesTo: " + err.Error())
@@ -124,7 +125,7 @@ func Test_ApiProfile_STATUS_WhenPropertiesConverted_RoundTripsWithoutLoss(t *tes
 		copied := subject.DeepCopy()
 
 		// Use AssignPropertiesTo() for the first stage of conversion
-		var other storage.ApiProfile_STATUS
+		var other v20261001s.ApiProfile_STATUS
 		err := copied.AssignProperties_To_ApiProfile_STATUS(&other)
 		if err != nil {
 			t.Fatal("AssignPropertiesTo: " + err.Error())
@@ -221,7 +222,7 @@ func Test_ClusterAutoscalingProfile_WhenPropertiesConverted_RoundTripsWithoutLos
 		copied := subject.DeepCopy()
 
 		// Use AssignPropertiesTo() for the first stage of conversion
-		var other storage.ClusterAutoscalingProfile
+		var other v20261001s.ClusterAutoscalingProfile
 		err := copied.AssignProperties_To_ClusterAutoscalingProfile(&other)
 		if err != nil {
 			t.Fatal("AssignPropertiesTo: " + err.Error())
@@ -319,7 +320,7 @@ func Test_ClusterAutoscalingProfile_STATUS_WhenPropertiesConverted_RoundTripsWit
 		copied := subject.DeepCopy()
 
 		// Use AssignPropertiesTo() for the first stage of conversion
-		var other storage.ClusterAutoscalingProfile_STATUS
+		var other v20261001s.ClusterAutoscalingProfile_STATUS
 		err := copied.AssignProperties_To_ClusterAutoscalingProfile_STATUS(&other)
 		if err != nil {
 			t.Fatal("AssignPropertiesTo: " + err.Error())
@@ -417,7 +418,7 @@ func Test_ClusterImageRegistryProfile_WhenPropertiesConverted_RoundTripsWithoutL
 		copied := subject.DeepCopy()
 
 		// Use AssignPropertiesTo() for the first stage of conversion
-		var other storage.ClusterImageRegistryProfile
+		var other v20261001s.ClusterImageRegistryProfile
 		err := copied.AssignProperties_To_ClusterImageRegistryProfile(&other)
 		if err != nil {
 			t.Fatal("AssignPropertiesTo: " + err.Error())
@@ -512,7 +513,7 @@ func Test_ClusterImageRegistryProfile_STATUS_WhenPropertiesConverted_RoundTripsW
 		copied := subject.DeepCopy()
 
 		// Use AssignPropertiesTo() for the first stage of conversion
-		var other storage.ClusterImageRegistryProfile_STATUS
+		var other v20261001s.ClusterImageRegistryProfile_STATUS
 		err := copied.AssignProperties_To_ClusterImageRegistryProfile_STATUS(&other)
 		if err != nil {
 			t.Fatal("AssignPropertiesTo: " + err.Error())
@@ -607,7 +608,7 @@ func Test_Condition_STATUS_WhenPropertiesConverted_RoundTripsWithoutLoss(t *test
 		copied := subject.DeepCopy()
 
 		// Use AssignPropertiesTo() for the first stage of conversion
-		var other storage.Condition_STATUS
+		var other v20261001s.Condition_STATUS
 		err := copied.AssignProperties_To_Condition_STATUS(&other)
 		if err != nil {
 			t.Fatal("AssignPropertiesTo: " + err.Error())
@@ -705,7 +706,7 @@ func Test_ConsoleProfile_STATUS_WhenPropertiesConverted_RoundTripsWithoutLoss(t 
 		copied := subject.DeepCopy()
 
 		// Use AssignPropertiesTo() for the first stage of conversion
-		var other storage.ConsoleProfile_STATUS
+		var other v20231122s.ConsoleProfile_STATUS
 		err := copied.AssignProperties_To_ConsoleProfile_STATUS(&other)
 		if err != nil {
 			t.Fatal("AssignPropertiesTo: " + err.Error())
@@ -800,7 +801,7 @@ func Test_CustomerManagedEncryptionProfile_WhenPropertiesConverted_RoundTripsWit
 		copied := subject.DeepCopy()
 
 		// Use AssignPropertiesTo() for the first stage of conversion
-		var other storage.CustomerManagedEncryptionProfile
+		var other v20261001s.CustomerManagedEncryptionProfile
 		err := copied.AssignProperties_To_CustomerManagedEncryptionProfile(&other)
 		if err != nil {
 			t.Fatal("AssignPropertiesTo: " + err.Error())
@@ -897,7 +898,7 @@ func Test_CustomerManagedEncryptionProfile_STATUS_WhenPropertiesConverted_RoundT
 		copied := subject.DeepCopy()
 
 		// Use AssignPropertiesTo() for the first stage of conversion
-		var other storage.CustomerManagedEncryptionProfile_STATUS
+		var other v20261001s.CustomerManagedEncryptionProfile_STATUS
 		err := copied.AssignProperties_To_CustomerManagedEncryptionProfile_STATUS(&other)
 		if err != nil {
 			t.Fatal("AssignPropertiesTo: " + err.Error())
@@ -994,7 +995,7 @@ func Test_DnsProfile_WhenPropertiesConverted_RoundTripsWithoutLoss(t *testing.T)
 		copied := subject.DeepCopy()
 
 		// Use AssignPropertiesTo() for the first stage of conversion
-		var other storage.DnsProfile
+		var other v20261001s.DnsProfile
 		err := copied.AssignProperties_To_DnsProfile(&other)
 		if err != nil {
 			t.Fatal("AssignPropertiesTo: " + err.Error())
@@ -1088,7 +1089,7 @@ func Test_DnsProfile_STATUS_WhenPropertiesConverted_RoundTripsWithoutLoss(t *tes
 		copied := subject.DeepCopy()
 
 		// Use AssignPropertiesTo() for the first stage of conversion
-		var other storage.DnsProfile_STATUS
+		var other v20261001s.DnsProfile_STATUS
 		err := copied.AssignProperties_To_DnsProfile_STATUS(&other)
 		if err != nil {
 			t.Fatal("AssignPropertiesTo: " + err.Error())
@@ -1183,7 +1184,7 @@ func Test_EtcdDataEncryptionProfile_WhenPropertiesConverted_RoundTripsWithoutLos
 		copied := subject.DeepCopy()
 
 		// Use AssignPropertiesTo() for the first stage of conversion
-		var other storage.EtcdDataEncryptionProfile
+		var other v20261001s.EtcdDataEncryptionProfile
 		err := copied.AssignProperties_To_EtcdDataEncryptionProfile(&other)
 		if err != nil {
 			t.Fatal("AssignPropertiesTo: " + err.Error())
@@ -1280,7 +1281,7 @@ func Test_EtcdDataEncryptionProfile_STATUS_WhenPropertiesConverted_RoundTripsWit
 		copied := subject.DeepCopy()
 
 		// Use AssignPropertiesTo() for the first stage of conversion
-		var other storage.EtcdDataEncryptionProfile_STATUS
+		var other v20261001s.EtcdDataEncryptionProfile_STATUS
 		err := copied.AssignProperties_To_EtcdDataEncryptionProfile_STATUS(&other)
 		if err != nil {
 			t.Fatal("AssignPropertiesTo: " + err.Error())
@@ -1377,7 +1378,7 @@ func Test_EtcdProfile_WhenPropertiesConverted_RoundTripsWithoutLoss(t *testing.T
 		copied := subject.DeepCopy()
 
 		// Use AssignPropertiesTo() for the first stage of conversion
-		var other storage.EtcdProfile
+		var other v20261001s.EtcdProfile
 		err := copied.AssignProperties_To_EtcdProfile(&other)
 		if err != nil {
 			t.Fatal("AssignPropertiesTo: " + err.Error())
@@ -1471,7 +1472,7 @@ func Test_EtcdProfile_STATUS_WhenPropertiesConverted_RoundTripsWithoutLoss(t *te
 		copied := subject.DeepCopy()
 
 		// Use AssignPropertiesTo() for the first stage of conversion
-		var other storage.EtcdProfile_STATUS
+		var other v20261001s.EtcdProfile_STATUS
 		err := copied.AssignProperties_To_EtcdProfile_STATUS(&other)
 		if err != nil {
 			t.Fatal("AssignPropertiesTo: " + err.Error())
@@ -1565,7 +1566,7 @@ func Test_HcpOpenShiftCluster_WhenConvertedToHub_RoundTripsWithoutLoss(t *testin
 		copied := subject.DeepCopy()
 
 		// Convert to our hub version
-		var hub storage.HcpOpenShiftCluster
+		var hub v20261001s.HcpOpenShiftCluster
 		err := copied.ConvertTo(&hub)
 		if err != nil {
 			t.Fatal("ConvertTo: " + err.Error())
@@ -1603,7 +1604,7 @@ func Test_HcpOpenShiftCluster_WhenPropertiesConverted_RoundTripsWithoutLoss(t *t
 		copied := subject.DeepCopy()
 
 		// Use AssignPropertiesTo() for the first stage of conversion
-		var other storage.HcpOpenShiftCluster
+		var other v20261001s.HcpOpenShiftCluster
 		err := copied.AssignProperties_To_HcpOpenShiftCluster(&other)
 		if err != nil {
 			t.Fatal("AssignPropertiesTo: " + err.Error())
@@ -1700,7 +1701,7 @@ func Test_HcpOpenShiftClusterOperatorSecrets_WhenPropertiesConverted_RoundTripsW
 		copied := subject.DeepCopy()
 
 		// Use AssignPropertiesTo() for the first stage of conversion
-		var other storage.HcpOpenShiftClusterOperatorSecrets
+		var other v20261001s.HcpOpenShiftClusterOperatorSecrets
 		err := copied.AssignProperties_To_HcpOpenShiftClusterOperatorSecrets(&other)
 		if err != nil {
 			t.Fatal("AssignPropertiesTo: " + err.Error())
@@ -1789,7 +1790,7 @@ func Test_HcpOpenShiftClusterOperatorSpec_WhenPropertiesConverted_RoundTripsWith
 		copied := subject.DeepCopy()
 
 		// Use AssignPropertiesTo() for the first stage of conversion
-		var other storage.HcpOpenShiftClusterOperatorSpec
+		var other v20261001s.HcpOpenShiftClusterOperatorSpec
 		err := copied.AssignProperties_To_HcpOpenShiftClusterOperatorSpec(&other)
 		if err != nil {
 			t.Fatal("AssignPropertiesTo: " + err.Error())
@@ -1884,7 +1885,7 @@ func Test_HcpOpenShiftClusterProperties_WhenPropertiesConverted_RoundTripsWithou
 		copied := subject.DeepCopy()
 
 		// Use AssignPropertiesTo() for the first stage of conversion
-		var other storage.HcpOpenShiftClusterProperties
+		var other v20261001s.HcpOpenShiftClusterProperties
 		err := copied.AssignProperties_To_HcpOpenShiftClusterProperties(&other)
 		if err != nil {
 			t.Fatal("AssignPropertiesTo: " + err.Error())
@@ -2001,7 +2002,7 @@ func Test_HcpOpenShiftClusterProperties_STATUS_WhenPropertiesConverted_RoundTrip
 		copied := subject.DeepCopy()
 
 		// Use AssignPropertiesTo() for the first stage of conversion
-		var other storage.HcpOpenShiftClusterProperties_STATUS
+		var other v20261001s.HcpOpenShiftClusterProperties_STATUS
 		err := copied.AssignProperties_To_HcpOpenShiftClusterProperties_STATUS(&other)
 		if err != nil {
 			t.Fatal("AssignPropertiesTo: " + err.Error())
@@ -2123,7 +2124,7 @@ func Test_HcpOpenShiftCluster_STATUS_WhenPropertiesConverted_RoundTripsWithoutLo
 		copied := subject.DeepCopy()
 
 		// Use AssignPropertiesTo() for the first stage of conversion
-		var other storage.HcpOpenShiftCluster_STATUS
+		var other v20261001s.HcpOpenShiftCluster_STATUS
 		err := copied.AssignProperties_To_HcpOpenShiftCluster_STATUS(&other)
 		if err != nil {
 			t.Fatal("AssignPropertiesTo: " + err.Error())
@@ -2231,7 +2232,7 @@ func Test_HcpOpenShiftCluster_Spec_WhenPropertiesConverted_RoundTripsWithoutLoss
 		copied := subject.DeepCopy()
 
 		// Use AssignPropertiesTo() for the first stage of conversion
-		var other storage.HcpOpenShiftCluster_Spec
+		var other v20261001s.HcpOpenShiftCluster_Spec
 		err := copied.AssignProperties_To_HcpOpenShiftCluster_Spec(&other)
 		if err != nil {
 			t.Fatal("AssignPropertiesTo: " + err.Error())
@@ -2339,7 +2340,7 @@ func Test_ImageDigestMirror_WhenPropertiesConverted_RoundTripsWithoutLoss(t *tes
 		copied := subject.DeepCopy()
 
 		// Use AssignPropertiesTo() for the first stage of conversion
-		var other storage.ImageDigestMirror
+		var other v20261001s.ImageDigestMirror
 		err := copied.AssignProperties_To_ImageDigestMirror(&other)
 		if err != nil {
 			t.Fatal("AssignPropertiesTo: " + err.Error())
@@ -2435,7 +2436,7 @@ func Test_ImageDigestMirror_STATUS_WhenPropertiesConverted_RoundTripsWithoutLoss
 		copied := subject.DeepCopy()
 
 		// Use AssignPropertiesTo() for the first stage of conversion
-		var other storage.ImageDigestMirror_STATUS
+		var other v20261001s.ImageDigestMirror_STATUS
 		err := copied.AssignProperties_To_ImageDigestMirror_STATUS(&other)
 		if err != nil {
 			t.Fatal("AssignPropertiesTo: " + err.Error())
@@ -2532,7 +2533,7 @@ func Test_IngressProfile_WhenPropertiesConverted_RoundTripsWithoutLoss(t *testin
 		copied := subject.DeepCopy()
 
 		// Use AssignPropertiesTo() for the first stage of conversion
-		var other storage.IngressProfile
+		var other v20231122s.IngressProfile
 		err := copied.AssignProperties_To_IngressProfile(&other)
 		if err != nil {
 			t.Fatal("AssignPropertiesTo: " + err.Error())
@@ -2626,7 +2627,7 @@ func Test_IngressProfile_STATUS_WhenPropertiesConverted_RoundTripsWithoutLoss(t 
 		copied := subject.DeepCopy()
 
 		// Use AssignPropertiesTo() for the first stage of conversion
-		var other storage.IngressProfile_STATUS
+		var other v20231122s.IngressProfile_STATUS
 		err := copied.AssignProperties_To_IngressProfile_STATUS(&other)
 		if err != nil {
 			t.Fatal("AssignPropertiesTo: " + err.Error())
@@ -2721,7 +2722,7 @@ func Test_KmsEncryptionProfile_WhenPropertiesConverted_RoundTripsWithoutLoss(t *
 		copied := subject.DeepCopy()
 
 		// Use AssignPropertiesTo() for the first stage of conversion
-		var other storage.KmsEncryptionProfile
+		var other v20261001s.KmsEncryptionProfile
 		err := copied.AssignProperties_To_KmsEncryptionProfile(&other)
 		if err != nil {
 			t.Fatal("AssignPropertiesTo: " + err.Error())
@@ -2819,7 +2820,7 @@ func Test_KmsEncryptionProfile_STATUS_WhenPropertiesConverted_RoundTripsWithoutL
 		copied := subject.DeepCopy()
 
 		// Use AssignPropertiesTo() for the first stage of conversion
-		var other storage.KmsEncryptionProfile_STATUS
+		var other v20261001s.KmsEncryptionProfile_STATUS
 		err := copied.AssignProperties_To_KmsEncryptionProfile_STATUS(&other)
 		if err != nil {
 			t.Fatal("AssignPropertiesTo: " + err.Error())
@@ -2917,7 +2918,7 @@ func Test_KmsKey_WhenPropertiesConverted_RoundTripsWithoutLoss(t *testing.T) {
 		copied := subject.DeepCopy()
 
 		// Use AssignPropertiesTo() for the first stage of conversion
-		var other storage.KmsKey
+		var other v20261001s.KmsKey
 		err := copied.AssignProperties_To_KmsKey(&other)
 		if err != nil {
 			t.Fatal("AssignPropertiesTo: " + err.Error())
@@ -3012,7 +3013,7 @@ func Test_KmsKey_STATUS_WhenPropertiesConverted_RoundTripsWithoutLoss(t *testing
 		copied := subject.DeepCopy()
 
 		// Use AssignPropertiesTo() for the first stage of conversion
-		var other storage.KmsKey_STATUS
+		var other v20261001s.KmsKey_STATUS
 		err := copied.AssignProperties_To_KmsKey_STATUS(&other)
 		if err != nil {
 			t.Fatal("AssignPropertiesTo: " + err.Error())
@@ -3107,7 +3108,7 @@ func Test_ManagedServiceIdentity_WhenPropertiesConverted_RoundTripsWithoutLoss(t
 		copied := subject.DeepCopy()
 
 		// Use AssignPropertiesTo() for the first stage of conversion
-		var other storage.ManagedServiceIdentity
+		var other v20261001s.ManagedServiceIdentity
 		err := copied.AssignProperties_To_ManagedServiceIdentity(&other)
 		if err != nil {
 			t.Fatal("AssignPropertiesTo: " + err.Error())
@@ -3204,7 +3205,7 @@ func Test_ManagedServiceIdentity_STATUS_WhenPropertiesConverted_RoundTripsWithou
 		copied := subject.DeepCopy()
 
 		// Use AssignPropertiesTo() for the first stage of conversion
-		var other storage.ManagedServiceIdentity_STATUS
+		var other v20261001s.ManagedServiceIdentity_STATUS
 		err := copied.AssignProperties_To_ManagedServiceIdentity_STATUS(&other)
 		if err != nil {
 			t.Fatal("AssignPropertiesTo: " + err.Error())
@@ -3305,7 +3306,7 @@ func Test_NetworkProfile_WhenPropertiesConverted_RoundTripsWithoutLoss(t *testin
 		copied := subject.DeepCopy()
 
 		// Use AssignPropertiesTo() for the first stage of conversion
-		var other storage.NetworkProfile
+		var other v20231122s.NetworkProfile
 		err := copied.AssignProperties_To_NetworkProfile(&other)
 		if err != nil {
 			t.Fatal("AssignPropertiesTo: " + err.Error())
@@ -3404,7 +3405,7 @@ func Test_NetworkProfile_STATUS_WhenPropertiesConverted_RoundTripsWithoutLoss(t 
 		copied := subject.DeepCopy()
 
 		// Use AssignPropertiesTo() for the first stage of conversion
-		var other storage.NetworkProfile_STATUS
+		var other v20231122s.NetworkProfile_STATUS
 		err := copied.AssignProperties_To_NetworkProfile_STATUS(&other)
 		if err != nil {
 			t.Fatal("AssignPropertiesTo: " + err.Error())
@@ -3504,7 +3505,7 @@ func Test_OperatorsAuthenticationProfile_WhenPropertiesConverted_RoundTripsWitho
 		copied := subject.DeepCopy()
 
 		// Use AssignPropertiesTo() for the first stage of conversion
-		var other storage.OperatorsAuthenticationProfile
+		var other v20261001s.OperatorsAuthenticationProfile
 		err := copied.AssignProperties_To_OperatorsAuthenticationProfile(&other)
 		if err != nil {
 			t.Fatal("AssignPropertiesTo: " + err.Error())
@@ -3599,7 +3600,7 @@ func Test_OperatorsAuthenticationProfile_STATUS_WhenPropertiesConverted_RoundTri
 		copied := subject.DeepCopy()
 
 		// Use AssignPropertiesTo() for the first stage of conversion
-		var other storage.OperatorsAuthenticationProfile_STATUS
+		var other v20261001s.OperatorsAuthenticationProfile_STATUS
 		err := copied.AssignProperties_To_OperatorsAuthenticationProfile_STATUS(&other)
 		if err != nil {
 			t.Fatal("AssignPropertiesTo: " + err.Error())
@@ -3694,7 +3695,7 @@ func Test_PlatformProfile_WhenPropertiesConverted_RoundTripsWithoutLoss(t *testi
 		copied := subject.DeepCopy()
 
 		// Use AssignPropertiesTo() for the first stage of conversion
-		var other storage.PlatformProfile
+		var other v20261001s.PlatformProfile
 		err := copied.AssignProperties_To_PlatformProfile(&other)
 		if err != nil {
 			t.Fatal("AssignPropertiesTo: " + err.Error())
@@ -3791,7 +3792,7 @@ func Test_PlatformProfile_STATUS_WhenPropertiesConverted_RoundTripsWithoutLoss(t
 		copied := subject.DeepCopy()
 
 		// Use AssignPropertiesTo() for the first stage of conversion
-		var other storage.PlatformProfile_STATUS
+		var other v20261001s.PlatformProfile_STATUS
 		err := copied.AssignProperties_To_PlatformProfile_STATUS(&other)
 		if err != nil {
 			t.Fatal("AssignPropertiesTo: " + err.Error())
@@ -3950,7 +3951,7 @@ func Test_SystemData_STATUS_WhenPropertiesConverted_RoundTripsWithoutLoss(t *tes
 		copied := subject.DeepCopy()
 
 		// Use AssignPropertiesTo() for the first stage of conversion
-		var other storage.SystemData_STATUS
+		var other v20231122s.SystemData_STATUS
 		err := copied.AssignProperties_To_SystemData_STATUS(&other)
 		if err != nil {
 			t.Fatal("AssignPropertiesTo: " + err.Error())
@@ -4049,7 +4050,7 @@ func Test_UserAssignedIdentitiesProfile_WhenPropertiesConverted_RoundTripsWithou
 		copied := subject.DeepCopy()
 
 		// Use AssignPropertiesTo() for the first stage of conversion
-		var other storage.UserAssignedIdentitiesProfile
+		var other v20261001s.UserAssignedIdentitiesProfile
 		err := copied.AssignProperties_To_UserAssignedIdentitiesProfile(&other)
 		if err != nil {
 			t.Fatal("AssignPropertiesTo: " + err.Error())
@@ -4138,7 +4139,7 @@ func Test_UserAssignedIdentitiesProfile_STATUS_WhenPropertiesConverted_RoundTrip
 		copied := subject.DeepCopy()
 
 		// Use AssignPropertiesTo() for the first stage of conversion
-		var other storage.UserAssignedIdentitiesProfile_STATUS
+		var other v20261001s.UserAssignedIdentitiesProfile_STATUS
 		err := copied.AssignProperties_To_UserAssignedIdentitiesProfile_STATUS(&other)
 		if err != nil {
 			t.Fatal("AssignPropertiesTo: " + err.Error())
@@ -4238,7 +4239,7 @@ func Test_UserAssignedIdentityDetails_WhenPropertiesConverted_RoundTripsWithoutL
 		copied := subject.DeepCopy()
 
 		// Use AssignPropertiesTo() for the first stage of conversion
-		var other storage.UserAssignedIdentityDetails
+		var other v20261001s.UserAssignedIdentityDetails
 		err := copied.AssignProperties_To_UserAssignedIdentityDetails(&other)
 		if err != nil {
 			t.Fatal("AssignPropertiesTo: " + err.Error())
@@ -4327,7 +4328,7 @@ func Test_UserAssignedIdentity_STATUS_WhenPropertiesConverted_RoundTripsWithoutL
 		copied := subject.DeepCopy()
 
 		// Use AssignPropertiesTo() for the first stage of conversion
-		var other storage.UserAssignedIdentity_STATUS
+		var other v20261001s.UserAssignedIdentity_STATUS
 		err := copied.AssignProperties_To_UserAssignedIdentity_STATUS(&other)
 		if err != nil {
 			t.Fatal("AssignPropertiesTo: " + err.Error())
@@ -4423,7 +4424,7 @@ func Test_VersionProfile_WhenPropertiesConverted_RoundTripsWithoutLoss(t *testin
 		copied := subject.DeepCopy()
 
 		// Use AssignPropertiesTo() for the first stage of conversion
-		var other storage.VersionProfile
+		var other v20261001s.VersionProfile
 		err := copied.AssignProperties_To_VersionProfile(&other)
 		if err != nil {
 			t.Fatal("AssignPropertiesTo: " + err.Error())
@@ -4518,7 +4519,7 @@ func Test_VersionProfile_STATUS_WhenPropertiesConverted_RoundTripsWithoutLoss(t 
 		copied := subject.DeepCopy()
 
 		// Use AssignPropertiesTo() for the first stage of conversion
-		var other storage.VersionProfile_STATUS
+		var other v20261001s.VersionProfile_STATUS
 		err := copied.AssignProperties_To_VersionProfile_STATUS(&other)
 		if err != nil {
 			t.Fatal("AssignPropertiesTo: " + err.Error())

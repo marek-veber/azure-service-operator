@@ -5,7 +5,8 @@ package storage
 
 import (
 	"fmt"
-	storage "github.com/Azure/azure-service-operator/v2/api/redhatopenshift/v20261001/storage"
+	v20231122s "github.com/Azure/azure-service-operator/v2/api/redhatopenshift/v1api20231122/storage"
+	v20261001s "github.com/Azure/azure-service-operator/v2/api/redhatopenshift/v20261001/storage"
 	"github.com/Azure/azure-service-operator/v2/pkg/genruntime"
 	"github.com/Azure/azure-service-operator/v2/pkg/genruntime/conditions"
 	"github.com/Azure/azure-service-operator/v2/pkg/genruntime/configmaps"
@@ -51,7 +52,7 @@ var _ conversion.Convertible = &HcpOpenShiftCluster{}
 
 // ConvertFrom populates our HcpOpenShiftCluster from the provided hub HcpOpenShiftCluster
 func (cluster *HcpOpenShiftCluster) ConvertFrom(hub conversion.Hub) error {
-	source, ok := hub.(*storage.HcpOpenShiftCluster)
+	source, ok := hub.(*v20261001s.HcpOpenShiftCluster)
 	if !ok {
 		return fmt.Errorf("expected redhatopenshift/v20261001/storage/HcpOpenShiftCluster but received %T instead", hub)
 	}
@@ -61,7 +62,7 @@ func (cluster *HcpOpenShiftCluster) ConvertFrom(hub conversion.Hub) error {
 
 // ConvertTo populates the provided hub HcpOpenShiftCluster from our HcpOpenShiftCluster
 func (cluster *HcpOpenShiftCluster) ConvertTo(hub conversion.Hub) error {
-	destination, ok := hub.(*storage.HcpOpenShiftCluster)
+	destination, ok := hub.(*v20261001s.HcpOpenShiftCluster)
 	if !ok {
 		return fmt.Errorf("expected redhatopenshift/v20261001/storage/HcpOpenShiftCluster but received %T instead", hub)
 	}
@@ -165,7 +166,7 @@ func (cluster *HcpOpenShiftCluster) SetStatus(status genruntime.ConvertibleStatu
 }
 
 // AssignProperties_From_HcpOpenShiftCluster populates our HcpOpenShiftCluster from the provided source HcpOpenShiftCluster
-func (cluster *HcpOpenShiftCluster) AssignProperties_From_HcpOpenShiftCluster(source *storage.HcpOpenShiftCluster) error {
+func (cluster *HcpOpenShiftCluster) AssignProperties_From_HcpOpenShiftCluster(source *v20261001s.HcpOpenShiftCluster) error {
 
 	// ObjectMeta
 	cluster.ObjectMeta = *source.ObjectMeta.DeepCopy()
@@ -200,13 +201,13 @@ func (cluster *HcpOpenShiftCluster) AssignProperties_From_HcpOpenShiftCluster(so
 }
 
 // AssignProperties_To_HcpOpenShiftCluster populates the provided destination HcpOpenShiftCluster from our HcpOpenShiftCluster
-func (cluster *HcpOpenShiftCluster) AssignProperties_To_HcpOpenShiftCluster(destination *storage.HcpOpenShiftCluster) error {
+func (cluster *HcpOpenShiftCluster) AssignProperties_To_HcpOpenShiftCluster(destination *v20261001s.HcpOpenShiftCluster) error {
 
 	// ObjectMeta
 	destination.ObjectMeta = *cluster.ObjectMeta.DeepCopy()
 
 	// Spec
-	var spec storage.HcpOpenShiftCluster_Spec
+	var spec v20261001s.HcpOpenShiftCluster_Spec
 	err := cluster.Spec.AssignProperties_To_HcpOpenShiftCluster_Spec(&spec)
 	if err != nil {
 		return eris.Wrap(err, "calling AssignProperties_To_HcpOpenShiftCluster_Spec() to populate field Spec")
@@ -214,7 +215,7 @@ func (cluster *HcpOpenShiftCluster) AssignProperties_To_HcpOpenShiftCluster(dest
 	destination.Spec = spec
 
 	// Status
-	var status storage.HcpOpenShiftCluster_STATUS
+	var status v20261001s.HcpOpenShiftCluster_STATUS
 	err = cluster.Status.AssignProperties_To_HcpOpenShiftCluster_STATUS(&status)
 	if err != nil {
 		return eris.Wrap(err, "calling AssignProperties_To_HcpOpenShiftCluster_STATUS() to populate field Status")
@@ -261,8 +262,8 @@ type APIVersion string
 const APIVersion_Value = APIVersion("2026-09-01-preview")
 
 type augmentConversionForHcpOpenShiftCluster interface {
-	AssignPropertiesFrom(src *storage.HcpOpenShiftCluster) error
-	AssignPropertiesTo(dst *storage.HcpOpenShiftCluster) error
+	AssignPropertiesFrom(src *v20261001s.HcpOpenShiftCluster) error
+	AssignPropertiesTo(dst *v20261001s.HcpOpenShiftCluster) error
 }
 
 // Storage version of v20260901preview.HcpOpenShiftCluster_Spec
@@ -289,14 +290,14 @@ var _ genruntime.ConvertibleSpec = &HcpOpenShiftCluster_Spec{}
 
 // ConvertSpecFrom populates our HcpOpenShiftCluster_Spec from the provided source
 func (cluster *HcpOpenShiftCluster_Spec) ConvertSpecFrom(source genruntime.ConvertibleSpec) error {
-	src, ok := source.(*storage.HcpOpenShiftCluster_Spec)
+	src, ok := source.(*v20261001s.HcpOpenShiftCluster_Spec)
 	if ok {
 		// Populate our instance from source
 		return cluster.AssignProperties_From_HcpOpenShiftCluster_Spec(src)
 	}
 
 	// Convert to an intermediate form
-	src = &storage.HcpOpenShiftCluster_Spec{}
+	src = &v20261001s.HcpOpenShiftCluster_Spec{}
 	err := src.ConvertSpecFrom(source)
 	if err != nil {
 		return eris.Wrap(err, "initial step of conversion in ConvertSpecFrom()")
@@ -313,14 +314,14 @@ func (cluster *HcpOpenShiftCluster_Spec) ConvertSpecFrom(source genruntime.Conve
 
 // ConvertSpecTo populates the provided destination from our HcpOpenShiftCluster_Spec
 func (cluster *HcpOpenShiftCluster_Spec) ConvertSpecTo(destination genruntime.ConvertibleSpec) error {
-	dst, ok := destination.(*storage.HcpOpenShiftCluster_Spec)
+	dst, ok := destination.(*v20261001s.HcpOpenShiftCluster_Spec)
 	if ok {
 		// Populate destination from our instance
 		return cluster.AssignProperties_To_HcpOpenShiftCluster_Spec(dst)
 	}
 
 	// Convert to an intermediate form
-	dst = &storage.HcpOpenShiftCluster_Spec{}
+	dst = &v20261001s.HcpOpenShiftCluster_Spec{}
 	err := cluster.AssignProperties_To_HcpOpenShiftCluster_Spec(dst)
 	if err != nil {
 		return eris.Wrap(err, "initial step of conversion in ConvertSpecTo()")
@@ -336,7 +337,7 @@ func (cluster *HcpOpenShiftCluster_Spec) ConvertSpecTo(destination genruntime.Co
 }
 
 // AssignProperties_From_HcpOpenShiftCluster_Spec populates our HcpOpenShiftCluster_Spec from the provided source HcpOpenShiftCluster_Spec
-func (cluster *HcpOpenShiftCluster_Spec) AssignProperties_From_HcpOpenShiftCluster_Spec(source *storage.HcpOpenShiftCluster_Spec) error {
+func (cluster *HcpOpenShiftCluster_Spec) AssignProperties_From_HcpOpenShiftCluster_Spec(source *v20261001s.HcpOpenShiftCluster_Spec) error {
 	// Clone the existing property bag
 	propertyBag := genruntime.NewPropertyBag(source.PropertyBag)
 
@@ -417,7 +418,7 @@ func (cluster *HcpOpenShiftCluster_Spec) AssignProperties_From_HcpOpenShiftClust
 }
 
 // AssignProperties_To_HcpOpenShiftCluster_Spec populates the provided destination HcpOpenShiftCluster_Spec from our HcpOpenShiftCluster_Spec
-func (cluster *HcpOpenShiftCluster_Spec) AssignProperties_To_HcpOpenShiftCluster_Spec(destination *storage.HcpOpenShiftCluster_Spec) error {
+func (cluster *HcpOpenShiftCluster_Spec) AssignProperties_To_HcpOpenShiftCluster_Spec(destination *v20261001s.HcpOpenShiftCluster_Spec) error {
 	// Clone the existing property bag
 	propertyBag := genruntime.NewPropertyBag(cluster.PropertyBag)
 
@@ -426,7 +427,7 @@ func (cluster *HcpOpenShiftCluster_Spec) AssignProperties_To_HcpOpenShiftCluster
 
 	// Identity
 	if cluster.Identity != nil {
-		var identity storage.ManagedServiceIdentity
+		var identity v20261001s.ManagedServiceIdentity
 		err := cluster.Identity.AssignProperties_To_ManagedServiceIdentity(&identity)
 		if err != nil {
 			return eris.Wrap(err, "calling AssignProperties_To_ManagedServiceIdentity() to populate field Identity")
@@ -441,7 +442,7 @@ func (cluster *HcpOpenShiftCluster_Spec) AssignProperties_To_HcpOpenShiftCluster
 
 	// OperatorSpec
 	if cluster.OperatorSpec != nil {
-		var operatorSpec storage.HcpOpenShiftClusterOperatorSpec
+		var operatorSpec v20261001s.HcpOpenShiftClusterOperatorSpec
 		err := cluster.OperatorSpec.AssignProperties_To_HcpOpenShiftClusterOperatorSpec(&operatorSpec)
 		if err != nil {
 			return eris.Wrap(err, "calling AssignProperties_To_HcpOpenShiftClusterOperatorSpec() to populate field OperatorSpec")
@@ -464,7 +465,7 @@ func (cluster *HcpOpenShiftCluster_Spec) AssignProperties_To_HcpOpenShiftCluster
 
 	// Properties
 	if cluster.Properties != nil {
-		var property storage.HcpOpenShiftClusterProperties
+		var property v20261001s.HcpOpenShiftClusterProperties
 		err := cluster.Properties.AssignProperties_To_HcpOpenShiftClusterProperties(&property)
 		if err != nil {
 			return eris.Wrap(err, "calling AssignProperties_To_HcpOpenShiftClusterProperties() to populate field Properties")
@@ -516,14 +517,14 @@ var _ genruntime.ConvertibleStatus = &HcpOpenShiftCluster_STATUS{}
 
 // ConvertStatusFrom populates our HcpOpenShiftCluster_STATUS from the provided source
 func (cluster *HcpOpenShiftCluster_STATUS) ConvertStatusFrom(source genruntime.ConvertibleStatus) error {
-	src, ok := source.(*storage.HcpOpenShiftCluster_STATUS)
+	src, ok := source.(*v20261001s.HcpOpenShiftCluster_STATUS)
 	if ok {
 		// Populate our instance from source
 		return cluster.AssignProperties_From_HcpOpenShiftCluster_STATUS(src)
 	}
 
 	// Convert to an intermediate form
-	src = &storage.HcpOpenShiftCluster_STATUS{}
+	src = &v20261001s.HcpOpenShiftCluster_STATUS{}
 	err := src.ConvertStatusFrom(source)
 	if err != nil {
 		return eris.Wrap(err, "initial step of conversion in ConvertStatusFrom()")
@@ -540,14 +541,14 @@ func (cluster *HcpOpenShiftCluster_STATUS) ConvertStatusFrom(source genruntime.C
 
 // ConvertStatusTo populates the provided destination from our HcpOpenShiftCluster_STATUS
 func (cluster *HcpOpenShiftCluster_STATUS) ConvertStatusTo(destination genruntime.ConvertibleStatus) error {
-	dst, ok := destination.(*storage.HcpOpenShiftCluster_STATUS)
+	dst, ok := destination.(*v20261001s.HcpOpenShiftCluster_STATUS)
 	if ok {
 		// Populate destination from our instance
 		return cluster.AssignProperties_To_HcpOpenShiftCluster_STATUS(dst)
 	}
 
 	// Convert to an intermediate form
-	dst = &storage.HcpOpenShiftCluster_STATUS{}
+	dst = &v20261001s.HcpOpenShiftCluster_STATUS{}
 	err := cluster.AssignProperties_To_HcpOpenShiftCluster_STATUS(dst)
 	if err != nil {
 		return eris.Wrap(err, "initial step of conversion in ConvertStatusTo()")
@@ -563,7 +564,7 @@ func (cluster *HcpOpenShiftCluster_STATUS) ConvertStatusTo(destination genruntim
 }
 
 // AssignProperties_From_HcpOpenShiftCluster_STATUS populates our HcpOpenShiftCluster_STATUS from the provided source HcpOpenShiftCluster_STATUS
-func (cluster *HcpOpenShiftCluster_STATUS) AssignProperties_From_HcpOpenShiftCluster_STATUS(source *storage.HcpOpenShiftCluster_STATUS) error {
+func (cluster *HcpOpenShiftCluster_STATUS) AssignProperties_From_HcpOpenShiftCluster_STATUS(source *v20261001s.HcpOpenShiftCluster_STATUS) error {
 	// Clone the existing property bag
 	propertyBag := genruntime.NewPropertyBag(source.PropertyBag)
 
@@ -605,10 +606,15 @@ func (cluster *HcpOpenShiftCluster_STATUS) AssignProperties_From_HcpOpenShiftClu
 
 	// SystemData
 	if source.SystemData != nil {
-		var systemDatum SystemData_STATUS
-		err := systemDatum.AssignProperties_From_SystemData_STATUS(source.SystemData)
+		var systemDataSTATUSStash v20231122s.SystemData_STATUS
+		err := systemDataSTATUSStash.AssignProperties_From_SystemData_STATUS(source.SystemData)
 		if err != nil {
-			return eris.Wrap(err, "calling AssignProperties_From_SystemData_STATUS() to populate field SystemData")
+			return eris.Wrap(err, "calling AssignProperties_From_SystemData_STATUS() to populate field SystemData_STATUSStash from SystemData")
+		}
+		var systemDatum SystemData_STATUS
+		err = systemDatum.AssignProperties_From_SystemData_STATUS(&systemDataSTATUSStash)
+		if err != nil {
+			return eris.Wrap(err, "calling AssignProperties_From_SystemData_STATUS() to populate field SystemData from SystemData_STATUSStash")
 		}
 		cluster.SystemData = &systemDatum
 	} else {
@@ -642,7 +648,7 @@ func (cluster *HcpOpenShiftCluster_STATUS) AssignProperties_From_HcpOpenShiftClu
 }
 
 // AssignProperties_To_HcpOpenShiftCluster_STATUS populates the provided destination HcpOpenShiftCluster_STATUS from our HcpOpenShiftCluster_STATUS
-func (cluster *HcpOpenShiftCluster_STATUS) AssignProperties_To_HcpOpenShiftCluster_STATUS(destination *storage.HcpOpenShiftCluster_STATUS) error {
+func (cluster *HcpOpenShiftCluster_STATUS) AssignProperties_To_HcpOpenShiftCluster_STATUS(destination *v20261001s.HcpOpenShiftCluster_STATUS) error {
 	// Clone the existing property bag
 	propertyBag := genruntime.NewPropertyBag(cluster.PropertyBag)
 
@@ -654,7 +660,7 @@ func (cluster *HcpOpenShiftCluster_STATUS) AssignProperties_To_HcpOpenShiftClust
 
 	// Identity
 	if cluster.Identity != nil {
-		var identity storage.ManagedServiceIdentity_STATUS
+		var identity v20261001s.ManagedServiceIdentity_STATUS
 		err := cluster.Identity.AssignProperties_To_ManagedServiceIdentity_STATUS(&identity)
 		if err != nil {
 			return eris.Wrap(err, "calling AssignProperties_To_ManagedServiceIdentity_STATUS() to populate field Identity")
@@ -672,7 +678,7 @@ func (cluster *HcpOpenShiftCluster_STATUS) AssignProperties_To_HcpOpenShiftClust
 
 	// Properties
 	if cluster.Properties != nil {
-		var property storage.HcpOpenShiftClusterProperties_STATUS
+		var property v20261001s.HcpOpenShiftClusterProperties_STATUS
 		err := cluster.Properties.AssignProperties_To_HcpOpenShiftClusterProperties_STATUS(&property)
 		if err != nil {
 			return eris.Wrap(err, "calling AssignProperties_To_HcpOpenShiftClusterProperties_STATUS() to populate field Properties")
@@ -684,10 +690,15 @@ func (cluster *HcpOpenShiftCluster_STATUS) AssignProperties_To_HcpOpenShiftClust
 
 	// SystemData
 	if cluster.SystemData != nil {
-		var systemDatum storage.SystemData_STATUS
-		err := cluster.SystemData.AssignProperties_To_SystemData_STATUS(&systemDatum)
+		var systemDataSTATUSStash v20231122s.SystemData_STATUS
+		err := cluster.SystemData.AssignProperties_To_SystemData_STATUS(&systemDataSTATUSStash)
 		if err != nil {
-			return eris.Wrap(err, "calling AssignProperties_To_SystemData_STATUS() to populate field SystemData")
+			return eris.Wrap(err, "calling AssignProperties_To_SystemData_STATUS() to populate field SystemData_STATUSStash from SystemData")
+		}
+		var systemDatum v20261001s.SystemData_STATUS
+		err = systemDataSTATUSStash.AssignProperties_To_SystemData_STATUS(&systemDatum)
+		if err != nil {
+			return eris.Wrap(err, "calling AssignProperties_To_SystemData_STATUS() to populate field SystemData from SystemData_STATUSStash")
 		}
 		destination.SystemData = &systemDatum
 	} else {
@@ -721,13 +732,13 @@ func (cluster *HcpOpenShiftCluster_STATUS) AssignProperties_To_HcpOpenShiftClust
 }
 
 type augmentConversionForHcpOpenShiftCluster_Spec interface {
-	AssignPropertiesFrom(src *storage.HcpOpenShiftCluster_Spec) error
-	AssignPropertiesTo(dst *storage.HcpOpenShiftCluster_Spec) error
+	AssignPropertiesFrom(src *v20261001s.HcpOpenShiftCluster_Spec) error
+	AssignPropertiesTo(dst *v20261001s.HcpOpenShiftCluster_Spec) error
 }
 
 type augmentConversionForHcpOpenShiftCluster_STATUS interface {
-	AssignPropertiesFrom(src *storage.HcpOpenShiftCluster_STATUS) error
-	AssignPropertiesTo(dst *storage.HcpOpenShiftCluster_STATUS) error
+	AssignPropertiesFrom(src *v20261001s.HcpOpenShiftCluster_STATUS) error
+	AssignPropertiesTo(dst *v20261001s.HcpOpenShiftCluster_STATUS) error
 }
 
 // Storage version of v20260901preview.HcpOpenShiftClusterOperatorSpec
@@ -740,7 +751,7 @@ type HcpOpenShiftClusterOperatorSpec struct {
 }
 
 // AssignProperties_From_HcpOpenShiftClusterOperatorSpec populates our HcpOpenShiftClusterOperatorSpec from the provided source HcpOpenShiftClusterOperatorSpec
-func (operator *HcpOpenShiftClusterOperatorSpec) AssignProperties_From_HcpOpenShiftClusterOperatorSpec(source *storage.HcpOpenShiftClusterOperatorSpec) error {
+func (operator *HcpOpenShiftClusterOperatorSpec) AssignProperties_From_HcpOpenShiftClusterOperatorSpec(source *v20261001s.HcpOpenShiftClusterOperatorSpec) error {
 	// Clone the existing property bag
 	propertyBag := genruntime.NewPropertyBag(source.PropertyBag)
 
@@ -809,7 +820,7 @@ func (operator *HcpOpenShiftClusterOperatorSpec) AssignProperties_From_HcpOpenSh
 }
 
 // AssignProperties_To_HcpOpenShiftClusterOperatorSpec populates the provided destination HcpOpenShiftClusterOperatorSpec from our HcpOpenShiftClusterOperatorSpec
-func (operator *HcpOpenShiftClusterOperatorSpec) AssignProperties_To_HcpOpenShiftClusterOperatorSpec(destination *storage.HcpOpenShiftClusterOperatorSpec) error {
+func (operator *HcpOpenShiftClusterOperatorSpec) AssignProperties_To_HcpOpenShiftClusterOperatorSpec(destination *v20261001s.HcpOpenShiftClusterOperatorSpec) error {
 	// Clone the existing property bag
 	propertyBag := genruntime.NewPropertyBag(operator.PropertyBag)
 
@@ -847,7 +858,7 @@ func (operator *HcpOpenShiftClusterOperatorSpec) AssignProperties_To_HcpOpenShif
 
 	// Secrets
 	if operator.Secrets != nil {
-		var secret storage.HcpOpenShiftClusterOperatorSecrets
+		var secret v20261001s.HcpOpenShiftClusterOperatorSecrets
 		err := operator.Secrets.AssignProperties_To_HcpOpenShiftClusterOperatorSecrets(&secret)
 		if err != nil {
 			return eris.Wrap(err, "calling AssignProperties_To_HcpOpenShiftClusterOperatorSecrets() to populate field Secrets")
@@ -896,7 +907,7 @@ type HcpOpenShiftClusterProperties struct {
 }
 
 // AssignProperties_From_HcpOpenShiftClusterProperties populates our HcpOpenShiftClusterProperties from the provided source HcpOpenShiftClusterProperties
-func (properties *HcpOpenShiftClusterProperties) AssignProperties_From_HcpOpenShiftClusterProperties(source *storage.HcpOpenShiftClusterProperties) error {
+func (properties *HcpOpenShiftClusterProperties) AssignProperties_From_HcpOpenShiftClusterProperties(source *v20261001s.HcpOpenShiftClusterProperties) error {
 	// Clone the existing property bag
 	propertyBag := genruntime.NewPropertyBag(source.PropertyBag)
 
@@ -981,10 +992,15 @@ func (properties *HcpOpenShiftClusterProperties) AssignProperties_From_HcpOpenSh
 
 	// Ingress
 	if source.Ingress != nil {
-		var ingress IngressProfile
-		err := ingress.AssignProperties_From_IngressProfile(source.Ingress)
+		var ingressProfileStash v20231122s.IngressProfile
+		err := ingressProfileStash.AssignProperties_From_IngressProfile(source.Ingress)
 		if err != nil {
-			return eris.Wrap(err, "calling AssignProperties_From_IngressProfile() to populate field Ingress")
+			return eris.Wrap(err, "calling AssignProperties_From_IngressProfile() to populate field IngressProfileStash from Ingress")
+		}
+		var ingress IngressProfile
+		err = ingress.AssignProperties_From_IngressProfile(&ingressProfileStash)
+		if err != nil {
+			return eris.Wrap(err, "calling AssignProperties_From_IngressProfile() to populate field Ingress from IngressProfileStash")
 		}
 		properties.Ingress = &ingress
 	} else {
@@ -993,10 +1009,15 @@ func (properties *HcpOpenShiftClusterProperties) AssignProperties_From_HcpOpenSh
 
 	// Network
 	if source.Network != nil {
-		var network NetworkProfile
-		err := network.AssignProperties_From_NetworkProfile(source.Network)
+		var networkProfileStash v20231122s.NetworkProfile
+		err := networkProfileStash.AssignProperties_From_NetworkProfile(source.Network)
 		if err != nil {
-			return eris.Wrap(err, "calling AssignProperties_From_NetworkProfile() to populate field Network")
+			return eris.Wrap(err, "calling AssignProperties_From_NetworkProfile() to populate field NetworkProfileStash from Network")
+		}
+		var network NetworkProfile
+		err = network.AssignProperties_From_NetworkProfile(&networkProfileStash)
+		if err != nil {
+			return eris.Wrap(err, "calling AssignProperties_From_NetworkProfile() to populate field Network from NetworkProfileStash")
 		}
 		properties.Network = &network
 	} else {
@@ -1051,13 +1072,13 @@ func (properties *HcpOpenShiftClusterProperties) AssignProperties_From_HcpOpenSh
 }
 
 // AssignProperties_To_HcpOpenShiftClusterProperties populates the provided destination HcpOpenShiftClusterProperties from our HcpOpenShiftClusterProperties
-func (properties *HcpOpenShiftClusterProperties) AssignProperties_To_HcpOpenShiftClusterProperties(destination *storage.HcpOpenShiftClusterProperties) error {
+func (properties *HcpOpenShiftClusterProperties) AssignProperties_To_HcpOpenShiftClusterProperties(destination *v20261001s.HcpOpenShiftClusterProperties) error {
 	// Clone the existing property bag
 	propertyBag := genruntime.NewPropertyBag(properties.PropertyBag)
 
 	// Api
 	if properties.Api != nil {
-		var api storage.ApiProfile
+		var api v20261001s.ApiProfile
 		err := properties.Api.AssignProperties_To_ApiProfile(&api)
 		if err != nil {
 			return eris.Wrap(err, "calling AssignProperties_To_ApiProfile() to populate field Api")
@@ -1069,7 +1090,7 @@ func (properties *HcpOpenShiftClusterProperties) AssignProperties_To_HcpOpenShif
 
 	// Autoscaling
 	if properties.Autoscaling != nil {
-		var autoscaling storage.ClusterAutoscalingProfile
+		var autoscaling v20261001s.ClusterAutoscalingProfile
 		err := properties.Autoscaling.AssignProperties_To_ClusterAutoscalingProfile(&autoscaling)
 		if err != nil {
 			return eris.Wrap(err, "calling AssignProperties_To_ClusterAutoscalingProfile() to populate field Autoscaling")
@@ -1081,7 +1102,7 @@ func (properties *HcpOpenShiftClusterProperties) AssignProperties_To_HcpOpenShif
 
 	// ClusterImageRegistry
 	if properties.ClusterImageRegistry != nil {
-		var clusterImageRegistry storage.ClusterImageRegistryProfile
+		var clusterImageRegistry v20261001s.ClusterImageRegistryProfile
 		err := properties.ClusterImageRegistry.AssignProperties_To_ClusterImageRegistryProfile(&clusterImageRegistry)
 		if err != nil {
 			return eris.Wrap(err, "calling AssignProperties_To_ClusterImageRegistryProfile() to populate field ClusterImageRegistry")
@@ -1096,7 +1117,7 @@ func (properties *HcpOpenShiftClusterProperties) AssignProperties_To_HcpOpenShif
 
 	// Dns
 	if properties.Dns != nil {
-		var dnsDNS storage.DnsProfile
+		var dnsDNS v20261001s.DnsProfile
 		err := properties.Dns.AssignProperties_To_DnsProfile(&dnsDNS)
 		if err != nil {
 			return eris.Wrap(err, "calling AssignProperties_To_DnsProfile() to populate field Dns")
@@ -1108,7 +1129,7 @@ func (properties *HcpOpenShiftClusterProperties) AssignProperties_To_HcpOpenShif
 
 	// Etcd
 	if properties.Etcd != nil {
-		var etcd storage.EtcdProfile
+		var etcd v20261001s.EtcdProfile
 		err := properties.Etcd.AssignProperties_To_EtcdProfile(&etcd)
 		if err != nil {
 			return eris.Wrap(err, "calling AssignProperties_To_EtcdProfile() to populate field Etcd")
@@ -1120,9 +1141,9 @@ func (properties *HcpOpenShiftClusterProperties) AssignProperties_To_HcpOpenShif
 
 	// ImageDigestMirrors
 	if properties.ImageDigestMirrors != nil {
-		imageDigestMirrorList := make([]storage.ImageDigestMirror, len(properties.ImageDigestMirrors))
+		imageDigestMirrorList := make([]v20261001s.ImageDigestMirror, len(properties.ImageDigestMirrors))
 		for imageDigestMirrorIndex, imageDigestMirrorItem := range properties.ImageDigestMirrors {
-			var imageDigestMirror storage.ImageDigestMirror
+			var imageDigestMirror v20261001s.ImageDigestMirror
 			err := imageDigestMirrorItem.AssignProperties_To_ImageDigestMirror(&imageDigestMirror)
 			if err != nil {
 				return eris.Wrap(err, "calling AssignProperties_To_ImageDigestMirror() to populate field ImageDigestMirrors")
@@ -1136,10 +1157,15 @@ func (properties *HcpOpenShiftClusterProperties) AssignProperties_To_HcpOpenShif
 
 	// Ingress
 	if properties.Ingress != nil {
-		var ingress storage.IngressProfile
-		err := properties.Ingress.AssignProperties_To_IngressProfile(&ingress)
+		var ingressProfileStash v20231122s.IngressProfile
+		err := properties.Ingress.AssignProperties_To_IngressProfile(&ingressProfileStash)
 		if err != nil {
-			return eris.Wrap(err, "calling AssignProperties_To_IngressProfile() to populate field Ingress")
+			return eris.Wrap(err, "calling AssignProperties_To_IngressProfile() to populate field IngressProfileStash from Ingress")
+		}
+		var ingress v20261001s.IngressProfile
+		err = ingressProfileStash.AssignProperties_To_IngressProfile(&ingress)
+		if err != nil {
+			return eris.Wrap(err, "calling AssignProperties_To_IngressProfile() to populate field Ingress from IngressProfileStash")
 		}
 		destination.Ingress = &ingress
 	} else {
@@ -1148,10 +1174,15 @@ func (properties *HcpOpenShiftClusterProperties) AssignProperties_To_HcpOpenShif
 
 	// Network
 	if properties.Network != nil {
-		var network storage.NetworkProfile
-		err := properties.Network.AssignProperties_To_NetworkProfile(&network)
+		var networkProfileStash v20231122s.NetworkProfile
+		err := properties.Network.AssignProperties_To_NetworkProfile(&networkProfileStash)
 		if err != nil {
-			return eris.Wrap(err, "calling AssignProperties_To_NetworkProfile() to populate field Network")
+			return eris.Wrap(err, "calling AssignProperties_To_NetworkProfile() to populate field NetworkProfileStash from Network")
+		}
+		var network v20261001s.NetworkProfile
+		err = networkProfileStash.AssignProperties_To_NetworkProfile(&network)
+		if err != nil {
+			return eris.Wrap(err, "calling AssignProperties_To_NetworkProfile() to populate field Network from NetworkProfileStash")
 		}
 		destination.Network = &network
 	} else {
@@ -1163,7 +1194,7 @@ func (properties *HcpOpenShiftClusterProperties) AssignProperties_To_HcpOpenShif
 
 	// Platform
 	if properties.Platform != nil {
-		var platform storage.PlatformProfile
+		var platform v20261001s.PlatformProfile
 		err := properties.Platform.AssignProperties_To_PlatformProfile(&platform)
 		if err != nil {
 			return eris.Wrap(err, "calling AssignProperties_To_PlatformProfile() to populate field Platform")
@@ -1175,7 +1206,7 @@ func (properties *HcpOpenShiftClusterProperties) AssignProperties_To_HcpOpenShif
 
 	// Version
 	if properties.Version != nil {
-		var version storage.VersionProfile
+		var version v20261001s.VersionProfile
 		err := properties.Version.AssignProperties_To_VersionProfile(&version)
 		if err != nil {
 			return eris.Wrap(err, "calling AssignProperties_To_VersionProfile() to populate field Version")
@@ -1227,7 +1258,7 @@ type HcpOpenShiftClusterProperties_STATUS struct {
 }
 
 // AssignProperties_From_HcpOpenShiftClusterProperties_STATUS populates our HcpOpenShiftClusterProperties_STATUS from the provided source HcpOpenShiftClusterProperties_STATUS
-func (properties *HcpOpenShiftClusterProperties_STATUS) AssignProperties_From_HcpOpenShiftClusterProperties_STATUS(source *storage.HcpOpenShiftClusterProperties_STATUS) error {
+func (properties *HcpOpenShiftClusterProperties_STATUS) AssignProperties_From_HcpOpenShiftClusterProperties_STATUS(source *v20261001s.HcpOpenShiftClusterProperties_STATUS) error {
 	// Clone the existing property bag
 	propertyBag := genruntime.NewPropertyBag(source.PropertyBag)
 
@@ -1269,10 +1300,15 @@ func (properties *HcpOpenShiftClusterProperties_STATUS) AssignProperties_From_Hc
 
 	// Console
 	if source.Console != nil {
-		var console ConsoleProfile_STATUS
-		err := console.AssignProperties_From_ConsoleProfile_STATUS(source.Console)
+		var consoleProfileSTATUSStash v20231122s.ConsoleProfile_STATUS
+		err := consoleProfileSTATUSStash.AssignProperties_From_ConsoleProfile_STATUS(source.Console)
 		if err != nil {
-			return eris.Wrap(err, "calling AssignProperties_From_ConsoleProfile_STATUS() to populate field Console")
+			return eris.Wrap(err, "calling AssignProperties_From_ConsoleProfile_STATUS() to populate field ConsoleProfile_STATUSStash from Console")
+		}
+		var console ConsoleProfile_STATUS
+		err = console.AssignProperties_From_ConsoleProfile_STATUS(&consoleProfileSTATUSStash)
+		if err != nil {
+			return eris.Wrap(err, "calling AssignProperties_From_ConsoleProfile_STATUS() to populate field Console from ConsoleProfile_STATUSStash")
 		}
 		properties.Console = &console
 	} else {
@@ -1324,10 +1360,15 @@ func (properties *HcpOpenShiftClusterProperties_STATUS) AssignProperties_From_Hc
 
 	// Ingress
 	if source.Ingress != nil {
-		var ingress IngressProfile_STATUS
-		err := ingress.AssignProperties_From_IngressProfile_STATUS(source.Ingress)
+		var ingressProfileSTATUSStash v20231122s.IngressProfile_STATUS
+		err := ingressProfileSTATUSStash.AssignProperties_From_IngressProfile_STATUS(source.Ingress)
 		if err != nil {
-			return eris.Wrap(err, "calling AssignProperties_From_IngressProfile_STATUS() to populate field Ingress")
+			return eris.Wrap(err, "calling AssignProperties_From_IngressProfile_STATUS() to populate field IngressProfile_STATUSStash from Ingress")
+		}
+		var ingress IngressProfile_STATUS
+		err = ingress.AssignProperties_From_IngressProfile_STATUS(&ingressProfileSTATUSStash)
+		if err != nil {
+			return eris.Wrap(err, "calling AssignProperties_From_IngressProfile_STATUS() to populate field Ingress from IngressProfile_STATUSStash")
 		}
 		properties.Ingress = &ingress
 	} else {
@@ -1336,10 +1377,15 @@ func (properties *HcpOpenShiftClusterProperties_STATUS) AssignProperties_From_Hc
 
 	// Network
 	if source.Network != nil {
-		var network NetworkProfile_STATUS
-		err := network.AssignProperties_From_NetworkProfile_STATUS(source.Network)
+		var networkProfileSTATUSStash v20231122s.NetworkProfile_STATUS
+		err := networkProfileSTATUSStash.AssignProperties_From_NetworkProfile_STATUS(source.Network)
 		if err != nil {
-			return eris.Wrap(err, "calling AssignProperties_From_NetworkProfile_STATUS() to populate field Network")
+			return eris.Wrap(err, "calling AssignProperties_From_NetworkProfile_STATUS() to populate field NetworkProfile_STATUSStash from Network")
+		}
+		var network NetworkProfile_STATUS
+		err = network.AssignProperties_From_NetworkProfile_STATUS(&networkProfileSTATUSStash)
+		if err != nil {
+			return eris.Wrap(err, "calling AssignProperties_From_NetworkProfile_STATUS() to populate field Network from NetworkProfile_STATUSStash")
 		}
 		properties.Network = &network
 	} else {
@@ -1397,13 +1443,13 @@ func (properties *HcpOpenShiftClusterProperties_STATUS) AssignProperties_From_Hc
 }
 
 // AssignProperties_To_HcpOpenShiftClusterProperties_STATUS populates the provided destination HcpOpenShiftClusterProperties_STATUS from our HcpOpenShiftClusterProperties_STATUS
-func (properties *HcpOpenShiftClusterProperties_STATUS) AssignProperties_To_HcpOpenShiftClusterProperties_STATUS(destination *storage.HcpOpenShiftClusterProperties_STATUS) error {
+func (properties *HcpOpenShiftClusterProperties_STATUS) AssignProperties_To_HcpOpenShiftClusterProperties_STATUS(destination *v20261001s.HcpOpenShiftClusterProperties_STATUS) error {
 	// Clone the existing property bag
 	propertyBag := genruntime.NewPropertyBag(properties.PropertyBag)
 
 	// Api
 	if properties.Api != nil {
-		var api storage.ApiProfile_STATUS
+		var api v20261001s.ApiProfile_STATUS
 		err := properties.Api.AssignProperties_To_ApiProfile_STATUS(&api)
 		if err != nil {
 			return eris.Wrap(err, "calling AssignProperties_To_ApiProfile_STATUS() to populate field Api")
@@ -1415,7 +1461,7 @@ func (properties *HcpOpenShiftClusterProperties_STATUS) AssignProperties_To_HcpO
 
 	// Autoscaling
 	if properties.Autoscaling != nil {
-		var autoscaling storage.ClusterAutoscalingProfile_STATUS
+		var autoscaling v20261001s.ClusterAutoscalingProfile_STATUS
 		err := properties.Autoscaling.AssignProperties_To_ClusterAutoscalingProfile_STATUS(&autoscaling)
 		if err != nil {
 			return eris.Wrap(err, "calling AssignProperties_To_ClusterAutoscalingProfile_STATUS() to populate field Autoscaling")
@@ -1427,7 +1473,7 @@ func (properties *HcpOpenShiftClusterProperties_STATUS) AssignProperties_To_HcpO
 
 	// ClusterImageRegistry
 	if properties.ClusterImageRegistry != nil {
-		var clusterImageRegistry storage.ClusterImageRegistryProfile_STATUS
+		var clusterImageRegistry v20261001s.ClusterImageRegistryProfile_STATUS
 		err := properties.ClusterImageRegistry.AssignProperties_To_ClusterImageRegistryProfile_STATUS(&clusterImageRegistry)
 		if err != nil {
 			return eris.Wrap(err, "calling AssignProperties_To_ClusterImageRegistryProfile_STATUS() to populate field ClusterImageRegistry")
@@ -1439,10 +1485,15 @@ func (properties *HcpOpenShiftClusterProperties_STATUS) AssignProperties_To_HcpO
 
 	// Console
 	if properties.Console != nil {
-		var console storage.ConsoleProfile_STATUS
-		err := properties.Console.AssignProperties_To_ConsoleProfile_STATUS(&console)
+		var consoleProfileSTATUSStash v20231122s.ConsoleProfile_STATUS
+		err := properties.Console.AssignProperties_To_ConsoleProfile_STATUS(&consoleProfileSTATUSStash)
 		if err != nil {
-			return eris.Wrap(err, "calling AssignProperties_To_ConsoleProfile_STATUS() to populate field Console")
+			return eris.Wrap(err, "calling AssignProperties_To_ConsoleProfile_STATUS() to populate field ConsoleProfile_STATUSStash from Console")
+		}
+		var console v20261001s.ConsoleProfile_STATUS
+		err = consoleProfileSTATUSStash.AssignProperties_To_ConsoleProfile_STATUS(&console)
+		if err != nil {
+			return eris.Wrap(err, "calling AssignProperties_To_ConsoleProfile_STATUS() to populate field Console from ConsoleProfile_STATUSStash")
 		}
 		destination.Console = &console
 	} else {
@@ -1454,7 +1505,7 @@ func (properties *HcpOpenShiftClusterProperties_STATUS) AssignProperties_To_HcpO
 
 	// Dns
 	if properties.Dns != nil {
-		var dnsDNS storage.DnsProfile_STATUS
+		var dnsDNS v20261001s.DnsProfile_STATUS
 		err := properties.Dns.AssignProperties_To_DnsProfile_STATUS(&dnsDNS)
 		if err != nil {
 			return eris.Wrap(err, "calling AssignProperties_To_DnsProfile_STATUS() to populate field Dns")
@@ -1466,7 +1517,7 @@ func (properties *HcpOpenShiftClusterProperties_STATUS) AssignProperties_To_HcpO
 
 	// Etcd
 	if properties.Etcd != nil {
-		var etcd storage.EtcdProfile_STATUS
+		var etcd v20261001s.EtcdProfile_STATUS
 		err := properties.Etcd.AssignProperties_To_EtcdProfile_STATUS(&etcd)
 		if err != nil {
 			return eris.Wrap(err, "calling AssignProperties_To_EtcdProfile_STATUS() to populate field Etcd")
@@ -1478,9 +1529,9 @@ func (properties *HcpOpenShiftClusterProperties_STATUS) AssignProperties_To_HcpO
 
 	// ImageDigestMirrors
 	if properties.ImageDigestMirrors != nil {
-		imageDigestMirrorList := make([]storage.ImageDigestMirror_STATUS, len(properties.ImageDigestMirrors))
+		imageDigestMirrorList := make([]v20261001s.ImageDigestMirror_STATUS, len(properties.ImageDigestMirrors))
 		for imageDigestMirrorIndex, imageDigestMirrorItem := range properties.ImageDigestMirrors {
-			var imageDigestMirror storage.ImageDigestMirror_STATUS
+			var imageDigestMirror v20261001s.ImageDigestMirror_STATUS
 			err := imageDigestMirrorItem.AssignProperties_To_ImageDigestMirror_STATUS(&imageDigestMirror)
 			if err != nil {
 				return eris.Wrap(err, "calling AssignProperties_To_ImageDigestMirror_STATUS() to populate field ImageDigestMirrors")
@@ -1494,10 +1545,15 @@ func (properties *HcpOpenShiftClusterProperties_STATUS) AssignProperties_To_HcpO
 
 	// Ingress
 	if properties.Ingress != nil {
-		var ingress storage.IngressProfile_STATUS
-		err := properties.Ingress.AssignProperties_To_IngressProfile_STATUS(&ingress)
+		var ingressProfileSTATUSStash v20231122s.IngressProfile_STATUS
+		err := properties.Ingress.AssignProperties_To_IngressProfile_STATUS(&ingressProfileSTATUSStash)
 		if err != nil {
-			return eris.Wrap(err, "calling AssignProperties_To_IngressProfile_STATUS() to populate field Ingress")
+			return eris.Wrap(err, "calling AssignProperties_To_IngressProfile_STATUS() to populate field IngressProfile_STATUSStash from Ingress")
+		}
+		var ingress v20261001s.IngressProfile_STATUS
+		err = ingressProfileSTATUSStash.AssignProperties_To_IngressProfile_STATUS(&ingress)
+		if err != nil {
+			return eris.Wrap(err, "calling AssignProperties_To_IngressProfile_STATUS() to populate field Ingress from IngressProfile_STATUSStash")
 		}
 		destination.Ingress = &ingress
 	} else {
@@ -1506,10 +1562,15 @@ func (properties *HcpOpenShiftClusterProperties_STATUS) AssignProperties_To_HcpO
 
 	// Network
 	if properties.Network != nil {
-		var network storage.NetworkProfile_STATUS
-		err := properties.Network.AssignProperties_To_NetworkProfile_STATUS(&network)
+		var networkProfileSTATUSStash v20231122s.NetworkProfile_STATUS
+		err := properties.Network.AssignProperties_To_NetworkProfile_STATUS(&networkProfileSTATUSStash)
 		if err != nil {
-			return eris.Wrap(err, "calling AssignProperties_To_NetworkProfile_STATUS() to populate field Network")
+			return eris.Wrap(err, "calling AssignProperties_To_NetworkProfile_STATUS() to populate field NetworkProfile_STATUSStash from Network")
+		}
+		var network v20261001s.NetworkProfile_STATUS
+		err = networkProfileSTATUSStash.AssignProperties_To_NetworkProfile_STATUS(&network)
+		if err != nil {
+			return eris.Wrap(err, "calling AssignProperties_To_NetworkProfile_STATUS() to populate field Network from NetworkProfile_STATUSStash")
 		}
 		destination.Network = &network
 	} else {
@@ -1521,7 +1582,7 @@ func (properties *HcpOpenShiftClusterProperties_STATUS) AssignProperties_To_HcpO
 
 	// Platform
 	if properties.Platform != nil {
-		var platform storage.PlatformProfile_STATUS
+		var platform v20261001s.PlatformProfile_STATUS
 		err := properties.Platform.AssignProperties_To_PlatformProfile_STATUS(&platform)
 		if err != nil {
 			return eris.Wrap(err, "calling AssignProperties_To_PlatformProfile_STATUS() to populate field Platform")
@@ -1536,7 +1597,7 @@ func (properties *HcpOpenShiftClusterProperties_STATUS) AssignProperties_To_HcpO
 
 	// Version
 	if properties.Version != nil {
-		var version storage.VersionProfile_STATUS
+		var version v20261001s.VersionProfile_STATUS
 		err := properties.Version.AssignProperties_To_VersionProfile_STATUS(&version)
 		if err != nil {
 			return eris.Wrap(err, "calling AssignProperties_To_VersionProfile_STATUS() to populate field Version")
@@ -1575,7 +1636,7 @@ type ManagedServiceIdentity struct {
 }
 
 // AssignProperties_From_ManagedServiceIdentity populates our ManagedServiceIdentity from the provided source ManagedServiceIdentity
-func (identity *ManagedServiceIdentity) AssignProperties_From_ManagedServiceIdentity(source *storage.ManagedServiceIdentity) error {
+func (identity *ManagedServiceIdentity) AssignProperties_From_ManagedServiceIdentity(source *v20261001s.ManagedServiceIdentity) error {
 	// Clone the existing property bag
 	propertyBag := genruntime.NewPropertyBag(source.PropertyBag)
 
@@ -1619,7 +1680,7 @@ func (identity *ManagedServiceIdentity) AssignProperties_From_ManagedServiceIden
 }
 
 // AssignProperties_To_ManagedServiceIdentity populates the provided destination ManagedServiceIdentity from our ManagedServiceIdentity
-func (identity *ManagedServiceIdentity) AssignProperties_To_ManagedServiceIdentity(destination *storage.ManagedServiceIdentity) error {
+func (identity *ManagedServiceIdentity) AssignProperties_To_ManagedServiceIdentity(destination *v20261001s.ManagedServiceIdentity) error {
 	// Clone the existing property bag
 	propertyBag := genruntime.NewPropertyBag(identity.PropertyBag)
 
@@ -1628,9 +1689,9 @@ func (identity *ManagedServiceIdentity) AssignProperties_To_ManagedServiceIdenti
 
 	// UserAssignedIdentities
 	if identity.UserAssignedIdentities != nil {
-		userAssignedIdentityList := make([]storage.UserAssignedIdentityDetails, len(identity.UserAssignedIdentities))
+		userAssignedIdentityList := make([]v20261001s.UserAssignedIdentityDetails, len(identity.UserAssignedIdentities))
 		for userAssignedIdentityIndex, userAssignedIdentityItem := range identity.UserAssignedIdentities {
-			var userAssignedIdentity storage.UserAssignedIdentityDetails
+			var userAssignedIdentity v20261001s.UserAssignedIdentityDetails
 			err := userAssignedIdentityItem.AssignProperties_To_UserAssignedIdentityDetails(&userAssignedIdentity)
 			if err != nil {
 				return eris.Wrap(err, "calling AssignProperties_To_UserAssignedIdentityDetails() to populate field UserAssignedIdentities")
@@ -1673,7 +1734,7 @@ type ManagedServiceIdentity_STATUS struct {
 }
 
 // AssignProperties_From_ManagedServiceIdentity_STATUS populates our ManagedServiceIdentity_STATUS from the provided source ManagedServiceIdentity_STATUS
-func (identity *ManagedServiceIdentity_STATUS) AssignProperties_From_ManagedServiceIdentity_STATUS(source *storage.ManagedServiceIdentity_STATUS) error {
+func (identity *ManagedServiceIdentity_STATUS) AssignProperties_From_ManagedServiceIdentity_STATUS(source *v20261001s.ManagedServiceIdentity_STATUS) error {
 	// Clone the existing property bag
 	propertyBag := genruntime.NewPropertyBag(source.PropertyBag)
 
@@ -1723,7 +1784,7 @@ func (identity *ManagedServiceIdentity_STATUS) AssignProperties_From_ManagedServ
 }
 
 // AssignProperties_To_ManagedServiceIdentity_STATUS populates the provided destination ManagedServiceIdentity_STATUS from our ManagedServiceIdentity_STATUS
-func (identity *ManagedServiceIdentity_STATUS) AssignProperties_To_ManagedServiceIdentity_STATUS(destination *storage.ManagedServiceIdentity_STATUS) error {
+func (identity *ManagedServiceIdentity_STATUS) AssignProperties_To_ManagedServiceIdentity_STATUS(destination *v20261001s.ManagedServiceIdentity_STATUS) error {
 	// Clone the existing property bag
 	propertyBag := genruntime.NewPropertyBag(identity.PropertyBag)
 
@@ -1738,9 +1799,9 @@ func (identity *ManagedServiceIdentity_STATUS) AssignProperties_To_ManagedServic
 
 	// UserAssignedIdentities
 	if identity.UserAssignedIdentities != nil {
-		userAssignedIdentityMap := make(map[string]storage.UserAssignedIdentity_STATUS, len(identity.UserAssignedIdentities))
+		userAssignedIdentityMap := make(map[string]v20261001s.UserAssignedIdentity_STATUS, len(identity.UserAssignedIdentities))
 		for userAssignedIdentityKey, userAssignedIdentityValue := range identity.UserAssignedIdentities {
-			var userAssignedIdentity storage.UserAssignedIdentity_STATUS
+			var userAssignedIdentity v20261001s.UserAssignedIdentity_STATUS
 			err := userAssignedIdentityValue.AssignProperties_To_UserAssignedIdentity_STATUS(&userAssignedIdentity)
 			if err != nil {
 				return eris.Wrap(err, "calling AssignProperties_To_UserAssignedIdentity_STATUS() to populate field UserAssignedIdentities")
@@ -1785,7 +1846,7 @@ type SystemData_STATUS struct {
 }
 
 // AssignProperties_From_SystemData_STATUS populates our SystemData_STATUS from the provided source SystemData_STATUS
-func (data *SystemData_STATUS) AssignProperties_From_SystemData_STATUS(source *storage.SystemData_STATUS) error {
+func (data *SystemData_STATUS) AssignProperties_From_SystemData_STATUS(source *v20231122s.SystemData_STATUS) error {
 	// Clone the existing property bag
 	propertyBag := genruntime.NewPropertyBag(source.PropertyBag)
 
@@ -1828,7 +1889,7 @@ func (data *SystemData_STATUS) AssignProperties_From_SystemData_STATUS(source *s
 }
 
 // AssignProperties_To_SystemData_STATUS populates the provided destination SystemData_STATUS from our SystemData_STATUS
-func (data *SystemData_STATUS) AssignProperties_To_SystemData_STATUS(destination *storage.SystemData_STATUS) error {
+func (data *SystemData_STATUS) AssignProperties_To_SystemData_STATUS(destination *v20231122s.SystemData_STATUS) error {
 	// Clone the existing property bag
 	propertyBag := genruntime.NewPropertyBag(data.PropertyBag)
 
@@ -1879,7 +1940,7 @@ type ApiProfile struct {
 }
 
 // AssignProperties_From_ApiProfile populates our ApiProfile from the provided source ApiProfile
-func (profile *ApiProfile) AssignProperties_From_ApiProfile(source *storage.ApiProfile) error {
+func (profile *ApiProfile) AssignProperties_From_ApiProfile(source *v20261001s.ApiProfile) error {
 	// Clone the existing property bag
 	propertyBag := genruntime.NewPropertyBag(source.PropertyBag)
 
@@ -1910,7 +1971,7 @@ func (profile *ApiProfile) AssignProperties_From_ApiProfile(source *storage.ApiP
 }
 
 // AssignProperties_To_ApiProfile populates the provided destination ApiProfile from our ApiProfile
-func (profile *ApiProfile) AssignProperties_To_ApiProfile(destination *storage.ApiProfile) error {
+func (profile *ApiProfile) AssignProperties_To_ApiProfile(destination *v20261001s.ApiProfile) error {
 	// Clone the existing property bag
 	propertyBag := genruntime.NewPropertyBag(profile.PropertyBag)
 
@@ -1950,7 +2011,7 @@ type ApiProfile_STATUS struct {
 }
 
 // AssignProperties_From_ApiProfile_STATUS populates our ApiProfile_STATUS from the provided source ApiProfile_STATUS
-func (profile *ApiProfile_STATUS) AssignProperties_From_ApiProfile_STATUS(source *storage.ApiProfile_STATUS) error {
+func (profile *ApiProfile_STATUS) AssignProperties_From_ApiProfile_STATUS(source *v20261001s.ApiProfile_STATUS) error {
 	// Clone the existing property bag
 	propertyBag := genruntime.NewPropertyBag(source.PropertyBag)
 
@@ -1984,7 +2045,7 @@ func (profile *ApiProfile_STATUS) AssignProperties_From_ApiProfile_STATUS(source
 }
 
 // AssignProperties_To_ApiProfile_STATUS populates the provided destination ApiProfile_STATUS from our ApiProfile_STATUS
-func (profile *ApiProfile_STATUS) AssignProperties_To_ApiProfile_STATUS(destination *storage.ApiProfile_STATUS) error {
+func (profile *ApiProfile_STATUS) AssignProperties_To_ApiProfile_STATUS(destination *v20261001s.ApiProfile_STATUS) error {
 	// Clone the existing property bag
 	propertyBag := genruntime.NewPropertyBag(profile.PropertyBag)
 
@@ -2018,33 +2079,33 @@ func (profile *ApiProfile_STATUS) AssignProperties_To_ApiProfile_STATUS(destinat
 }
 
 type augmentConversionForHcpOpenShiftClusterOperatorSpec interface {
-	AssignPropertiesFrom(src *storage.HcpOpenShiftClusterOperatorSpec) error
-	AssignPropertiesTo(dst *storage.HcpOpenShiftClusterOperatorSpec) error
+	AssignPropertiesFrom(src *v20261001s.HcpOpenShiftClusterOperatorSpec) error
+	AssignPropertiesTo(dst *v20261001s.HcpOpenShiftClusterOperatorSpec) error
 }
 
 type augmentConversionForHcpOpenShiftClusterProperties interface {
-	AssignPropertiesFrom(src *storage.HcpOpenShiftClusterProperties) error
-	AssignPropertiesTo(dst *storage.HcpOpenShiftClusterProperties) error
+	AssignPropertiesFrom(src *v20261001s.HcpOpenShiftClusterProperties) error
+	AssignPropertiesTo(dst *v20261001s.HcpOpenShiftClusterProperties) error
 }
 
 type augmentConversionForHcpOpenShiftClusterProperties_STATUS interface {
-	AssignPropertiesFrom(src *storage.HcpOpenShiftClusterProperties_STATUS) error
-	AssignPropertiesTo(dst *storage.HcpOpenShiftClusterProperties_STATUS) error
+	AssignPropertiesFrom(src *v20261001s.HcpOpenShiftClusterProperties_STATUS) error
+	AssignPropertiesTo(dst *v20261001s.HcpOpenShiftClusterProperties_STATUS) error
 }
 
 type augmentConversionForManagedServiceIdentity interface {
-	AssignPropertiesFrom(src *storage.ManagedServiceIdentity) error
-	AssignPropertiesTo(dst *storage.ManagedServiceIdentity) error
+	AssignPropertiesFrom(src *v20261001s.ManagedServiceIdentity) error
+	AssignPropertiesTo(dst *v20261001s.ManagedServiceIdentity) error
 }
 
 type augmentConversionForManagedServiceIdentity_STATUS interface {
-	AssignPropertiesFrom(src *storage.ManagedServiceIdentity_STATUS) error
-	AssignPropertiesTo(dst *storage.ManagedServiceIdentity_STATUS) error
+	AssignPropertiesFrom(src *v20261001s.ManagedServiceIdentity_STATUS) error
+	AssignPropertiesTo(dst *v20261001s.ManagedServiceIdentity_STATUS) error
 }
 
 type augmentConversionForSystemData_STATUS interface {
-	AssignPropertiesFrom(src *storage.SystemData_STATUS) error
-	AssignPropertiesTo(dst *storage.SystemData_STATUS) error
+	AssignPropertiesFrom(src *v20231122s.SystemData_STATUS) error
+	AssignPropertiesTo(dst *v20231122s.SystemData_STATUS) error
 }
 
 // Storage version of v20260901preview.ClusterAutoscalingProfile
@@ -2059,7 +2120,7 @@ type ClusterAutoscalingProfile struct {
 }
 
 // AssignProperties_From_ClusterAutoscalingProfile populates our ClusterAutoscalingProfile from the provided source ClusterAutoscalingProfile
-func (profile *ClusterAutoscalingProfile) AssignProperties_From_ClusterAutoscalingProfile(source *storage.ClusterAutoscalingProfile) error {
+func (profile *ClusterAutoscalingProfile) AssignProperties_From_ClusterAutoscalingProfile(source *v20261001s.ClusterAutoscalingProfile) error {
 	// Clone the existing property bag
 	propertyBag := genruntime.NewPropertyBag(source.PropertyBag)
 
@@ -2096,7 +2157,7 @@ func (profile *ClusterAutoscalingProfile) AssignProperties_From_ClusterAutoscali
 }
 
 // AssignProperties_To_ClusterAutoscalingProfile populates the provided destination ClusterAutoscalingProfile from our ClusterAutoscalingProfile
-func (profile *ClusterAutoscalingProfile) AssignProperties_To_ClusterAutoscalingProfile(destination *storage.ClusterAutoscalingProfile) error {
+func (profile *ClusterAutoscalingProfile) AssignProperties_To_ClusterAutoscalingProfile(destination *v20261001s.ClusterAutoscalingProfile) error {
 	// Clone the existing property bag
 	propertyBag := genruntime.NewPropertyBag(profile.PropertyBag)
 
@@ -2144,7 +2205,7 @@ type ClusterAutoscalingProfile_STATUS struct {
 }
 
 // AssignProperties_From_ClusterAutoscalingProfile_STATUS populates our ClusterAutoscalingProfile_STATUS from the provided source ClusterAutoscalingProfile_STATUS
-func (profile *ClusterAutoscalingProfile_STATUS) AssignProperties_From_ClusterAutoscalingProfile_STATUS(source *storage.ClusterAutoscalingProfile_STATUS) error {
+func (profile *ClusterAutoscalingProfile_STATUS) AssignProperties_From_ClusterAutoscalingProfile_STATUS(source *v20261001s.ClusterAutoscalingProfile_STATUS) error {
 	// Clone the existing property bag
 	propertyBag := genruntime.NewPropertyBag(source.PropertyBag)
 
@@ -2181,7 +2242,7 @@ func (profile *ClusterAutoscalingProfile_STATUS) AssignProperties_From_ClusterAu
 }
 
 // AssignProperties_To_ClusterAutoscalingProfile_STATUS populates the provided destination ClusterAutoscalingProfile_STATUS from our ClusterAutoscalingProfile_STATUS
-func (profile *ClusterAutoscalingProfile_STATUS) AssignProperties_To_ClusterAutoscalingProfile_STATUS(destination *storage.ClusterAutoscalingProfile_STATUS) error {
+func (profile *ClusterAutoscalingProfile_STATUS) AssignProperties_To_ClusterAutoscalingProfile_STATUS(destination *v20261001s.ClusterAutoscalingProfile_STATUS) error {
 	// Clone the existing property bag
 	propertyBag := genruntime.NewPropertyBag(profile.PropertyBag)
 
@@ -2225,7 +2286,7 @@ type ClusterImageRegistryProfile struct {
 }
 
 // AssignProperties_From_ClusterImageRegistryProfile populates our ClusterImageRegistryProfile from the provided source ClusterImageRegistryProfile
-func (profile *ClusterImageRegistryProfile) AssignProperties_From_ClusterImageRegistryProfile(source *storage.ClusterImageRegistryProfile) error {
+func (profile *ClusterImageRegistryProfile) AssignProperties_From_ClusterImageRegistryProfile(source *v20261001s.ClusterImageRegistryProfile) error {
 	// Clone the existing property bag
 	propertyBag := genruntime.NewPropertyBag(source.PropertyBag)
 
@@ -2253,7 +2314,7 @@ func (profile *ClusterImageRegistryProfile) AssignProperties_From_ClusterImageRe
 }
 
 // AssignProperties_To_ClusterImageRegistryProfile populates the provided destination ClusterImageRegistryProfile from our ClusterImageRegistryProfile
-func (profile *ClusterImageRegistryProfile) AssignProperties_To_ClusterImageRegistryProfile(destination *storage.ClusterImageRegistryProfile) error {
+func (profile *ClusterImageRegistryProfile) AssignProperties_To_ClusterImageRegistryProfile(destination *v20261001s.ClusterImageRegistryProfile) error {
 	// Clone the existing property bag
 	propertyBag := genruntime.NewPropertyBag(profile.PropertyBag)
 
@@ -2288,7 +2349,7 @@ type ClusterImageRegistryProfile_STATUS struct {
 }
 
 // AssignProperties_From_ClusterImageRegistryProfile_STATUS populates our ClusterImageRegistryProfile_STATUS from the provided source ClusterImageRegistryProfile_STATUS
-func (profile *ClusterImageRegistryProfile_STATUS) AssignProperties_From_ClusterImageRegistryProfile_STATUS(source *storage.ClusterImageRegistryProfile_STATUS) error {
+func (profile *ClusterImageRegistryProfile_STATUS) AssignProperties_From_ClusterImageRegistryProfile_STATUS(source *v20261001s.ClusterImageRegistryProfile_STATUS) error {
 	// Clone the existing property bag
 	propertyBag := genruntime.NewPropertyBag(source.PropertyBag)
 
@@ -2316,7 +2377,7 @@ func (profile *ClusterImageRegistryProfile_STATUS) AssignProperties_From_Cluster
 }
 
 // AssignProperties_To_ClusterImageRegistryProfile_STATUS populates the provided destination ClusterImageRegistryProfile_STATUS from our ClusterImageRegistryProfile_STATUS
-func (profile *ClusterImageRegistryProfile_STATUS) AssignProperties_To_ClusterImageRegistryProfile_STATUS(destination *storage.ClusterImageRegistryProfile_STATUS) error {
+func (profile *ClusterImageRegistryProfile_STATUS) AssignProperties_To_ClusterImageRegistryProfile_STATUS(destination *v20261001s.ClusterImageRegistryProfile_STATUS) error {
 	// Clone the existing property bag
 	propertyBag := genruntime.NewPropertyBag(profile.PropertyBag)
 
@@ -2351,7 +2412,7 @@ type ConsoleProfile_STATUS struct {
 }
 
 // AssignProperties_From_ConsoleProfile_STATUS populates our ConsoleProfile_STATUS from the provided source ConsoleProfile_STATUS
-func (profile *ConsoleProfile_STATUS) AssignProperties_From_ConsoleProfile_STATUS(source *storage.ConsoleProfile_STATUS) error {
+func (profile *ConsoleProfile_STATUS) AssignProperties_From_ConsoleProfile_STATUS(source *v20231122s.ConsoleProfile_STATUS) error {
 	// Clone the existing property bag
 	propertyBag := genruntime.NewPropertyBag(source.PropertyBag)
 
@@ -2379,7 +2440,7 @@ func (profile *ConsoleProfile_STATUS) AssignProperties_From_ConsoleProfile_STATU
 }
 
 // AssignProperties_To_ConsoleProfile_STATUS populates the provided destination ConsoleProfile_STATUS from our ConsoleProfile_STATUS
-func (profile *ConsoleProfile_STATUS) AssignProperties_To_ConsoleProfile_STATUS(destination *storage.ConsoleProfile_STATUS) error {
+func (profile *ConsoleProfile_STATUS) AssignProperties_To_ConsoleProfile_STATUS(destination *v20231122s.ConsoleProfile_STATUS) error {
 	// Clone the existing property bag
 	propertyBag := genruntime.NewPropertyBag(profile.PropertyBag)
 
@@ -2414,7 +2475,7 @@ type DnsProfile struct {
 }
 
 // AssignProperties_From_DnsProfile populates our DnsProfile from the provided source DnsProfile
-func (profile *DnsProfile) AssignProperties_From_DnsProfile(source *storage.DnsProfile) error {
+func (profile *DnsProfile) AssignProperties_From_DnsProfile(source *v20261001s.DnsProfile) error {
 	// Clone the existing property bag
 	propertyBag := genruntime.NewPropertyBag(source.PropertyBag)
 
@@ -2442,7 +2503,7 @@ func (profile *DnsProfile) AssignProperties_From_DnsProfile(source *storage.DnsP
 }
 
 // AssignProperties_To_DnsProfile populates the provided destination DnsProfile from our DnsProfile
-func (profile *DnsProfile) AssignProperties_To_DnsProfile(destination *storage.DnsProfile) error {
+func (profile *DnsProfile) AssignProperties_To_DnsProfile(destination *v20261001s.DnsProfile) error {
 	// Clone the existing property bag
 	propertyBag := genruntime.NewPropertyBag(profile.PropertyBag)
 
@@ -2478,7 +2539,7 @@ type DnsProfile_STATUS struct {
 }
 
 // AssignProperties_From_DnsProfile_STATUS populates our DnsProfile_STATUS from the provided source DnsProfile_STATUS
-func (profile *DnsProfile_STATUS) AssignProperties_From_DnsProfile_STATUS(source *storage.DnsProfile_STATUS) error {
+func (profile *DnsProfile_STATUS) AssignProperties_From_DnsProfile_STATUS(source *v20261001s.DnsProfile_STATUS) error {
 	// Clone the existing property bag
 	propertyBag := genruntime.NewPropertyBag(source.PropertyBag)
 
@@ -2509,7 +2570,7 @@ func (profile *DnsProfile_STATUS) AssignProperties_From_DnsProfile_STATUS(source
 }
 
 // AssignProperties_To_DnsProfile_STATUS populates the provided destination DnsProfile_STATUS from our DnsProfile_STATUS
-func (profile *DnsProfile_STATUS) AssignProperties_To_DnsProfile_STATUS(destination *storage.DnsProfile_STATUS) error {
+func (profile *DnsProfile_STATUS) AssignProperties_To_DnsProfile_STATUS(destination *v20261001s.DnsProfile_STATUS) error {
 	// Clone the existing property bag
 	propertyBag := genruntime.NewPropertyBag(profile.PropertyBag)
 
@@ -2547,7 +2608,7 @@ type EtcdProfile struct {
 }
 
 // AssignProperties_From_EtcdProfile populates our EtcdProfile from the provided source EtcdProfile
-func (profile *EtcdProfile) AssignProperties_From_EtcdProfile(source *storage.EtcdProfile) error {
+func (profile *EtcdProfile) AssignProperties_From_EtcdProfile(source *v20261001s.EtcdProfile) error {
 	// Clone the existing property bag
 	propertyBag := genruntime.NewPropertyBag(source.PropertyBag)
 
@@ -2584,13 +2645,13 @@ func (profile *EtcdProfile) AssignProperties_From_EtcdProfile(source *storage.Et
 }
 
 // AssignProperties_To_EtcdProfile populates the provided destination EtcdProfile from our EtcdProfile
-func (profile *EtcdProfile) AssignProperties_To_EtcdProfile(destination *storage.EtcdProfile) error {
+func (profile *EtcdProfile) AssignProperties_To_EtcdProfile(destination *v20261001s.EtcdProfile) error {
 	// Clone the existing property bag
 	propertyBag := genruntime.NewPropertyBag(profile.PropertyBag)
 
 	// DataEncryption
 	if profile.DataEncryption != nil {
-		var dataEncryption storage.EtcdDataEncryptionProfile
+		var dataEncryption v20261001s.EtcdDataEncryptionProfile
 		err := profile.DataEncryption.AssignProperties_To_EtcdDataEncryptionProfile(&dataEncryption)
 		if err != nil {
 			return eris.Wrap(err, "calling AssignProperties_To_EtcdDataEncryptionProfile() to populate field DataEncryption")
@@ -2628,7 +2689,7 @@ type EtcdProfile_STATUS struct {
 }
 
 // AssignProperties_From_EtcdProfile_STATUS populates our EtcdProfile_STATUS from the provided source EtcdProfile_STATUS
-func (profile *EtcdProfile_STATUS) AssignProperties_From_EtcdProfile_STATUS(source *storage.EtcdProfile_STATUS) error {
+func (profile *EtcdProfile_STATUS) AssignProperties_From_EtcdProfile_STATUS(source *v20261001s.EtcdProfile_STATUS) error {
 	// Clone the existing property bag
 	propertyBag := genruntime.NewPropertyBag(source.PropertyBag)
 
@@ -2665,13 +2726,13 @@ func (profile *EtcdProfile_STATUS) AssignProperties_From_EtcdProfile_STATUS(sour
 }
 
 // AssignProperties_To_EtcdProfile_STATUS populates the provided destination EtcdProfile_STATUS from our EtcdProfile_STATUS
-func (profile *EtcdProfile_STATUS) AssignProperties_To_EtcdProfile_STATUS(destination *storage.EtcdProfile_STATUS) error {
+func (profile *EtcdProfile_STATUS) AssignProperties_To_EtcdProfile_STATUS(destination *v20261001s.EtcdProfile_STATUS) error {
 	// Clone the existing property bag
 	propertyBag := genruntime.NewPropertyBag(profile.PropertyBag)
 
 	// DataEncryption
 	if profile.DataEncryption != nil {
-		var dataEncryption storage.EtcdDataEncryptionProfile_STATUS
+		var dataEncryption v20261001s.EtcdDataEncryptionProfile_STATUS
 		err := profile.DataEncryption.AssignProperties_To_EtcdDataEncryptionProfile_STATUS(&dataEncryption)
 		if err != nil {
 			return eris.Wrap(err, "calling AssignProperties_To_EtcdDataEncryptionProfile_STATUS() to populate field DataEncryption")
@@ -2708,7 +2769,7 @@ type HcpOpenShiftClusterOperatorSecrets struct {
 }
 
 // AssignProperties_From_HcpOpenShiftClusterOperatorSecrets populates our HcpOpenShiftClusterOperatorSecrets from the provided source HcpOpenShiftClusterOperatorSecrets
-func (secrets *HcpOpenShiftClusterOperatorSecrets) AssignProperties_From_HcpOpenShiftClusterOperatorSecrets(source *storage.HcpOpenShiftClusterOperatorSecrets) error {
+func (secrets *HcpOpenShiftClusterOperatorSecrets) AssignProperties_From_HcpOpenShiftClusterOperatorSecrets(source *v20261001s.HcpOpenShiftClusterOperatorSecrets) error {
 	// Clone the existing property bag
 	propertyBag := genruntime.NewPropertyBag(source.PropertyBag)
 
@@ -2741,7 +2802,7 @@ func (secrets *HcpOpenShiftClusterOperatorSecrets) AssignProperties_From_HcpOpen
 }
 
 // AssignProperties_To_HcpOpenShiftClusterOperatorSecrets populates the provided destination HcpOpenShiftClusterOperatorSecrets from our HcpOpenShiftClusterOperatorSecrets
-func (secrets *HcpOpenShiftClusterOperatorSecrets) AssignProperties_To_HcpOpenShiftClusterOperatorSecrets(destination *storage.HcpOpenShiftClusterOperatorSecrets) error {
+func (secrets *HcpOpenShiftClusterOperatorSecrets) AssignProperties_To_HcpOpenShiftClusterOperatorSecrets(destination *v20261001s.HcpOpenShiftClusterOperatorSecrets) error {
 	// Clone the existing property bag
 	propertyBag := genruntime.NewPropertyBag(secrets.PropertyBag)
 
@@ -2783,7 +2844,7 @@ type ImageDigestMirror struct {
 }
 
 // AssignProperties_From_ImageDigestMirror populates our ImageDigestMirror from the provided source ImageDigestMirror
-func (mirror *ImageDigestMirror) AssignProperties_From_ImageDigestMirror(source *storage.ImageDigestMirror) error {
+func (mirror *ImageDigestMirror) AssignProperties_From_ImageDigestMirror(source *v20261001s.ImageDigestMirror) error {
 	// Clone the existing property bag
 	propertyBag := genruntime.NewPropertyBag(source.PropertyBag)
 
@@ -2814,7 +2875,7 @@ func (mirror *ImageDigestMirror) AssignProperties_From_ImageDigestMirror(source 
 }
 
 // AssignProperties_To_ImageDigestMirror populates the provided destination ImageDigestMirror from our ImageDigestMirror
-func (mirror *ImageDigestMirror) AssignProperties_To_ImageDigestMirror(destination *storage.ImageDigestMirror) error {
+func (mirror *ImageDigestMirror) AssignProperties_To_ImageDigestMirror(destination *v20261001s.ImageDigestMirror) error {
 	// Clone the existing property bag
 	propertyBag := genruntime.NewPropertyBag(mirror.PropertyBag)
 
@@ -2854,7 +2915,7 @@ type ImageDigestMirror_STATUS struct {
 }
 
 // AssignProperties_From_ImageDigestMirror_STATUS populates our ImageDigestMirror_STATUS from the provided source ImageDigestMirror_STATUS
-func (mirror *ImageDigestMirror_STATUS) AssignProperties_From_ImageDigestMirror_STATUS(source *storage.ImageDigestMirror_STATUS) error {
+func (mirror *ImageDigestMirror_STATUS) AssignProperties_From_ImageDigestMirror_STATUS(source *v20261001s.ImageDigestMirror_STATUS) error {
 	// Clone the existing property bag
 	propertyBag := genruntime.NewPropertyBag(source.PropertyBag)
 
@@ -2885,7 +2946,7 @@ func (mirror *ImageDigestMirror_STATUS) AssignProperties_From_ImageDigestMirror_
 }
 
 // AssignProperties_To_ImageDigestMirror_STATUS populates the provided destination ImageDigestMirror_STATUS from our ImageDigestMirror_STATUS
-func (mirror *ImageDigestMirror_STATUS) AssignProperties_To_ImageDigestMirror_STATUS(destination *storage.ImageDigestMirror_STATUS) error {
+func (mirror *ImageDigestMirror_STATUS) AssignProperties_To_ImageDigestMirror_STATUS(destination *v20261001s.ImageDigestMirror_STATUS) error {
 	// Clone the existing property bag
 	propertyBag := genruntime.NewPropertyBag(mirror.PropertyBag)
 
@@ -2923,12 +2984,36 @@ type IngressProfile struct {
 }
 
 // AssignProperties_From_IngressProfile populates our IngressProfile from the provided source IngressProfile
-func (profile *IngressProfile) AssignProperties_From_IngressProfile(source *storage.IngressProfile) error {
+func (profile *IngressProfile) AssignProperties_From_IngressProfile(source *v20231122s.IngressProfile) error {
 	// Clone the existing property bag
 	propertyBag := genruntime.NewPropertyBag(source.PropertyBag)
 
+	// Name
+	if source.Name != nil {
+		propertyBag.Add("Name", *source.Name)
+	} else {
+		propertyBag.Remove("Name")
+	}
+
 	// Type
-	profile.Type = genruntime.ClonePointerToString(source.Type)
+	if propertyBag.Contains("Type") {
+		var typeVar string
+		err := propertyBag.Pull("Type", &typeVar)
+		if err != nil {
+			return eris.Wrap(err, "pulling 'Type' from propertyBag")
+		}
+
+		profile.Type = &typeVar
+	} else {
+		profile.Type = nil
+	}
+
+	// Visibility
+	if source.Visibility != nil {
+		propertyBag.Add("Visibility", *source.Visibility)
+	} else {
+		propertyBag.Remove("Visibility")
+	}
 
 	// Update the property bag
 	if len(propertyBag) > 0 {
@@ -2951,12 +3036,42 @@ func (profile *IngressProfile) AssignProperties_From_IngressProfile(source *stor
 }
 
 // AssignProperties_To_IngressProfile populates the provided destination IngressProfile from our IngressProfile
-func (profile *IngressProfile) AssignProperties_To_IngressProfile(destination *storage.IngressProfile) error {
+func (profile *IngressProfile) AssignProperties_To_IngressProfile(destination *v20231122s.IngressProfile) error {
 	// Clone the existing property bag
 	propertyBag := genruntime.NewPropertyBag(profile.PropertyBag)
 
+	// Name
+	if propertyBag.Contains("Name") {
+		var name string
+		err := propertyBag.Pull("Name", &name)
+		if err != nil {
+			return eris.Wrap(err, "pulling 'Name' from propertyBag")
+		}
+
+		destination.Name = &name
+	} else {
+		destination.Name = nil
+	}
+
 	// Type
-	destination.Type = genruntime.ClonePointerToString(profile.Type)
+	if profile.Type != nil {
+		propertyBag.Add("Type", *profile.Type)
+	} else {
+		propertyBag.Remove("Type")
+	}
+
+	// Visibility
+	if propertyBag.Contains("Visibility") {
+		var visibility string
+		err := propertyBag.Pull("Visibility", &visibility)
+		if err != nil {
+			return eris.Wrap(err, "pulling 'Visibility' from propertyBag")
+		}
+
+		destination.Visibility = &visibility
+	} else {
+		destination.Visibility = nil
+	}
 
 	// Update the property bag
 	if len(propertyBag) > 0 {
@@ -2986,12 +3101,43 @@ type IngressProfile_STATUS struct {
 }
 
 // AssignProperties_From_IngressProfile_STATUS populates our IngressProfile_STATUS from the provided source IngressProfile_STATUS
-func (profile *IngressProfile_STATUS) AssignProperties_From_IngressProfile_STATUS(source *storage.IngressProfile_STATUS) error {
+func (profile *IngressProfile_STATUS) AssignProperties_From_IngressProfile_STATUS(source *v20231122s.IngressProfile_STATUS) error {
 	// Clone the existing property bag
 	propertyBag := genruntime.NewPropertyBag(source.PropertyBag)
 
+	// Ip
+	if source.Ip != nil {
+		propertyBag.Add("Ip", *source.Ip)
+	} else {
+		propertyBag.Remove("Ip")
+	}
+
+	// Name
+	if source.Name != nil {
+		propertyBag.Add("Name", *source.Name)
+	} else {
+		propertyBag.Remove("Name")
+	}
+
 	// Type
-	profile.Type = genruntime.ClonePointerToString(source.Type)
+	if propertyBag.Contains("Type") {
+		var typeVar string
+		err := propertyBag.Pull("Type", &typeVar)
+		if err != nil {
+			return eris.Wrap(err, "pulling 'Type' from propertyBag")
+		}
+
+		profile.Type = &typeVar
+	} else {
+		profile.Type = nil
+	}
+
+	// Visibility
+	if source.Visibility != nil {
+		propertyBag.Add("Visibility", *source.Visibility)
+	} else {
+		propertyBag.Remove("Visibility")
+	}
 
 	// Update the property bag
 	if len(propertyBag) > 0 {
@@ -3014,12 +3160,55 @@ func (profile *IngressProfile_STATUS) AssignProperties_From_IngressProfile_STATU
 }
 
 // AssignProperties_To_IngressProfile_STATUS populates the provided destination IngressProfile_STATUS from our IngressProfile_STATUS
-func (profile *IngressProfile_STATUS) AssignProperties_To_IngressProfile_STATUS(destination *storage.IngressProfile_STATUS) error {
+func (profile *IngressProfile_STATUS) AssignProperties_To_IngressProfile_STATUS(destination *v20231122s.IngressProfile_STATUS) error {
 	// Clone the existing property bag
 	propertyBag := genruntime.NewPropertyBag(profile.PropertyBag)
 
+	// Ip
+	if propertyBag.Contains("Ip") {
+		var ip string
+		err := propertyBag.Pull("Ip", &ip)
+		if err != nil {
+			return eris.Wrap(err, "pulling 'Ip' from propertyBag")
+		}
+
+		destination.Ip = &ip
+	} else {
+		destination.Ip = nil
+	}
+
+	// Name
+	if propertyBag.Contains("Name") {
+		var name string
+		err := propertyBag.Pull("Name", &name)
+		if err != nil {
+			return eris.Wrap(err, "pulling 'Name' from propertyBag")
+		}
+
+		destination.Name = &name
+	} else {
+		destination.Name = nil
+	}
+
 	// Type
-	destination.Type = genruntime.ClonePointerToString(profile.Type)
+	if profile.Type != nil {
+		propertyBag.Add("Type", *profile.Type)
+	} else {
+		propertyBag.Remove("Type")
+	}
+
+	// Visibility
+	if propertyBag.Contains("Visibility") {
+		var visibility string
+		err := propertyBag.Pull("Visibility", &visibility)
+		if err != nil {
+			return eris.Wrap(err, "pulling 'Visibility' from propertyBag")
+		}
+
+		destination.Visibility = &visibility
+	} else {
+		destination.Visibility = nil
+	}
 
 	// Update the property bag
 	if len(propertyBag) > 0 {
@@ -3053,21 +3242,72 @@ type NetworkProfile struct {
 }
 
 // AssignProperties_From_NetworkProfile populates our NetworkProfile from the provided source NetworkProfile
-func (profile *NetworkProfile) AssignProperties_From_NetworkProfile(source *storage.NetworkProfile) error {
+func (profile *NetworkProfile) AssignProperties_From_NetworkProfile(source *v20231122s.NetworkProfile) error {
 	// Clone the existing property bag
 	propertyBag := genruntime.NewPropertyBag(source.PropertyBag)
 
 	// HostPrefix
-	profile.HostPrefix = genruntime.ClonePointerToInt(source.HostPrefix)
+	if propertyBag.Contains("HostPrefix") {
+		var hostPrefix int
+		err := propertyBag.Pull("HostPrefix", &hostPrefix)
+		if err != nil {
+			return eris.Wrap(err, "pulling 'HostPrefix' from propertyBag")
+		}
+
+		profile.HostPrefix = &hostPrefix
+	} else {
+		profile.HostPrefix = nil
+	}
+
+	// LoadBalancerProfile
+	if source.LoadBalancerProfile != nil {
+		propertyBag.Add("LoadBalancerProfile", *source.LoadBalancerProfile)
+	} else {
+		propertyBag.Remove("LoadBalancerProfile")
+	}
 
 	// MachineCidr
-	profile.MachineCidr = genruntime.ClonePointerToString(source.MachineCidr)
+	if propertyBag.Contains("MachineCidr") {
+		var machineCidr string
+		err := propertyBag.Pull("MachineCidr", &machineCidr)
+		if err != nil {
+			return eris.Wrap(err, "pulling 'MachineCidr' from propertyBag")
+		}
+
+		profile.MachineCidr = &machineCidr
+	} else {
+		profile.MachineCidr = nil
+	}
 
 	// NetworkType
-	profile.NetworkType = genruntime.ClonePointerToString(source.NetworkType)
+	if propertyBag.Contains("NetworkType") {
+		var networkType string
+		err := propertyBag.Pull("NetworkType", &networkType)
+		if err != nil {
+			return eris.Wrap(err, "pulling 'NetworkType' from propertyBag")
+		}
+
+		profile.NetworkType = &networkType
+	} else {
+		profile.NetworkType = nil
+	}
+
+	// OutboundType
+	if source.OutboundType != nil {
+		propertyBag.Add("OutboundType", *source.OutboundType)
+	} else {
+		propertyBag.Remove("OutboundType")
+	}
 
 	// PodCidr
 	profile.PodCidr = genruntime.ClonePointerToString(source.PodCidr)
+
+	// PreconfiguredNSG
+	if source.PreconfiguredNSG != nil {
+		propertyBag.Add("PreconfiguredNSG", *source.PreconfiguredNSG)
+	} else {
+		propertyBag.Remove("PreconfiguredNSG")
+	}
 
 	// ServiceCidr
 	profile.ServiceCidr = genruntime.ClonePointerToString(source.ServiceCidr)
@@ -3093,21 +3333,72 @@ func (profile *NetworkProfile) AssignProperties_From_NetworkProfile(source *stor
 }
 
 // AssignProperties_To_NetworkProfile populates the provided destination NetworkProfile from our NetworkProfile
-func (profile *NetworkProfile) AssignProperties_To_NetworkProfile(destination *storage.NetworkProfile) error {
+func (profile *NetworkProfile) AssignProperties_To_NetworkProfile(destination *v20231122s.NetworkProfile) error {
 	// Clone the existing property bag
 	propertyBag := genruntime.NewPropertyBag(profile.PropertyBag)
 
 	// HostPrefix
-	destination.HostPrefix = genruntime.ClonePointerToInt(profile.HostPrefix)
+	if profile.HostPrefix != nil {
+		propertyBag.Add("HostPrefix", *profile.HostPrefix)
+	} else {
+		propertyBag.Remove("HostPrefix")
+	}
+
+	// LoadBalancerProfile
+	if propertyBag.Contains("LoadBalancerProfile") {
+		var loadBalancerProfile v20231122s.LoadBalancerProfile
+		err := propertyBag.Pull("LoadBalancerProfile", &loadBalancerProfile)
+		if err != nil {
+			return eris.Wrap(err, "pulling 'LoadBalancerProfile' from propertyBag")
+		}
+
+		destination.LoadBalancerProfile = &loadBalancerProfile
+	} else {
+		destination.LoadBalancerProfile = nil
+	}
 
 	// MachineCidr
-	destination.MachineCidr = genruntime.ClonePointerToString(profile.MachineCidr)
+	if profile.MachineCidr != nil {
+		propertyBag.Add("MachineCidr", *profile.MachineCidr)
+	} else {
+		propertyBag.Remove("MachineCidr")
+	}
 
 	// NetworkType
-	destination.NetworkType = genruntime.ClonePointerToString(profile.NetworkType)
+	if profile.NetworkType != nil {
+		propertyBag.Add("NetworkType", *profile.NetworkType)
+	} else {
+		propertyBag.Remove("NetworkType")
+	}
+
+	// OutboundType
+	if propertyBag.Contains("OutboundType") {
+		var outboundType string
+		err := propertyBag.Pull("OutboundType", &outboundType)
+		if err != nil {
+			return eris.Wrap(err, "pulling 'OutboundType' from propertyBag")
+		}
+
+		destination.OutboundType = &outboundType
+	} else {
+		destination.OutboundType = nil
+	}
 
 	// PodCidr
 	destination.PodCidr = genruntime.ClonePointerToString(profile.PodCidr)
+
+	// PreconfiguredNSG
+	if propertyBag.Contains("PreconfiguredNSG") {
+		var preconfiguredNSG string
+		err := propertyBag.Pull("PreconfiguredNSG", &preconfiguredNSG)
+		if err != nil {
+			return eris.Wrap(err, "pulling 'PreconfiguredNSG' from propertyBag")
+		}
+
+		destination.PreconfiguredNSG = &preconfiguredNSG
+	} else {
+		destination.PreconfiguredNSG = nil
+	}
 
 	// ServiceCidr
 	destination.ServiceCidr = genruntime.ClonePointerToString(profile.ServiceCidr)
@@ -3144,21 +3435,72 @@ type NetworkProfile_STATUS struct {
 }
 
 // AssignProperties_From_NetworkProfile_STATUS populates our NetworkProfile_STATUS from the provided source NetworkProfile_STATUS
-func (profile *NetworkProfile_STATUS) AssignProperties_From_NetworkProfile_STATUS(source *storage.NetworkProfile_STATUS) error {
+func (profile *NetworkProfile_STATUS) AssignProperties_From_NetworkProfile_STATUS(source *v20231122s.NetworkProfile_STATUS) error {
 	// Clone the existing property bag
 	propertyBag := genruntime.NewPropertyBag(source.PropertyBag)
 
 	// HostPrefix
-	profile.HostPrefix = genruntime.ClonePointerToInt(source.HostPrefix)
+	if propertyBag.Contains("HostPrefix") {
+		var hostPrefix int
+		err := propertyBag.Pull("HostPrefix", &hostPrefix)
+		if err != nil {
+			return eris.Wrap(err, "pulling 'HostPrefix' from propertyBag")
+		}
+
+		profile.HostPrefix = &hostPrefix
+	} else {
+		profile.HostPrefix = nil
+	}
+
+	// LoadBalancerProfile
+	if source.LoadBalancerProfile != nil {
+		propertyBag.Add("LoadBalancerProfile", *source.LoadBalancerProfile)
+	} else {
+		propertyBag.Remove("LoadBalancerProfile")
+	}
 
 	// MachineCidr
-	profile.MachineCidr = genruntime.ClonePointerToString(source.MachineCidr)
+	if propertyBag.Contains("MachineCidr") {
+		var machineCidr string
+		err := propertyBag.Pull("MachineCidr", &machineCidr)
+		if err != nil {
+			return eris.Wrap(err, "pulling 'MachineCidr' from propertyBag")
+		}
+
+		profile.MachineCidr = &machineCidr
+	} else {
+		profile.MachineCidr = nil
+	}
 
 	// NetworkType
-	profile.NetworkType = genruntime.ClonePointerToString(source.NetworkType)
+	if propertyBag.Contains("NetworkType") {
+		var networkType string
+		err := propertyBag.Pull("NetworkType", &networkType)
+		if err != nil {
+			return eris.Wrap(err, "pulling 'NetworkType' from propertyBag")
+		}
+
+		profile.NetworkType = &networkType
+	} else {
+		profile.NetworkType = nil
+	}
+
+	// OutboundType
+	if source.OutboundType != nil {
+		propertyBag.Add("OutboundType", *source.OutboundType)
+	} else {
+		propertyBag.Remove("OutboundType")
+	}
 
 	// PodCidr
 	profile.PodCidr = genruntime.ClonePointerToString(source.PodCidr)
+
+	// PreconfiguredNSG
+	if source.PreconfiguredNSG != nil {
+		propertyBag.Add("PreconfiguredNSG", *source.PreconfiguredNSG)
+	} else {
+		propertyBag.Remove("PreconfiguredNSG")
+	}
 
 	// ServiceCidr
 	profile.ServiceCidr = genruntime.ClonePointerToString(source.ServiceCidr)
@@ -3184,21 +3526,72 @@ func (profile *NetworkProfile_STATUS) AssignProperties_From_NetworkProfile_STATU
 }
 
 // AssignProperties_To_NetworkProfile_STATUS populates the provided destination NetworkProfile_STATUS from our NetworkProfile_STATUS
-func (profile *NetworkProfile_STATUS) AssignProperties_To_NetworkProfile_STATUS(destination *storage.NetworkProfile_STATUS) error {
+func (profile *NetworkProfile_STATUS) AssignProperties_To_NetworkProfile_STATUS(destination *v20231122s.NetworkProfile_STATUS) error {
 	// Clone the existing property bag
 	propertyBag := genruntime.NewPropertyBag(profile.PropertyBag)
 
 	// HostPrefix
-	destination.HostPrefix = genruntime.ClonePointerToInt(profile.HostPrefix)
+	if profile.HostPrefix != nil {
+		propertyBag.Add("HostPrefix", *profile.HostPrefix)
+	} else {
+		propertyBag.Remove("HostPrefix")
+	}
+
+	// LoadBalancerProfile
+	if propertyBag.Contains("LoadBalancerProfile") {
+		var loadBalancerProfile v20231122s.LoadBalancerProfile_STATUS
+		err := propertyBag.Pull("LoadBalancerProfile", &loadBalancerProfile)
+		if err != nil {
+			return eris.Wrap(err, "pulling 'LoadBalancerProfile' from propertyBag")
+		}
+
+		destination.LoadBalancerProfile = &loadBalancerProfile
+	} else {
+		destination.LoadBalancerProfile = nil
+	}
 
 	// MachineCidr
-	destination.MachineCidr = genruntime.ClonePointerToString(profile.MachineCidr)
+	if profile.MachineCidr != nil {
+		propertyBag.Add("MachineCidr", *profile.MachineCidr)
+	} else {
+		propertyBag.Remove("MachineCidr")
+	}
 
 	// NetworkType
-	destination.NetworkType = genruntime.ClonePointerToString(profile.NetworkType)
+	if profile.NetworkType != nil {
+		propertyBag.Add("NetworkType", *profile.NetworkType)
+	} else {
+		propertyBag.Remove("NetworkType")
+	}
+
+	// OutboundType
+	if propertyBag.Contains("OutboundType") {
+		var outboundType string
+		err := propertyBag.Pull("OutboundType", &outboundType)
+		if err != nil {
+			return eris.Wrap(err, "pulling 'OutboundType' from propertyBag")
+		}
+
+		destination.OutboundType = &outboundType
+	} else {
+		destination.OutboundType = nil
+	}
 
 	// PodCidr
 	destination.PodCidr = genruntime.ClonePointerToString(profile.PodCidr)
+
+	// PreconfiguredNSG
+	if propertyBag.Contains("PreconfiguredNSG") {
+		var preconfiguredNSG string
+		err := propertyBag.Pull("PreconfiguredNSG", &preconfiguredNSG)
+		if err != nil {
+			return eris.Wrap(err, "pulling 'PreconfiguredNSG' from propertyBag")
+		}
+
+		destination.PreconfiguredNSG = &preconfiguredNSG
+	} else {
+		destination.PreconfiguredNSG = nil
+	}
 
 	// ServiceCidr
 	destination.ServiceCidr = genruntime.ClonePointerToString(profile.ServiceCidr)
@@ -3250,7 +3643,7 @@ type PlatformProfile struct {
 }
 
 // AssignProperties_From_PlatformProfile populates our PlatformProfile from the provided source PlatformProfile
-func (profile *PlatformProfile) AssignProperties_From_PlatformProfile(source *storage.PlatformProfile) error {
+func (profile *PlatformProfile) AssignProperties_From_PlatformProfile(source *v20261001s.PlatformProfile) error {
 	// Clone the existing property bag
 	propertyBag := genruntime.NewPropertyBag(source.PropertyBag)
 
@@ -3324,13 +3717,13 @@ func (profile *PlatformProfile) AssignProperties_From_PlatformProfile(source *st
 }
 
 // AssignProperties_To_PlatformProfile populates the provided destination PlatformProfile from our PlatformProfile
-func (profile *PlatformProfile) AssignProperties_To_PlatformProfile(destination *storage.PlatformProfile) error {
+func (profile *PlatformProfile) AssignProperties_To_PlatformProfile(destination *v20261001s.PlatformProfile) error {
 	// Clone the existing property bag
 	propertyBag := genruntime.NewPropertyBag(profile.PropertyBag)
 
 	// ContainerRegistry
 	if propertyBag.Contains("ContainerRegistry") {
-		var containerRegistry storage.ContainerRegistryProfile
+		var containerRegistry v20261001s.ContainerRegistryProfile
 		err := propertyBag.Pull("ContainerRegistry", &containerRegistry)
 		if err != nil {
 			return eris.Wrap(err, "pulling 'ContainerRegistry' from propertyBag")
@@ -3354,7 +3747,7 @@ func (profile *PlatformProfile) AssignProperties_To_PlatformProfile(destination 
 
 	// OperatorsAuthentication
 	if profile.OperatorsAuthentication != nil {
-		var operatorsAuthentication storage.OperatorsAuthenticationProfile
+		var operatorsAuthentication v20261001s.OperatorsAuthenticationProfile
 		err := profile.OperatorsAuthentication.AssignProperties_To_OperatorsAuthenticationProfile(&operatorsAuthentication)
 		if err != nil {
 			return eris.Wrap(err, "calling AssignProperties_To_OperatorsAuthenticationProfile() to populate field OperatorsAuthentication")
@@ -3417,7 +3810,7 @@ type PlatformProfile_STATUS struct {
 }
 
 // AssignProperties_From_PlatformProfile_STATUS populates our PlatformProfile_STATUS from the provided source PlatformProfile_STATUS
-func (profile *PlatformProfile_STATUS) AssignProperties_From_PlatformProfile_STATUS(source *storage.PlatformProfile_STATUS) error {
+func (profile *PlatformProfile_STATUS) AssignProperties_From_PlatformProfile_STATUS(source *v20261001s.PlatformProfile_STATUS) error {
 	// Clone the existing property bag
 	propertyBag := genruntime.NewPropertyBag(source.PropertyBag)
 
@@ -3479,13 +3872,13 @@ func (profile *PlatformProfile_STATUS) AssignProperties_From_PlatformProfile_STA
 }
 
 // AssignProperties_To_PlatformProfile_STATUS populates the provided destination PlatformProfile_STATUS from our PlatformProfile_STATUS
-func (profile *PlatformProfile_STATUS) AssignProperties_To_PlatformProfile_STATUS(destination *storage.PlatformProfile_STATUS) error {
+func (profile *PlatformProfile_STATUS) AssignProperties_To_PlatformProfile_STATUS(destination *v20261001s.PlatformProfile_STATUS) error {
 	// Clone the existing property bag
 	propertyBag := genruntime.NewPropertyBag(profile.PropertyBag)
 
 	// ContainerRegistry
 	if propertyBag.Contains("ContainerRegistry") {
-		var containerRegistry storage.ContainerRegistryProfile_STATUS
+		var containerRegistry v20261001s.ContainerRegistryProfile_STATUS
 		err := propertyBag.Pull("ContainerRegistry", &containerRegistry)
 		if err != nil {
 			return eris.Wrap(err, "pulling 'ContainerRegistry' from propertyBag")
@@ -3507,7 +3900,7 @@ func (profile *PlatformProfile_STATUS) AssignProperties_To_PlatformProfile_STATU
 
 	// OperatorsAuthentication
 	if profile.OperatorsAuthentication != nil {
-		var operatorsAuthentication storage.OperatorsAuthenticationProfile_STATUS
+		var operatorsAuthentication v20261001s.OperatorsAuthenticationProfile_STATUS
 		err := profile.OperatorsAuthentication.AssignProperties_To_OperatorsAuthenticationProfile_STATUS(&operatorsAuthentication)
 		if err != nil {
 			return eris.Wrap(err, "calling AssignProperties_To_OperatorsAuthenticationProfile_STATUS() to populate field OperatorsAuthentication")
@@ -3562,7 +3955,7 @@ type UserAssignedIdentity_STATUS struct {
 }
 
 // AssignProperties_From_UserAssignedIdentity_STATUS populates our UserAssignedIdentity_STATUS from the provided source UserAssignedIdentity_STATUS
-func (identity *UserAssignedIdentity_STATUS) AssignProperties_From_UserAssignedIdentity_STATUS(source *storage.UserAssignedIdentity_STATUS) error {
+func (identity *UserAssignedIdentity_STATUS) AssignProperties_From_UserAssignedIdentity_STATUS(source *v20261001s.UserAssignedIdentity_STATUS) error {
 	// Clone the existing property bag
 	propertyBag := genruntime.NewPropertyBag(source.PropertyBag)
 
@@ -3593,7 +3986,7 @@ func (identity *UserAssignedIdentity_STATUS) AssignProperties_From_UserAssignedI
 }
 
 // AssignProperties_To_UserAssignedIdentity_STATUS populates the provided destination UserAssignedIdentity_STATUS from our UserAssignedIdentity_STATUS
-func (identity *UserAssignedIdentity_STATUS) AssignProperties_To_UserAssignedIdentity_STATUS(destination *storage.UserAssignedIdentity_STATUS) error {
+func (identity *UserAssignedIdentity_STATUS) AssignProperties_To_UserAssignedIdentity_STATUS(destination *v20261001s.UserAssignedIdentity_STATUS) error {
 	// Clone the existing property bag
 	propertyBag := genruntime.NewPropertyBag(identity.PropertyBag)
 
@@ -3631,7 +4024,7 @@ type UserAssignedIdentityDetails struct {
 }
 
 // AssignProperties_From_UserAssignedIdentityDetails populates our UserAssignedIdentityDetails from the provided source UserAssignedIdentityDetails
-func (details *UserAssignedIdentityDetails) AssignProperties_From_UserAssignedIdentityDetails(source *storage.UserAssignedIdentityDetails) error {
+func (details *UserAssignedIdentityDetails) AssignProperties_From_UserAssignedIdentityDetails(source *v20261001s.UserAssignedIdentityDetails) error {
 	// Clone the existing property bag
 	propertyBag := genruntime.NewPropertyBag(source.PropertyBag)
 
@@ -3659,7 +4052,7 @@ func (details *UserAssignedIdentityDetails) AssignProperties_From_UserAssignedId
 }
 
 // AssignProperties_To_UserAssignedIdentityDetails populates the provided destination UserAssignedIdentityDetails from our UserAssignedIdentityDetails
-func (details *UserAssignedIdentityDetails) AssignProperties_To_UserAssignedIdentityDetails(destination *storage.UserAssignedIdentityDetails) error {
+func (details *UserAssignedIdentityDetails) AssignProperties_To_UserAssignedIdentityDetails(destination *v20261001s.UserAssignedIdentityDetails) error {
 	// Clone the existing property bag
 	propertyBag := genruntime.NewPropertyBag(details.PropertyBag)
 
@@ -3695,7 +4088,7 @@ type VersionProfile struct {
 }
 
 // AssignProperties_From_VersionProfile populates our VersionProfile from the provided source VersionProfile
-func (profile *VersionProfile) AssignProperties_From_VersionProfile(source *storage.VersionProfile) error {
+func (profile *VersionProfile) AssignProperties_From_VersionProfile(source *v20261001s.VersionProfile) error {
 	// Clone the existing property bag
 	propertyBag := genruntime.NewPropertyBag(source.PropertyBag)
 
@@ -3726,7 +4119,7 @@ func (profile *VersionProfile) AssignProperties_From_VersionProfile(source *stor
 }
 
 // AssignProperties_To_VersionProfile populates the provided destination VersionProfile from our VersionProfile
-func (profile *VersionProfile) AssignProperties_To_VersionProfile(destination *storage.VersionProfile) error {
+func (profile *VersionProfile) AssignProperties_To_VersionProfile(destination *v20261001s.VersionProfile) error {
 	// Clone the existing property bag
 	propertyBag := genruntime.NewPropertyBag(profile.PropertyBag)
 
@@ -3765,7 +4158,7 @@ type VersionProfile_STATUS struct {
 }
 
 // AssignProperties_From_VersionProfile_STATUS populates our VersionProfile_STATUS from the provided source VersionProfile_STATUS
-func (profile *VersionProfile_STATUS) AssignProperties_From_VersionProfile_STATUS(source *storage.VersionProfile_STATUS) error {
+func (profile *VersionProfile_STATUS) AssignProperties_From_VersionProfile_STATUS(source *v20261001s.VersionProfile_STATUS) error {
 	// Clone the existing property bag
 	propertyBag := genruntime.NewPropertyBag(source.PropertyBag)
 
@@ -3796,7 +4189,7 @@ func (profile *VersionProfile_STATUS) AssignProperties_From_VersionProfile_STATU
 }
 
 // AssignProperties_To_VersionProfile_STATUS populates the provided destination VersionProfile_STATUS from our VersionProfile_STATUS
-func (profile *VersionProfile_STATUS) AssignProperties_To_VersionProfile_STATUS(destination *storage.VersionProfile_STATUS) error {
+func (profile *VersionProfile_STATUS) AssignProperties_To_VersionProfile_STATUS(destination *v20261001s.VersionProfile_STATUS) error {
 	// Clone the existing property bag
 	propertyBag := genruntime.NewPropertyBag(profile.PropertyBag)
 
@@ -3827,123 +4220,123 @@ func (profile *VersionProfile_STATUS) AssignProperties_To_VersionProfile_STATUS(
 }
 
 type augmentConversionForApiProfile interface {
-	AssignPropertiesFrom(src *storage.ApiProfile) error
-	AssignPropertiesTo(dst *storage.ApiProfile) error
+	AssignPropertiesFrom(src *v20261001s.ApiProfile) error
+	AssignPropertiesTo(dst *v20261001s.ApiProfile) error
 }
 
 type augmentConversionForApiProfile_STATUS interface {
-	AssignPropertiesFrom(src *storage.ApiProfile_STATUS) error
-	AssignPropertiesTo(dst *storage.ApiProfile_STATUS) error
+	AssignPropertiesFrom(src *v20261001s.ApiProfile_STATUS) error
+	AssignPropertiesTo(dst *v20261001s.ApiProfile_STATUS) error
 }
 
 type augmentConversionForClusterAutoscalingProfile interface {
-	AssignPropertiesFrom(src *storage.ClusterAutoscalingProfile) error
-	AssignPropertiesTo(dst *storage.ClusterAutoscalingProfile) error
+	AssignPropertiesFrom(src *v20261001s.ClusterAutoscalingProfile) error
+	AssignPropertiesTo(dst *v20261001s.ClusterAutoscalingProfile) error
 }
 
 type augmentConversionForClusterAutoscalingProfile_STATUS interface {
-	AssignPropertiesFrom(src *storage.ClusterAutoscalingProfile_STATUS) error
-	AssignPropertiesTo(dst *storage.ClusterAutoscalingProfile_STATUS) error
+	AssignPropertiesFrom(src *v20261001s.ClusterAutoscalingProfile_STATUS) error
+	AssignPropertiesTo(dst *v20261001s.ClusterAutoscalingProfile_STATUS) error
 }
 
 type augmentConversionForClusterImageRegistryProfile interface {
-	AssignPropertiesFrom(src *storage.ClusterImageRegistryProfile) error
-	AssignPropertiesTo(dst *storage.ClusterImageRegistryProfile) error
+	AssignPropertiesFrom(src *v20261001s.ClusterImageRegistryProfile) error
+	AssignPropertiesTo(dst *v20261001s.ClusterImageRegistryProfile) error
 }
 
 type augmentConversionForClusterImageRegistryProfile_STATUS interface {
-	AssignPropertiesFrom(src *storage.ClusterImageRegistryProfile_STATUS) error
-	AssignPropertiesTo(dst *storage.ClusterImageRegistryProfile_STATUS) error
+	AssignPropertiesFrom(src *v20261001s.ClusterImageRegistryProfile_STATUS) error
+	AssignPropertiesTo(dst *v20261001s.ClusterImageRegistryProfile_STATUS) error
 }
 
 type augmentConversionForConsoleProfile_STATUS interface {
-	AssignPropertiesFrom(src *storage.ConsoleProfile_STATUS) error
-	AssignPropertiesTo(dst *storage.ConsoleProfile_STATUS) error
+	AssignPropertiesFrom(src *v20231122s.ConsoleProfile_STATUS) error
+	AssignPropertiesTo(dst *v20231122s.ConsoleProfile_STATUS) error
 }
 
 type augmentConversionForDnsProfile interface {
-	AssignPropertiesFrom(src *storage.DnsProfile) error
-	AssignPropertiesTo(dst *storage.DnsProfile) error
+	AssignPropertiesFrom(src *v20261001s.DnsProfile) error
+	AssignPropertiesTo(dst *v20261001s.DnsProfile) error
 }
 
 type augmentConversionForDnsProfile_STATUS interface {
-	AssignPropertiesFrom(src *storage.DnsProfile_STATUS) error
-	AssignPropertiesTo(dst *storage.DnsProfile_STATUS) error
+	AssignPropertiesFrom(src *v20261001s.DnsProfile_STATUS) error
+	AssignPropertiesTo(dst *v20261001s.DnsProfile_STATUS) error
 }
 
 type augmentConversionForEtcdProfile interface {
-	AssignPropertiesFrom(src *storage.EtcdProfile) error
-	AssignPropertiesTo(dst *storage.EtcdProfile) error
+	AssignPropertiesFrom(src *v20261001s.EtcdProfile) error
+	AssignPropertiesTo(dst *v20261001s.EtcdProfile) error
 }
 
 type augmentConversionForEtcdProfile_STATUS interface {
-	AssignPropertiesFrom(src *storage.EtcdProfile_STATUS) error
-	AssignPropertiesTo(dst *storage.EtcdProfile_STATUS) error
+	AssignPropertiesFrom(src *v20261001s.EtcdProfile_STATUS) error
+	AssignPropertiesTo(dst *v20261001s.EtcdProfile_STATUS) error
 }
 
 type augmentConversionForHcpOpenShiftClusterOperatorSecrets interface {
-	AssignPropertiesFrom(src *storage.HcpOpenShiftClusterOperatorSecrets) error
-	AssignPropertiesTo(dst *storage.HcpOpenShiftClusterOperatorSecrets) error
+	AssignPropertiesFrom(src *v20261001s.HcpOpenShiftClusterOperatorSecrets) error
+	AssignPropertiesTo(dst *v20261001s.HcpOpenShiftClusterOperatorSecrets) error
 }
 
 type augmentConversionForImageDigestMirror interface {
-	AssignPropertiesFrom(src *storage.ImageDigestMirror) error
-	AssignPropertiesTo(dst *storage.ImageDigestMirror) error
+	AssignPropertiesFrom(src *v20261001s.ImageDigestMirror) error
+	AssignPropertiesTo(dst *v20261001s.ImageDigestMirror) error
 }
 
 type augmentConversionForImageDigestMirror_STATUS interface {
-	AssignPropertiesFrom(src *storage.ImageDigestMirror_STATUS) error
-	AssignPropertiesTo(dst *storage.ImageDigestMirror_STATUS) error
+	AssignPropertiesFrom(src *v20261001s.ImageDigestMirror_STATUS) error
+	AssignPropertiesTo(dst *v20261001s.ImageDigestMirror_STATUS) error
 }
 
 type augmentConversionForIngressProfile interface {
-	AssignPropertiesFrom(src *storage.IngressProfile) error
-	AssignPropertiesTo(dst *storage.IngressProfile) error
+	AssignPropertiesFrom(src *v20231122s.IngressProfile) error
+	AssignPropertiesTo(dst *v20231122s.IngressProfile) error
 }
 
 type augmentConversionForIngressProfile_STATUS interface {
-	AssignPropertiesFrom(src *storage.IngressProfile_STATUS) error
-	AssignPropertiesTo(dst *storage.IngressProfile_STATUS) error
+	AssignPropertiesFrom(src *v20231122s.IngressProfile_STATUS) error
+	AssignPropertiesTo(dst *v20231122s.IngressProfile_STATUS) error
 }
 
 type augmentConversionForNetworkProfile interface {
-	AssignPropertiesFrom(src *storage.NetworkProfile) error
-	AssignPropertiesTo(dst *storage.NetworkProfile) error
+	AssignPropertiesFrom(src *v20231122s.NetworkProfile) error
+	AssignPropertiesTo(dst *v20231122s.NetworkProfile) error
 }
 
 type augmentConversionForNetworkProfile_STATUS interface {
-	AssignPropertiesFrom(src *storage.NetworkProfile_STATUS) error
-	AssignPropertiesTo(dst *storage.NetworkProfile_STATUS) error
+	AssignPropertiesFrom(src *v20231122s.NetworkProfile_STATUS) error
+	AssignPropertiesTo(dst *v20231122s.NetworkProfile_STATUS) error
 }
 
 type augmentConversionForPlatformProfile interface {
-	AssignPropertiesFrom(src *storage.PlatformProfile) error
-	AssignPropertiesTo(dst *storage.PlatformProfile) error
+	AssignPropertiesFrom(src *v20261001s.PlatformProfile) error
+	AssignPropertiesTo(dst *v20261001s.PlatformProfile) error
 }
 
 type augmentConversionForPlatformProfile_STATUS interface {
-	AssignPropertiesFrom(src *storage.PlatformProfile_STATUS) error
-	AssignPropertiesTo(dst *storage.PlatformProfile_STATUS) error
+	AssignPropertiesFrom(src *v20261001s.PlatformProfile_STATUS) error
+	AssignPropertiesTo(dst *v20261001s.PlatformProfile_STATUS) error
 }
 
 type augmentConversionForUserAssignedIdentity_STATUS interface {
-	AssignPropertiesFrom(src *storage.UserAssignedIdentity_STATUS) error
-	AssignPropertiesTo(dst *storage.UserAssignedIdentity_STATUS) error
+	AssignPropertiesFrom(src *v20261001s.UserAssignedIdentity_STATUS) error
+	AssignPropertiesTo(dst *v20261001s.UserAssignedIdentity_STATUS) error
 }
 
 type augmentConversionForUserAssignedIdentityDetails interface {
-	AssignPropertiesFrom(src *storage.UserAssignedIdentityDetails) error
-	AssignPropertiesTo(dst *storage.UserAssignedIdentityDetails) error
+	AssignPropertiesFrom(src *v20261001s.UserAssignedIdentityDetails) error
+	AssignPropertiesTo(dst *v20261001s.UserAssignedIdentityDetails) error
 }
 
 type augmentConversionForVersionProfile interface {
-	AssignPropertiesFrom(src *storage.VersionProfile) error
-	AssignPropertiesTo(dst *storage.VersionProfile) error
+	AssignPropertiesFrom(src *v20261001s.VersionProfile) error
+	AssignPropertiesTo(dst *v20261001s.VersionProfile) error
 }
 
 type augmentConversionForVersionProfile_STATUS interface {
-	AssignPropertiesFrom(src *storage.VersionProfile_STATUS) error
-	AssignPropertiesTo(dst *storage.VersionProfile_STATUS) error
+	AssignPropertiesFrom(src *v20261001s.VersionProfile_STATUS) error
+	AssignPropertiesTo(dst *v20261001s.VersionProfile_STATUS) error
 }
 
 // Storage version of v20260901preview.Condition_STATUS
@@ -3958,7 +4351,7 @@ type Condition_STATUS struct {
 }
 
 // AssignProperties_From_Condition_STATUS populates our Condition_STATUS from the provided source Condition_STATUS
-func (condition *Condition_STATUS) AssignProperties_From_Condition_STATUS(source *storage.Condition_STATUS) error {
+func (condition *Condition_STATUS) AssignProperties_From_Condition_STATUS(source *v20261001s.Condition_STATUS) error {
 	// Clone the existing property bag
 	propertyBag := genruntime.NewPropertyBag(source.PropertyBag)
 
@@ -3998,7 +4391,7 @@ func (condition *Condition_STATUS) AssignProperties_From_Condition_STATUS(source
 }
 
 // AssignProperties_To_Condition_STATUS populates the provided destination Condition_STATUS from our Condition_STATUS
-func (condition *Condition_STATUS) AssignProperties_To_Condition_STATUS(destination *storage.Condition_STATUS) error {
+func (condition *Condition_STATUS) AssignProperties_To_Condition_STATUS(destination *v20261001s.Condition_STATUS) error {
 	// Clone the existing property bag
 	propertyBag := genruntime.NewPropertyBag(condition.PropertyBag)
 
@@ -4046,7 +4439,7 @@ type EtcdDataEncryptionProfile struct {
 }
 
 // AssignProperties_From_EtcdDataEncryptionProfile populates our EtcdDataEncryptionProfile from the provided source EtcdDataEncryptionProfile
-func (profile *EtcdDataEncryptionProfile) AssignProperties_From_EtcdDataEncryptionProfile(source *storage.EtcdDataEncryptionProfile) error {
+func (profile *EtcdDataEncryptionProfile) AssignProperties_From_EtcdDataEncryptionProfile(source *v20261001s.EtcdDataEncryptionProfile) error {
 	// Clone the existing property bag
 	propertyBag := genruntime.NewPropertyBag(source.PropertyBag)
 
@@ -4086,13 +4479,13 @@ func (profile *EtcdDataEncryptionProfile) AssignProperties_From_EtcdDataEncrypti
 }
 
 // AssignProperties_To_EtcdDataEncryptionProfile populates the provided destination EtcdDataEncryptionProfile from our EtcdDataEncryptionProfile
-func (profile *EtcdDataEncryptionProfile) AssignProperties_To_EtcdDataEncryptionProfile(destination *storage.EtcdDataEncryptionProfile) error {
+func (profile *EtcdDataEncryptionProfile) AssignProperties_To_EtcdDataEncryptionProfile(destination *v20261001s.EtcdDataEncryptionProfile) error {
 	// Clone the existing property bag
 	propertyBag := genruntime.NewPropertyBag(profile.PropertyBag)
 
 	// CustomerManaged
 	if profile.CustomerManaged != nil {
-		var customerManaged storage.CustomerManagedEncryptionProfile
+		var customerManaged v20261001s.CustomerManagedEncryptionProfile
 		err := profile.CustomerManaged.AssignProperties_To_CustomerManagedEncryptionProfile(&customerManaged)
 		if err != nil {
 			return eris.Wrap(err, "calling AssignProperties_To_CustomerManagedEncryptionProfile() to populate field CustomerManaged")
@@ -4134,7 +4527,7 @@ type EtcdDataEncryptionProfile_STATUS struct {
 }
 
 // AssignProperties_From_EtcdDataEncryptionProfile_STATUS populates our EtcdDataEncryptionProfile_STATUS from the provided source EtcdDataEncryptionProfile_STATUS
-func (profile *EtcdDataEncryptionProfile_STATUS) AssignProperties_From_EtcdDataEncryptionProfile_STATUS(source *storage.EtcdDataEncryptionProfile_STATUS) error {
+func (profile *EtcdDataEncryptionProfile_STATUS) AssignProperties_From_EtcdDataEncryptionProfile_STATUS(source *v20261001s.EtcdDataEncryptionProfile_STATUS) error {
 	// Clone the existing property bag
 	propertyBag := genruntime.NewPropertyBag(source.PropertyBag)
 
@@ -4174,13 +4567,13 @@ func (profile *EtcdDataEncryptionProfile_STATUS) AssignProperties_From_EtcdDataE
 }
 
 // AssignProperties_To_EtcdDataEncryptionProfile_STATUS populates the provided destination EtcdDataEncryptionProfile_STATUS from our EtcdDataEncryptionProfile_STATUS
-func (profile *EtcdDataEncryptionProfile_STATUS) AssignProperties_To_EtcdDataEncryptionProfile_STATUS(destination *storage.EtcdDataEncryptionProfile_STATUS) error {
+func (profile *EtcdDataEncryptionProfile_STATUS) AssignProperties_To_EtcdDataEncryptionProfile_STATUS(destination *v20261001s.EtcdDataEncryptionProfile_STATUS) error {
 	// Clone the existing property bag
 	propertyBag := genruntime.NewPropertyBag(profile.PropertyBag)
 
 	// CustomerManaged
 	if profile.CustomerManaged != nil {
-		var customerManaged storage.CustomerManagedEncryptionProfile_STATUS
+		var customerManaged v20261001s.CustomerManagedEncryptionProfile_STATUS
 		err := profile.CustomerManaged.AssignProperties_To_CustomerManagedEncryptionProfile_STATUS(&customerManaged)
 		if err != nil {
 			return eris.Wrap(err, "calling AssignProperties_To_CustomerManagedEncryptionProfile_STATUS() to populate field CustomerManaged")
@@ -4221,7 +4614,7 @@ type OperatorsAuthenticationProfile struct {
 }
 
 // AssignProperties_From_OperatorsAuthenticationProfile populates our OperatorsAuthenticationProfile from the provided source OperatorsAuthenticationProfile
-func (profile *OperatorsAuthenticationProfile) AssignProperties_From_OperatorsAuthenticationProfile(source *storage.OperatorsAuthenticationProfile) error {
+func (profile *OperatorsAuthenticationProfile) AssignProperties_From_OperatorsAuthenticationProfile(source *v20261001s.OperatorsAuthenticationProfile) error {
 	// Clone the existing property bag
 	propertyBag := genruntime.NewPropertyBag(source.PropertyBag)
 
@@ -4258,13 +4651,13 @@ func (profile *OperatorsAuthenticationProfile) AssignProperties_From_OperatorsAu
 }
 
 // AssignProperties_To_OperatorsAuthenticationProfile populates the provided destination OperatorsAuthenticationProfile from our OperatorsAuthenticationProfile
-func (profile *OperatorsAuthenticationProfile) AssignProperties_To_OperatorsAuthenticationProfile(destination *storage.OperatorsAuthenticationProfile) error {
+func (profile *OperatorsAuthenticationProfile) AssignProperties_To_OperatorsAuthenticationProfile(destination *v20261001s.OperatorsAuthenticationProfile) error {
 	// Clone the existing property bag
 	propertyBag := genruntime.NewPropertyBag(profile.PropertyBag)
 
 	// UserAssignedIdentities
 	if profile.UserAssignedIdentities != nil {
-		var userAssignedIdentity storage.UserAssignedIdentitiesProfile
+		var userAssignedIdentity v20261001s.UserAssignedIdentitiesProfile
 		err := profile.UserAssignedIdentities.AssignProperties_To_UserAssignedIdentitiesProfile(&userAssignedIdentity)
 		if err != nil {
 			return eris.Wrap(err, "calling AssignProperties_To_UserAssignedIdentitiesProfile() to populate field UserAssignedIdentities")
@@ -4302,7 +4695,7 @@ type OperatorsAuthenticationProfile_STATUS struct {
 }
 
 // AssignProperties_From_OperatorsAuthenticationProfile_STATUS populates our OperatorsAuthenticationProfile_STATUS from the provided source OperatorsAuthenticationProfile_STATUS
-func (profile *OperatorsAuthenticationProfile_STATUS) AssignProperties_From_OperatorsAuthenticationProfile_STATUS(source *storage.OperatorsAuthenticationProfile_STATUS) error {
+func (profile *OperatorsAuthenticationProfile_STATUS) AssignProperties_From_OperatorsAuthenticationProfile_STATUS(source *v20261001s.OperatorsAuthenticationProfile_STATUS) error {
 	// Clone the existing property bag
 	propertyBag := genruntime.NewPropertyBag(source.PropertyBag)
 
@@ -4339,13 +4732,13 @@ func (profile *OperatorsAuthenticationProfile_STATUS) AssignProperties_From_Oper
 }
 
 // AssignProperties_To_OperatorsAuthenticationProfile_STATUS populates the provided destination OperatorsAuthenticationProfile_STATUS from our OperatorsAuthenticationProfile_STATUS
-func (profile *OperatorsAuthenticationProfile_STATUS) AssignProperties_To_OperatorsAuthenticationProfile_STATUS(destination *storage.OperatorsAuthenticationProfile_STATUS) error {
+func (profile *OperatorsAuthenticationProfile_STATUS) AssignProperties_To_OperatorsAuthenticationProfile_STATUS(destination *v20261001s.OperatorsAuthenticationProfile_STATUS) error {
 	// Clone the existing property bag
 	propertyBag := genruntime.NewPropertyBag(profile.PropertyBag)
 
 	// UserAssignedIdentities
 	if profile.UserAssignedIdentities != nil {
-		var userAssignedIdentity storage.UserAssignedIdentitiesProfile_STATUS
+		var userAssignedIdentity v20261001s.UserAssignedIdentitiesProfile_STATUS
 		err := profile.UserAssignedIdentities.AssignProperties_To_UserAssignedIdentitiesProfile_STATUS(&userAssignedIdentity)
 		if err != nil {
 			return eris.Wrap(err, "calling AssignProperties_To_UserAssignedIdentitiesProfile_STATUS() to populate field UserAssignedIdentities")
@@ -4376,28 +4769,28 @@ func (profile *OperatorsAuthenticationProfile_STATUS) AssignProperties_To_Operat
 }
 
 type augmentConversionForCondition_STATUS interface {
-	AssignPropertiesFrom(src *storage.Condition_STATUS) error
-	AssignPropertiesTo(dst *storage.Condition_STATUS) error
+	AssignPropertiesFrom(src *v20261001s.Condition_STATUS) error
+	AssignPropertiesTo(dst *v20261001s.Condition_STATUS) error
 }
 
 type augmentConversionForEtcdDataEncryptionProfile interface {
-	AssignPropertiesFrom(src *storage.EtcdDataEncryptionProfile) error
-	AssignPropertiesTo(dst *storage.EtcdDataEncryptionProfile) error
+	AssignPropertiesFrom(src *v20261001s.EtcdDataEncryptionProfile) error
+	AssignPropertiesTo(dst *v20261001s.EtcdDataEncryptionProfile) error
 }
 
 type augmentConversionForEtcdDataEncryptionProfile_STATUS interface {
-	AssignPropertiesFrom(src *storage.EtcdDataEncryptionProfile_STATUS) error
-	AssignPropertiesTo(dst *storage.EtcdDataEncryptionProfile_STATUS) error
+	AssignPropertiesFrom(src *v20261001s.EtcdDataEncryptionProfile_STATUS) error
+	AssignPropertiesTo(dst *v20261001s.EtcdDataEncryptionProfile_STATUS) error
 }
 
 type augmentConversionForOperatorsAuthenticationProfile interface {
-	AssignPropertiesFrom(src *storage.OperatorsAuthenticationProfile) error
-	AssignPropertiesTo(dst *storage.OperatorsAuthenticationProfile) error
+	AssignPropertiesFrom(src *v20261001s.OperatorsAuthenticationProfile) error
+	AssignPropertiesTo(dst *v20261001s.OperatorsAuthenticationProfile) error
 }
 
 type augmentConversionForOperatorsAuthenticationProfile_STATUS interface {
-	AssignPropertiesFrom(src *storage.OperatorsAuthenticationProfile_STATUS) error
-	AssignPropertiesTo(dst *storage.OperatorsAuthenticationProfile_STATUS) error
+	AssignPropertiesFrom(src *v20261001s.OperatorsAuthenticationProfile_STATUS) error
+	AssignPropertiesTo(dst *v20261001s.OperatorsAuthenticationProfile_STATUS) error
 }
 
 // Storage version of v20260901preview.CustomerManagedEncryptionProfile
@@ -4409,7 +4802,7 @@ type CustomerManagedEncryptionProfile struct {
 }
 
 // AssignProperties_From_CustomerManagedEncryptionProfile populates our CustomerManagedEncryptionProfile from the provided source CustomerManagedEncryptionProfile
-func (profile *CustomerManagedEncryptionProfile) AssignProperties_From_CustomerManagedEncryptionProfile(source *storage.CustomerManagedEncryptionProfile) error {
+func (profile *CustomerManagedEncryptionProfile) AssignProperties_From_CustomerManagedEncryptionProfile(source *v20261001s.CustomerManagedEncryptionProfile) error {
 	// Clone the existing property bag
 	propertyBag := genruntime.NewPropertyBag(source.PropertyBag)
 
@@ -4449,7 +4842,7 @@ func (profile *CustomerManagedEncryptionProfile) AssignProperties_From_CustomerM
 }
 
 // AssignProperties_To_CustomerManagedEncryptionProfile populates the provided destination CustomerManagedEncryptionProfile from our CustomerManagedEncryptionProfile
-func (profile *CustomerManagedEncryptionProfile) AssignProperties_To_CustomerManagedEncryptionProfile(destination *storage.CustomerManagedEncryptionProfile) error {
+func (profile *CustomerManagedEncryptionProfile) AssignProperties_To_CustomerManagedEncryptionProfile(destination *v20261001s.CustomerManagedEncryptionProfile) error {
 	// Clone the existing property bag
 	propertyBag := genruntime.NewPropertyBag(profile.PropertyBag)
 
@@ -4458,7 +4851,7 @@ func (profile *CustomerManagedEncryptionProfile) AssignProperties_To_CustomerMan
 
 	// Kms
 	if profile.Kms != nil {
-		var km storage.KmsEncryptionProfile
+		var km v20261001s.KmsEncryptionProfile
 		err := profile.Kms.AssignProperties_To_KmsEncryptionProfile(&km)
 		if err != nil {
 			return eris.Wrap(err, "calling AssignProperties_To_KmsEncryptionProfile() to populate field Kms")
@@ -4497,7 +4890,7 @@ type CustomerManagedEncryptionProfile_STATUS struct {
 }
 
 // AssignProperties_From_CustomerManagedEncryptionProfile_STATUS populates our CustomerManagedEncryptionProfile_STATUS from the provided source CustomerManagedEncryptionProfile_STATUS
-func (profile *CustomerManagedEncryptionProfile_STATUS) AssignProperties_From_CustomerManagedEncryptionProfile_STATUS(source *storage.CustomerManagedEncryptionProfile_STATUS) error {
+func (profile *CustomerManagedEncryptionProfile_STATUS) AssignProperties_From_CustomerManagedEncryptionProfile_STATUS(source *v20261001s.CustomerManagedEncryptionProfile_STATUS) error {
 	// Clone the existing property bag
 	propertyBag := genruntime.NewPropertyBag(source.PropertyBag)
 
@@ -4537,7 +4930,7 @@ func (profile *CustomerManagedEncryptionProfile_STATUS) AssignProperties_From_Cu
 }
 
 // AssignProperties_To_CustomerManagedEncryptionProfile_STATUS populates the provided destination CustomerManagedEncryptionProfile_STATUS from our CustomerManagedEncryptionProfile_STATUS
-func (profile *CustomerManagedEncryptionProfile_STATUS) AssignProperties_To_CustomerManagedEncryptionProfile_STATUS(destination *storage.CustomerManagedEncryptionProfile_STATUS) error {
+func (profile *CustomerManagedEncryptionProfile_STATUS) AssignProperties_To_CustomerManagedEncryptionProfile_STATUS(destination *v20261001s.CustomerManagedEncryptionProfile_STATUS) error {
 	// Clone the existing property bag
 	propertyBag := genruntime.NewPropertyBag(profile.PropertyBag)
 
@@ -4546,7 +4939,7 @@ func (profile *CustomerManagedEncryptionProfile_STATUS) AssignProperties_To_Cust
 
 	// Kms
 	if profile.Kms != nil {
-		var km storage.KmsEncryptionProfile_STATUS
+		var km v20261001s.KmsEncryptionProfile_STATUS
 		err := profile.Kms.AssignProperties_To_KmsEncryptionProfile_STATUS(&km)
 		if err != nil {
 			return eris.Wrap(err, "calling AssignProperties_To_KmsEncryptionProfile_STATUS() to populate field Kms")
@@ -4592,7 +4985,7 @@ type UserAssignedIdentitiesProfile struct {
 }
 
 // AssignProperties_From_UserAssignedIdentitiesProfile populates our UserAssignedIdentitiesProfile from the provided source UserAssignedIdentitiesProfile
-func (profile *UserAssignedIdentitiesProfile) AssignProperties_From_UserAssignedIdentitiesProfile(source *storage.UserAssignedIdentitiesProfile) error {
+func (profile *UserAssignedIdentitiesProfile) AssignProperties_From_UserAssignedIdentitiesProfile(source *v20261001s.UserAssignedIdentitiesProfile) error {
 	// Clone the existing property bag
 	propertyBag := genruntime.NewPropertyBag(source.PropertyBag)
 
@@ -4647,7 +5040,7 @@ func (profile *UserAssignedIdentitiesProfile) AssignProperties_From_UserAssigned
 }
 
 // AssignProperties_To_UserAssignedIdentitiesProfile populates the provided destination UserAssignedIdentitiesProfile from our UserAssignedIdentitiesProfile
-func (profile *UserAssignedIdentitiesProfile) AssignProperties_To_UserAssignedIdentitiesProfile(destination *storage.UserAssignedIdentitiesProfile) error {
+func (profile *UserAssignedIdentitiesProfile) AssignProperties_To_UserAssignedIdentitiesProfile(destination *v20261001s.UserAssignedIdentitiesProfile) error {
 	// Clone the existing property bag
 	propertyBag := genruntime.NewPropertyBag(profile.PropertyBag)
 
@@ -4713,7 +5106,7 @@ type UserAssignedIdentitiesProfile_STATUS struct {
 }
 
 // AssignProperties_From_UserAssignedIdentitiesProfile_STATUS populates our UserAssignedIdentitiesProfile_STATUS from the provided source UserAssignedIdentitiesProfile_STATUS
-func (profile *UserAssignedIdentitiesProfile_STATUS) AssignProperties_From_UserAssignedIdentitiesProfile_STATUS(source *storage.UserAssignedIdentitiesProfile_STATUS) error {
+func (profile *UserAssignedIdentitiesProfile_STATUS) AssignProperties_From_UserAssignedIdentitiesProfile_STATUS(source *v20261001s.UserAssignedIdentitiesProfile_STATUS) error {
 	// Clone the existing property bag
 	propertyBag := genruntime.NewPropertyBag(source.PropertyBag)
 
@@ -4747,7 +5140,7 @@ func (profile *UserAssignedIdentitiesProfile_STATUS) AssignProperties_From_UserA
 }
 
 // AssignProperties_To_UserAssignedIdentitiesProfile_STATUS populates the provided destination UserAssignedIdentitiesProfile_STATUS from our UserAssignedIdentitiesProfile_STATUS
-func (profile *UserAssignedIdentitiesProfile_STATUS) AssignProperties_To_UserAssignedIdentitiesProfile_STATUS(destination *storage.UserAssignedIdentitiesProfile_STATUS) error {
+func (profile *UserAssignedIdentitiesProfile_STATUS) AssignProperties_To_UserAssignedIdentitiesProfile_STATUS(destination *v20261001s.UserAssignedIdentitiesProfile_STATUS) error {
 	// Clone the existing property bag
 	propertyBag := genruntime.NewPropertyBag(profile.PropertyBag)
 
@@ -4781,23 +5174,23 @@ func (profile *UserAssignedIdentitiesProfile_STATUS) AssignProperties_To_UserAss
 }
 
 type augmentConversionForCustomerManagedEncryptionProfile interface {
-	AssignPropertiesFrom(src *storage.CustomerManagedEncryptionProfile) error
-	AssignPropertiesTo(dst *storage.CustomerManagedEncryptionProfile) error
+	AssignPropertiesFrom(src *v20261001s.CustomerManagedEncryptionProfile) error
+	AssignPropertiesTo(dst *v20261001s.CustomerManagedEncryptionProfile) error
 }
 
 type augmentConversionForCustomerManagedEncryptionProfile_STATUS interface {
-	AssignPropertiesFrom(src *storage.CustomerManagedEncryptionProfile_STATUS) error
-	AssignPropertiesTo(dst *storage.CustomerManagedEncryptionProfile_STATUS) error
+	AssignPropertiesFrom(src *v20261001s.CustomerManagedEncryptionProfile_STATUS) error
+	AssignPropertiesTo(dst *v20261001s.CustomerManagedEncryptionProfile_STATUS) error
 }
 
 type augmentConversionForUserAssignedIdentitiesProfile interface {
-	AssignPropertiesFrom(src *storage.UserAssignedIdentitiesProfile) error
-	AssignPropertiesTo(dst *storage.UserAssignedIdentitiesProfile) error
+	AssignPropertiesFrom(src *v20261001s.UserAssignedIdentitiesProfile) error
+	AssignPropertiesTo(dst *v20261001s.UserAssignedIdentitiesProfile) error
 }
 
 type augmentConversionForUserAssignedIdentitiesProfile_STATUS interface {
-	AssignPropertiesFrom(src *storage.UserAssignedIdentitiesProfile_STATUS) error
-	AssignPropertiesTo(dst *storage.UserAssignedIdentitiesProfile_STATUS) error
+	AssignPropertiesFrom(src *v20261001s.UserAssignedIdentitiesProfile_STATUS) error
+	AssignPropertiesTo(dst *v20261001s.UserAssignedIdentitiesProfile_STATUS) error
 }
 
 // Storage version of v20260901preview.KmsEncryptionProfile
@@ -4814,7 +5207,7 @@ type KmsEncryptionProfile struct {
 }
 
 // AssignProperties_From_KmsEncryptionProfile populates our KmsEncryptionProfile from the provided source KmsEncryptionProfile
-func (profile *KmsEncryptionProfile) AssignProperties_From_KmsEncryptionProfile(source *storage.KmsEncryptionProfile) error {
+func (profile *KmsEncryptionProfile) AssignProperties_From_KmsEncryptionProfile(source *v20261001s.KmsEncryptionProfile) error {
 	// Clone the existing property bag
 	propertyBag := genruntime.NewPropertyBag(source.PropertyBag)
 
@@ -4864,13 +5257,13 @@ func (profile *KmsEncryptionProfile) AssignProperties_From_KmsEncryptionProfile(
 }
 
 // AssignProperties_To_KmsEncryptionProfile populates the provided destination KmsEncryptionProfile from our KmsEncryptionProfile
-func (profile *KmsEncryptionProfile) AssignProperties_To_KmsEncryptionProfile(destination *storage.KmsEncryptionProfile) error {
+func (profile *KmsEncryptionProfile) AssignProperties_To_KmsEncryptionProfile(destination *v20261001s.KmsEncryptionProfile) error {
 	// Clone the existing property bag
 	propertyBag := genruntime.NewPropertyBag(profile.PropertyBag)
 
 	// ActiveKey
 	if profile.ActiveKey != nil {
-		var activeKey storage.KmsKey
+		var activeKey v20261001s.KmsKey
 		err := profile.ActiveKey.AssignProperties_To_KmsKey(&activeKey)
 		if err != nil {
 			return eris.Wrap(err, "calling AssignProperties_To_KmsKey() to populate field ActiveKey")
@@ -4933,7 +5326,7 @@ type KmsEncryptionProfile_STATUS struct {
 }
 
 // AssignProperties_From_KmsEncryptionProfile_STATUS populates our KmsEncryptionProfile_STATUS from the provided source KmsEncryptionProfile_STATUS
-func (profile *KmsEncryptionProfile_STATUS) AssignProperties_From_KmsEncryptionProfile_STATUS(source *storage.KmsEncryptionProfile_STATUS) error {
+func (profile *KmsEncryptionProfile_STATUS) AssignProperties_From_KmsEncryptionProfile_STATUS(source *v20261001s.KmsEncryptionProfile_STATUS) error {
 	// Clone the existing property bag
 	propertyBag := genruntime.NewPropertyBag(source.PropertyBag)
 
@@ -4983,13 +5376,13 @@ func (profile *KmsEncryptionProfile_STATUS) AssignProperties_From_KmsEncryptionP
 }
 
 // AssignProperties_To_KmsEncryptionProfile_STATUS populates the provided destination KmsEncryptionProfile_STATUS from our KmsEncryptionProfile_STATUS
-func (profile *KmsEncryptionProfile_STATUS) AssignProperties_To_KmsEncryptionProfile_STATUS(destination *storage.KmsEncryptionProfile_STATUS) error {
+func (profile *KmsEncryptionProfile_STATUS) AssignProperties_To_KmsEncryptionProfile_STATUS(destination *v20261001s.KmsEncryptionProfile_STATUS) error {
 	// Clone the existing property bag
 	propertyBag := genruntime.NewPropertyBag(profile.PropertyBag)
 
 	// ActiveKey
 	if profile.ActiveKey != nil {
-		var activeKey storage.KmsKey_STATUS
+		var activeKey v20261001s.KmsKey_STATUS
 		err := profile.ActiveKey.AssignProperties_To_KmsKey_STATUS(&activeKey)
 		if err != nil {
 			return eris.Wrap(err, "calling AssignProperties_To_KmsKey_STATUS() to populate field ActiveKey")
@@ -5039,13 +5432,13 @@ func (profile *KmsEncryptionProfile_STATUS) AssignProperties_To_KmsEncryptionPro
 }
 
 type augmentConversionForKmsEncryptionProfile interface {
-	AssignPropertiesFrom(src *storage.KmsEncryptionProfile) error
-	AssignPropertiesTo(dst *storage.KmsEncryptionProfile) error
+	AssignPropertiesFrom(src *v20261001s.KmsEncryptionProfile) error
+	AssignPropertiesTo(dst *v20261001s.KmsEncryptionProfile) error
 }
 
 type augmentConversionForKmsEncryptionProfile_STATUS interface {
-	AssignPropertiesFrom(src *storage.KmsEncryptionProfile_STATUS) error
-	AssignPropertiesTo(dst *storage.KmsEncryptionProfile_STATUS) error
+	AssignPropertiesFrom(src *v20261001s.KmsEncryptionProfile_STATUS) error
+	AssignPropertiesTo(dst *v20261001s.KmsEncryptionProfile_STATUS) error
 }
 
 // Storage version of v20260901preview.KmsKey
@@ -5057,7 +5450,7 @@ type KmsKey struct {
 }
 
 // AssignProperties_From_KmsKey populates our KmsKey from the provided source KmsKey
-func (kmsKey *KmsKey) AssignProperties_From_KmsKey(source *storage.KmsKey) error {
+func (kmsKey *KmsKey) AssignProperties_From_KmsKey(source *v20261001s.KmsKey) error {
 	// Clone the existing property bag
 	propertyBag := genruntime.NewPropertyBag(source.PropertyBag)
 
@@ -5088,7 +5481,7 @@ func (kmsKey *KmsKey) AssignProperties_From_KmsKey(source *storage.KmsKey) error
 }
 
 // AssignProperties_To_KmsKey populates the provided destination KmsKey from our KmsKey
-func (kmsKey *KmsKey) AssignProperties_To_KmsKey(destination *storage.KmsKey) error {
+func (kmsKey *KmsKey) AssignProperties_To_KmsKey(destination *v20261001s.KmsKey) error {
 	// Clone the existing property bag
 	propertyBag := genruntime.NewPropertyBag(kmsKey.PropertyBag)
 
@@ -5127,7 +5520,7 @@ type KmsKey_STATUS struct {
 }
 
 // AssignProperties_From_KmsKey_STATUS populates our KmsKey_STATUS from the provided source KmsKey_STATUS
-func (kmsKey *KmsKey_STATUS) AssignProperties_From_KmsKey_STATUS(source *storage.KmsKey_STATUS) error {
+func (kmsKey *KmsKey_STATUS) AssignProperties_From_KmsKey_STATUS(source *v20261001s.KmsKey_STATUS) error {
 	// Clone the existing property bag
 	propertyBag := genruntime.NewPropertyBag(source.PropertyBag)
 
@@ -5158,7 +5551,7 @@ func (kmsKey *KmsKey_STATUS) AssignProperties_From_KmsKey_STATUS(source *storage
 }
 
 // AssignProperties_To_KmsKey_STATUS populates the provided destination KmsKey_STATUS from our KmsKey_STATUS
-func (kmsKey *KmsKey_STATUS) AssignProperties_To_KmsKey_STATUS(destination *storage.KmsKey_STATUS) error {
+func (kmsKey *KmsKey_STATUS) AssignProperties_To_KmsKey_STATUS(destination *v20261001s.KmsKey_STATUS) error {
 	// Clone the existing property bag
 	propertyBag := genruntime.NewPropertyBag(kmsKey.PropertyBag)
 
@@ -5189,13 +5582,13 @@ func (kmsKey *KmsKey_STATUS) AssignProperties_To_KmsKey_STATUS(destination *stor
 }
 
 type augmentConversionForKmsKey interface {
-	AssignPropertiesFrom(src *storage.KmsKey) error
-	AssignPropertiesTo(dst *storage.KmsKey) error
+	AssignPropertiesFrom(src *v20261001s.KmsKey) error
+	AssignPropertiesTo(dst *v20261001s.KmsKey) error
 }
 
 type augmentConversionForKmsKey_STATUS interface {
-	AssignPropertiesFrom(src *storage.KmsKey_STATUS) error
-	AssignPropertiesTo(dst *storage.KmsKey_STATUS) error
+	AssignPropertiesFrom(src *v20261001s.KmsKey_STATUS) error
+	AssignPropertiesTo(dst *v20261001s.KmsKey_STATUS) error
 }
 
 func init() {
